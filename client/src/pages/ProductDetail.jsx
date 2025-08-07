@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { ArrowLeft, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react'
+import { productService } from "../services/productService"
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -25,13 +26,8 @@ export default function ProductDetail() {
   const fetchProduct = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/products/${id}`)
-      if (response.ok) {
-        const data = await response.json()
-        setProduct(data)
-      } else {
-        console.error("Product not found")
-      }
+      const data = await productService.getProduct(id)
+      setProduct(data)
     } catch (error) {
       console.error("Error fetching product:", error)
     } finally {
@@ -41,10 +37,9 @@ export default function ProductDetail() {
 
   const fetchRelatedProducts = async () => {
     try {
-      const response = await fetch(`/api/products/category/${product.category}?limit=4`)
-      const data = await response.json()
+      const data = await productService.getProductsByCategory(product.category, 4)
       // Filter out current product
-      setRelatedProducts(data.filter((p) => p._id !== product._id))
+      setRelatedProducts(data.filter((p) => p.id !== product.id))
     } catch (error) {
       console.error("Error fetching related products:", error)
     }
@@ -292,8 +287,8 @@ export default function ProductDetail() {
             <h2 className="text-2xl font-bold text-gray-800 mb-8">Productos relacionados</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
-                <div key={relatedProduct._id} className="bg-white rounded-xl shadow-lg overflow-hidden group">
-                  <Link to={`/products/${relatedProduct._id}`}>
+                <div key={relatedProduct.id} className="bg-white rounded-xl shadow-lg overflow-hidden group">
+                  <Link to={`/products/${relatedProduct.id}`}>
                     <img
                       src={
                         relatedProduct.images[0] ||

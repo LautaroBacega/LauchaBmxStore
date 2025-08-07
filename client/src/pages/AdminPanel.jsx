@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Plus, Edit, Trash2, Search, Upload, X, ImageIcon } from 'lucide-react'
+import { Plus, Edit, Trash2, Search, Upload, X, ImageIcon, Download } from 'lucide-react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app } from "../firebase"
-import { apiInterceptor } from "../utils/apiInterceptor"
+import { productService } from "../services/productService"
 
 export default function AdminPanel() {
   const [products, setProducts] = useState([])
@@ -41,13 +41,6 @@ export default function AdminPanel() {
     tags: "",
   })
 
-  // Inicialización segura para evitar errores
-  useEffect(() => {
-    if (!products) {
-      setProducts([])
-    }
-  }, [])
-
   const categories = [
     { id: "frames", name: "Cuadros" },
     { id: "wheels", name: "Ruedas" },
@@ -70,17 +63,14 @@ export default function AdminPanel() {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      const params = new URLSearchParams({
+      const filters = {
         page: currentPage,
         limit: 20,
-      })
+        search: searchTerm,
+        category: selectedCategory,
+      }
 
-      if (searchTerm) params.append("search", searchTerm)
-      if (selectedCategory) params.append("category", selectedCategory)
-
-      const response = await apiInterceptor.fetchWithAuth(`/api/products/admin/all?${params}`)
-      const data = await response.json()
-
+      const data = await productService.getProducts(filters)
       setProducts(data.products)
       setPagination(data.pagination)
     } catch (error) {
@@ -177,17 +167,9 @@ export default function AdminPanel() {
       }
 
       if (editingProduct) {
-        await apiInterceptor.fetchWithAuth(`/api/products/${editingProduct._id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(productData),
-        })
+        await productService.updateProduct(editingProduct.id, productData)
       } else {
-        await apiInterceptor.fetchWithAuth("/api/products", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(productData),
-        })
+        await productService.addProduct(productData)
       }
 
       setShowModal(false)
@@ -213,9 +195,7 @@ export default function AdminPanel() {
   const handleDelete = async (productId) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
       try {
-        await apiInterceptor.fetchWithAuth(`/api/products/${productId}`, {
-          method: "DELETE",
-        })
+        await productService.deleteProduct(productId)
         fetchProducts()
       } catch (error) {
         console.error("Error deleting product:", error)
@@ -286,9 +266,18 @@ export default function AdminPanel() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="bg-red-600 text-white rounded-xl p-6 mb-8">
-          <h1 className="text-3xl font-bold mb-2">Panel de Administración</h1>
-          <p className="text-red-100">⚠️ Solo visible en desarrollo - Gestión de productos BMX</p>
+        <div className="bg-blue-600 text-white rounded-xl p-6 mb-8">
+          <h1 className="text-3xl font-bold mb-2">Panel de Administración - Solo Frontend</h1>
+          <p className="text-blue-100">✨ Gestión de productos con Firebase Storage y archivos JSON locales</p>
+          <div className="mt-4 flex gap-4">
+            <button
+              onClick={() => productService.saveProducts()}
+              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 flex items-center gap-2"
+            >
+              <Download size={16} />
+              Descargar JSON actualizado
+            </button>
+          </div>
         </div>
 
         {/* Controls */}
@@ -401,7 +390,7 @@ export default function AdminPanel() {
                   </tr>
                 ) : (
                   products.map((product) => (
-                    <tr key={product._id} className="hover:bg-gray-50">
+                    <tr key={product.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <img
@@ -459,7 +448,7 @@ export default function AdminPanel() {
                             <Edit size={16} />
                           </button>
                           <button
-                            onClick={() => handleDelete(product._id)}
+                            onClick={() => handleDelete(product.id)}
                             className="text-red-600 hover:text-red-900 p-1 rounded"
                           >
                             <Trash2 size={16} />

@@ -1,0 +1,29 @@
+{
+  "products": [
+    {
+      "name": "aaa",
+      "description": "aaaa",
+      "price": 12,
+      "category": "wheels",
+      "brand": "aaa",
+      "stock": 2,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754588448486_0_Captura%20de%20pantalla%202025-07-26%20125125.png?alt=media&token=6f74e2bb-953c-4778-864a-acdec891d366"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "",
+        "color": "",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "id": "1754588457526",
+      "createdAt": "2025-08-07T17:40:57.526Z",
+      "updatedAt": "2025-08-07T17:40:57.526Z"
+    }
+  ],
+  "categories": []
+}

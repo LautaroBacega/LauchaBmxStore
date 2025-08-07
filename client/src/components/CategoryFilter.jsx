@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Filter } from 'lucide-react'
+import { productService } from "../services/productService"
 
 export default function CategoryFilter({ selectedCategory, onCategoryChange, selectedBrand, onBrandChange }) {
   const [categories, setCategories] = useState([])
@@ -15,8 +16,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange, sel
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("/api/products/categories")
-      const data = await response.json()
+      const data = await productService.getCategories()
       setCategories(data)
     } catch (error) {
       console.error("Error fetching categories:", error)
@@ -25,10 +25,8 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange, sel
 
   const fetchBrands = async () => {
     try {
-      const response = await fetch("/api/products")
-      const data = await response.json()
-      const uniqueBrands = [...new Set(data.products.map((product) => product.brand))].sort()
-      setBrands(uniqueBrands)
+      const data = await productService.getBrands()
+      setBrands(data)
     } catch (error) {
       console.error("Error fetching brands:", error)
     }

@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, Grid, List, SortAsc } from 'lucide-react'
+import { Search, Grid, List } from 'lucide-react'
 import ProductCard from "../components/ProductCard"
 import CategoryFilter from "../components/CategoryFilter"
+import { productService } from "../services/productService"
 
 export default function Store() {
   const [products, setProducts] = useState([])
@@ -24,20 +25,18 @@ export default function Store() {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      const params = new URLSearchParams({
+      
+      const filters = {
         page: currentPage,
         limit: 12,
         sortBy,
         sortOrder,
-      })
+        search: searchTerm,
+        category: selectedCategory,
+        brand: selectedBrand
+      }
 
-      if (searchTerm) params.append("search", searchTerm)
-      if (selectedCategory) params.append("category", selectedCategory)
-      if (selectedBrand) params.append("brand", selectedBrand)
-
-      const response = await fetch(`/api/products?${params}`)
-      const data = await response.json()
-
+      const data = await productService.getProducts(filters)
       setProducts(data.products)
       setPagination(data.pagination)
     } catch (error) {
@@ -50,7 +49,6 @@ export default function Store() {
   const handleSearch = (e) => {
     e.preventDefault()
     setCurrentPage(1)
-    fetchProducts()
   }
 
   const handlePageChange = (page) => {
@@ -207,7 +205,7 @@ export default function Store() {
                 }
               >
                 {products.map((product) => (
-                  <ProductCard key={product._id} product={product} />
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             )}

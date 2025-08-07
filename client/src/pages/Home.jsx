@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { useUser } from "../hooks/useUser"
-import { Store, Star, Truck, Shield, RotateCcw, ArrowRight } from 'lucide-react'
+import { Store, Star, Truck, Shield, ArrowRight } from 'lucide-react'
 import ProductCard from "../components/ProductCard"
+import { productService } from "../services/productService"
 
 export default function Home() {
   const { currentUser } = useUser()
@@ -17,8 +18,7 @@ export default function Home() {
 
   const fetchFeaturedProducts = async () => {
     try {
-      const response = await fetch("/api/products/featured")
-      const data = await response.json()
+      const data = await productService.getFeaturedProducts(4)
       setFeaturedProducts(data)
     } catch (error) {
       console.error("Error fetching featured products:", error)
@@ -164,8 +164,8 @@ export default function Home() {
             </div>
           ) : featuredProducts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProducts.slice(0, 4).map((product) => (
-                <ProductCard key={product._id} product={product} />
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
