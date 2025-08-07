@@ -23,6 +23,30 @@
       "id": "1754588457526",
       "createdAt": "2025-08-07T17:40:57.526Z",
       "updatedAt": "2025-08-07T17:40:57.526Z"
+    },
+    {
+      "id": "1754597213654",
+      "name": "asas",
+      "description": "adasasas",
+      "price": 12,
+      "category": "frames",
+      "brand": "aaa",
+      "stock": 11,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754597205316_0_product-odysseyPath-tire-1.jpg?alt=media&token=733869c9-ba8c-4241-a2eb-68a9f69b5d44"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "",
+        "color": "",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-07T20:06:53.654Z",
+      "updatedAt": "2025-08-07T20:06:53.654Z"
     }
   ],
   "categories": []

@@ -1,9 +1,45 @@
-import Product from "../models/product.model.js"
 import { errorHandler } from "../utils/error.js"
+import fs from "fs/promises" // Importar el módulo fs/promises para operaciones asíncronas de archivos
+import path from "path"
+import { fileURLToPath } from "url"
 
-// Get all products with filtering and pagination
+// Obtener la ruta absoluta del archivo products.json
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+// Ajusta esta ruta si tu estructura de carpetas es diferente
+const productsFilePath = path.join(__dirname, "../../client/public/data/products.json")
+
+// Helper para leer el archivo products.json
+const readProductsFile = async () => {
+  try {
+    const data = await fs.readFile(productsFilePath, "utf8")
+    return JSON.parse(data)
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      // Si el archivo no existe, devolver una estructura vacía
+      console.warn("products.json no encontrado, creando estructura vacía.")
+      return { products: [], categories: [] }
+    }
+    console.error("Error al leer products.json:", error)
+    throw new Error("Error al acceder a los datos de productos.")
+  }
+}
+
+// Helper para escribir en el archivo products.json
+const writeProductsFile = async (data) => {
+  try {
+    await fs.writeFile(productsFilePath, JSON.stringify(data, null, 2), "utf8")
+    console.log("✅ products.json actualizado correctamente.")
+  } catch (error) {
+    console.error("Error al escribir en products.json:", error)
+    throw new Error("Error al guardar los datos de productos.")
+  }
+}
+
+// Obtener todos los productos con filtrado y paginación
 export const getProducts = async (req, res, next) => {
   try {
+    const { products } = await readProductsFile()
     const {
       page = 1,
       limit = 12,
@@ -15,50 +51,75 @@ export const getProducts = async (req, res, next) => {
       featured,
       sortBy = "createdAt",
       sortOrder = "desc",
+      active, // Permitir filtrar por activo/inactivo en admin
     } = req.query
 
-    // Build filter object
-    const filter = { active: true }
+    let filteredProducts = [...products]
 
-    if (category) filter.category = category
-    if (brand) filter.brand = new RegExp(brand, "i")
-    if (featured) filter.featured = featured === "true"
-
-    // Price range filter
-    if (minPrice || maxPrice) {
-      filter.price = {}
-      if (minPrice) filter.price.$gte = Number(minPrice)
-      if (maxPrice) filter.price.$lte = Number(maxPrice)
+    // Filtrar por estado activo (si se especifica, de lo contrario, incluir todos)
+    if (active !== undefined) {
+      filteredProducts = filteredProducts.filter((p) => p.active === (active === "true"))
+    } else {
+      // Por defecto, solo mostrar productos activos para el público
+      filteredProducts = filteredProducts.filter((p) => p.active === true)
     }
 
-    // Search filter
+    if (category) filteredProducts = filteredProducts.filter((p) => p.category === category)
+    if (brand)
+      filteredProducts = filteredProducts.filter((p) =>
+        p.brand.toLowerCase().includes(brand.toLowerCase()),
+      )
+    if (featured) filteredProducts = filteredProducts.filter((p) => p.featured === (featured === "true"))
+
+    if (minPrice)
+      filteredProducts = filteredProducts.filter((p) => p.price >= Number(minPrice))
+    if (maxPrice)
+      filteredProducts = filteredProducts.filter((p) => p.price <= Number(maxPrice))
+
     if (search) {
-      filter.$text = { $search: search }
+      const searchTermLower = search.toLowerCase()
+      filteredProducts = filteredProducts.filter(
+        (p) =>
+          p.name.toLowerCase().includes(searchTermLower) ||
+          p.description.toLowerCase().includes(searchTermLower) ||
+          p.brand.toLowerCase().includes(searchTermLower) ||
+          (p.tags && p.tags.some((tag) => tag.toLowerCase().includes(searchTermLower))),
+      )
     }
 
-    // Build sort object
-    const sort = {}
-    sort[sortBy] = sortOrder === "asc" ? 1 : -1
+    // Ordenar
+    filteredProducts.sort((a, b) => {
+      let aValue = a[sortBy]
+      let bValue = b[sortBy]
 
-    // Execute query with pagination
-    const skip = (page - 1) * limit
-    const products = await Product.find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(Number(limit))
-      .select("-__v")
+      if (sortBy === "createdAt" || sortBy === "updatedAt") {
+        aValue = new Date(aValue)
+        bValue = new Date(bValue)
+      } else if (typeof aValue === "string") {
+        aValue = aValue.toLowerCase()
+        bValue = bValue.toLowerCase()
+      }
 
-    // Get total count for pagination
-    const total = await Product.countDocuments(filter)
+      if (sortOrder === "desc") {
+        return bValue > aValue ? 1 : -1
+      } else {
+        return aValue > bValue ? 1 : -1
+      }
+    })
+
+    // Paginación
+    const skip = (Number(page) - 1) * Number(limit)
+    const paginatedProducts = filteredProducts.slice(skip, skip + Number(limit))
+    const total = filteredProducts.length
 
     res.status(200).json({
-      products,
+      products: paginatedProducts,
       pagination: {
         currentPage: Number(page),
-        totalPages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / Number(limit)),
         totalProducts: total,
-        hasNext: page * limit < total,
-        hasPrev: page > 1,
+        hasNext: Number(page) * Number(limit) < total,
+        hasPrev: Number(page) > 1,
       },
     })
   } catch (error) {
@@ -69,7 +130,8 @@ export const getProducts = async (req, res, next) => {
 // Get single product by ID
 export const getProduct = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id)
+    const { products } = await readProductsFile()
+    const product = products.find((p) => p.id === req.params.id)
 
     if (!product || !product.active) {
       return next(errorHandler(404, "Producto no encontrado"))
@@ -84,12 +146,13 @@ export const getProduct = async (req, res, next) => {
 // Get featured products
 export const getFeaturedProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({ featured: true, active: true })
-      .sort({ createdAt: -1 })
-      .limit(8)
-      .select("-__v")
+    const { products } = await readProductsFile()
+    const featuredProducts = products
+      .filter((p) => p.featured === true && p.active === true)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 8) // Limit to 8 featured products
 
-    res.status(200).json(products)
+    res.status(200).json(featuredProducts)
   } catch (error) {
     next(error)
   }
@@ -98,15 +161,16 @@ export const getFeaturedProducts = async (req, res, next) => {
 // Get products by category
 export const getProductsByCategory = async (req, res, next) => {
   try {
+    const { products } = await readProductsFile()
     const { category } = req.params
     const { limit = 12 } = req.query
 
-    const products = await Product.find({ category, active: true })
-      .sort({ createdAt: -1 })
-      .limit(Number(limit))
-      .select("-__v")
+    const productsInCategory = products
+      .filter((p) => p.category === category && p.active === true)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, Number(limit))
 
-    res.status(200).json(products)
+    res.status(200).json(productsInCategory)
   } catch (error) {
     next(error)
   }
@@ -115,31 +179,17 @@ export const getProductsByCategory = async (req, res, next) => {
 // Get all categories with product counts
 export const getCategories = async (req, res, next) => {
   try {
-    const categories = await Product.aggregate([
-      { $match: { active: true } },
-      { $group: { _id: "$category", count: { $sum: 1 } } },
-      { $sort: { _id: 1 } },
-    ])
+    const { products, categories: predefinedCategories } = await readProductsFile()
 
-    const categoryMap = {
-      frames: "Cuadros",
-      wheels: "Ruedas",
-      handlebars: "Manubrios",
-      pedals: "Pedales",
-      chains: "Cadenas",
-      brakes: "Frenos",
-      seats: "Asientos",
-      grips: "Puños",
-      pegs: "Pegs",
-      sprockets: "Platos",
-      tires: "Cubiertas",
-      accessories: "Accesorios",
-    }
+    const categoryCounts = {}
+    products.filter((p) => p.active).forEach((p) => {
+      categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
+    })
 
-    const formattedCategories = categories.map((cat) => ({
-      id: cat._id,
-      name: categoryMap[cat._id] || cat._id,
-      count: cat.count,
+    const formattedCategories = predefinedCategories.map((cat) => ({
+      id: cat.id,
+      name: cat.name,
+      count: categoryCounts[cat.id] || 0,
     }))
 
     res.status(200).json(formattedCategories)
@@ -148,89 +198,160 @@ export const getCategories = async (req, res, next) => {
   }
 }
 
-// ADMIN ONLY ROUTES (Development only)
+// Get all unique brands
+export const getBrands = async (req, res, next) => {
+  try {
+    const { products } = await readProductsFile()
+    const brands = [...new Set(products.map((p) => p.brand))].sort()
+    res.status(200).json(brands)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ADMIN ONLY ROUTES (Now write to JSON file)
 
 // Create product (Admin only)
 export const createProduct = async (req, res, next) => {
   try {
-    const product = new Product(req.body)
-    await product.save()
-    res.status(201).json(product)
+    const { products, categories } = await readProductsFile()
+    const newProduct = {
+      id: Date.now().toString(), // Generar un ID único basado en timestamp
+      ...req.body,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      // Asegurar que los campos booleanos tengan valores por defecto si no se envían
+      featured: req.body.featured === true,
+      active: req.body.active === true,
+      tags: req.body.tags || [],
+      images: req.body.images || [],
+      specifications: req.body.specifications || {},
+    }
+    products.push(newProduct)
+    await writeProductsFile({ products, categories })
+    res.status(201).json(newProduct)
   } catch (error) {
-    next(error)
+    next(errorHandler(500, "Error al crear el producto en el archivo JSON"))
   }
 }
 
 // Update product (Admin only)
 export const updateProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    })
+    const { products, categories } = await readProductsFile()
+    const productId = req.params.id
+    const index = products.findIndex((p) => p.id === productId)
 
-    if (!product) {
+    if (index === -1) {
       return next(errorHandler(404, "Producto no encontrado"))
     }
 
-    res.status(200).json(product)
+    // Actualizar el producto con los nuevos datos, manteniendo los existentes si no se proporcionan
+    products[index] = {
+      ...products[index],
+      ...req.body,
+      updatedAt: new Date().toISOString(),
+      tags: req.body.tags !== undefined ? req.body.tags : products[index].tags,
+      images: req.body.images !== undefined ? req.body.images : products[index].images,
+      specifications:
+        req.body.specifications !== undefined
+          ? { ...products[index].specifications, ...req.body.specifications }
+          : products[index].specifications,
+    }
+    await writeProductsFile({ products, categories })
+    res.status(200).json(products[index])
   } catch (error) {
-    next(error)
+    next(errorHandler(500, "Error al actualizar el producto en el archivo JSON"))
   }
 }
 
 // Delete product (Admin only)
 export const deleteProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id)
+    const { products, categories } = await readProductsFile()
+    const productId = req.params.id
+    const initialLength = products.length
+    const updatedProducts = products.filter((p) => p.id !== productId)
 
-    if (!product) {
+    if (updatedProducts.length === initialLength) {
       return next(errorHandler(404, "Producto no encontrado"))
     }
 
-    res.status(200).json({ message: "Producto eliminado correctamente" })
+    await writeProductsFile({ products: updatedProducts, categories })
+    res.status(200).json({ message: "Producto eliminado correctamente del archivo JSON" })
   } catch (error) {
-    next(error)
+    next(errorHandler(500, "Error al eliminar el producto del archivo JSON"))
   }
 }
 
 // Get all products for admin (including inactive)
 export const getAllProductsAdmin = async (req, res, next) => {
   try {
-    const {
-      page = 1,
-      limit = 20,
-      category,
-      brand,
-      active,
-      sortBy = "createdAt",
-      sortOrder = "desc",
-    } = req.query
-
-    const filter = {}
-    if (category) filter.category = category
-    if (brand) filter.brand = new RegExp(brand, "i")
-    if (active !== undefined) filter.active = active === "true"
-
-    const sort = {}
-    sort[sortBy] = sortOrder === "asc" ? 1 : -1
-
-    const skip = (page - 1) * limit
-    const products = await Product.find(filter).sort(sort).skip(skip).limit(Number(limit))
-
-    const total = await Product.countDocuments(filter)
-
-    res.status(200).json({
-      products,
-      pagination: {
-        currentPage: Number(page),
-        totalPages: Math.ceil(total / limit),
-        totalProducts: total,
-        hasNext: page * limit < total,
-        hasPrev: page > 1,
-      },
-    })
+    // Reutilizamos getProducts pero forzando active a undefined para que incluya todos
+    req.query.active = undefined
+    await getProducts(req, res, next)
   } catch (error) {
     next(error)
+  }
+}
+
+// Export data (for admin)
+export const exportData = async (req, res, next) => {
+  try {
+    const data = await readProductsFile()
+    res.setHeader("Content-Type", "application/json")
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=laucha-bmx-products-${new Date().toISOString().split("T")[0]}.json`,
+    )
+    res.status(200).send(JSON.stringify(data, null, 2))
+  } catch (error) {
+    next(errorHandler(500, "Error al exportar los datos."))
+  }
+}
+
+// Import data (for admin)
+export const importData = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return next(errorHandler(400, "No se ha subido ningún archivo."))
+    }
+
+    const importedData = JSON.parse(req.file.buffer.toString("utf8"))
+
+    if (!importedData.products || !Array.isArray(importedData.products)) {
+      return next(errorHandler(400, "Formato de archivo JSON inválido. Se esperaba un array de productos."))
+    }
+
+    // Opcional: Validar la estructura de los productos importados
+    // Por ahora, simplemente sobrescribimos
+    await writeProductsFile(importedData)
+    res.status(200).json({ message: "Datos importados correctamente." })
+  } catch (error) {
+    console.error("Error en importData:", error)
+    next(errorHandler(500, "Error al importar los datos. Asegúrate de que el archivo es un JSON válido."))
+  }
+}
+
+// Reset data to original (for admin)
+export const resetToOriginal = async (req, res, next) => {
+  try {
+    const originalDataPath = path.join(__dirname, "../../client/public/data/products.json.original") // Asume un archivo original
+    let originalData
+
+    try {
+      originalData = await fs.readFile(originalDataPath, "utf8")
+      originalData = JSON.parse(originalData)
+    } catch (readError) {
+      // Si no existe el .original, leer del products.json actual como fallback
+      console.warn("products.json.original no encontrado, usando products.json actual como base para reset.")
+      originalData = await fs.readFile(productsFilePath, "utf8")
+      originalData = JSON.parse(originalData)
+    }
+
+    await writeProductsFile(originalData)
+    res.status(200).json({ message: "Datos reseteados a la versión original." })
+  } catch (error) {
+    next(errorHandler(500, "Error al resetear los datos a la versión original."))
   }
 }

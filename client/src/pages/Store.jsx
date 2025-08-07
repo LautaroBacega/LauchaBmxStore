@@ -5,6 +5,7 @@ import { Search, Grid, List } from 'lucide-react'
 import ProductCard from "../components/ProductCard"
 import CategoryFilter from "../components/CategoryFilter"
 import { productService } from "../services/productService"
+import { isProduction } from "../utils/envUtils" // Importar isProduction
 
 export default function Store() {
   const [products, setProducts] = useState([])
@@ -36,6 +37,7 @@ export default function Store() {
         brand: selectedBrand
       }
 
+      // productService ahora maneja si es producción o desarrollo
       const data = await productService.getProducts(filters)
       setProducts(data.products)
       setPagination(data.pagination)
@@ -71,7 +73,10 @@ export default function Store() {
               <span className="text-yellow-500">LAUCHA</span> BMX STORE
             </h1>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Las mejores partes y accesorios para tu BMX. Calidad profesional para riders exigentes.
+              {isProduction
+                ? "Catálogo online de las mejores partes y accesorios BMX. Descubrí nuestra selección de productos premium."
+                : "Las mejores partes y accesorios para tu BMX. Calidad profesional para riders exigentes."
+              }
             </p>
           </div>
 

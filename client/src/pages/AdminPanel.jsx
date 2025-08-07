@@ -1,10 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Plus, Edit, Trash2, Search, Upload, X, ImageIcon, Download } from 'lucide-react'
+import { Plus, Edit, Trash2, Search, Upload, X, ImageIcon, Download, RotateCcw, BarChart3, FileUp } from 'lucide-react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app } from "../firebase"
 import { productService } from "../services/productService"
+import { isDevelopment } from "../utils/envUtils" // Importar isDevelopment
 
 export default function AdminPanel() {
   const [products, setProducts] = useState([])
@@ -15,11 +16,14 @@ export default function AdminPanel() {
   const [selectedCategory, setSelectedCategory] = useState("")
   const [pagination, setPagination] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
+  const [stats, setStats] = useState({})
+  const [showStats, setShowStats] = useState(false)
 
   // Estados para manejo de imágenes
   const [uploadingImages, setUploadingImages] = useState({})
   const [imageErrors, setImageErrors] = useState({})
   const fileInputRefs = useRef([])
+  const importFileRef = useRef(null)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -57,26 +61,42 @@ export default function AdminPanel() {
   ]
 
   useEffect(() => {
-    fetchProducts()
+    if (isDevelopment) { // Solo cargar productos y estadísticas en desarrollo
+      fetchProducts()
+      fetchStats()
+    }
   }, [currentPage, searchTerm, selectedCategory])
 
   const fetchProducts = async () => {
     try {
       setLoading(true)
+      
       const filters = {
         page: currentPage,
         limit: 20,
         search: searchTerm,
         category: selectedCategory,
+        active: undefined, // Para admin, queremos ver todos los productos (activos/inactivos)
       }
 
-      const data = await productService.getProducts(filters)
+      const data = await productService.getAllProductsAdmin(filters) // Usar getAllProductsAdmin
       setProducts(data.products)
       setPagination(data.pagination)
     } catch (error) {
       console.error("Error fetching products:", error)
+      alert("Error al cargar productos: " + error.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchStats = async () => {
+    try {
+      const statsData = await productService.getStats()
+      setStats(statsData)
+    } catch (error) {
+      console.error("Error fetching stats:", error)
+      alert("Error al cargar estadísticas: " + error.message)
     }
   }
 
@@ -176,8 +196,11 @@ export default function AdminPanel() {
       setEditingProduct(null)
       resetForm()
       fetchProducts()
+      fetchStats()
+      alert("Producto guardado correctamente. ¡Recuerda hacer commit del archivo products.json!")
     } catch (error) {
       console.error("Error saving product:", error)
+      alert("Error al guardar el producto: " + error.message)
     }
   }
 
@@ -197,10 +220,61 @@ export default function AdminPanel() {
       try {
         await productService.deleteProduct(productId)
         fetchProducts()
+        fetchStats()
+        alert("Producto eliminado correctamente. ¡Recuerda hacer commit del archivo products.json!")
       } catch (error) {
         console.error("Error deleting product:", error)
+        alert("Error al eliminar el producto: " + error.message)
       }
     }
+  }
+
+  const handleResetData = async () => {
+    if (window.confirm("¿Estás seguro de que quieres resetear todos los datos a los originales del JSON? Esto eliminará todos los cambios realizados.")) {
+      try {
+        const success = await productService.resetToOriginal()
+        if (success) {
+          fetchProducts()
+          fetchStats()
+          alert("Datos reseteados correctamente. ¡Recuerda hacer commit del archivo products.json!")
+        } else {
+          alert("Error al resetear los datos")
+        }
+      } catch (error) {
+        console.error("Error resetting data:", error)
+        alert("Error al resetear los datos: " + error.message)
+      }
+    }
+  }
+
+  const handleExportData = async () => {
+    try {
+      await productService.exportData()
+      alert("Datos exportados correctamente.")
+    } catch (error) {
+      console.error("Error exporting data:", error)
+      alert("Error al exportar los datos: " + error.message)
+    }
+  }
+
+  const handleImportData = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    if (window.confirm("¿Estás seguro de que quieres importar estos datos? Esto reemplazará todos los productos actuales.")) {
+      try {
+        await productService.importData(file)
+        fetchProducts()
+        fetchStats()
+        alert("Datos importados correctamente. ¡Recuerda hacer commit del archivo products.json!")
+      } catch (error) {
+        console.error("Error importing data:", error)
+        alert("Error al importar los datos: " + error.message)
+      }
+    }
+
+    // Reset file input
+    e.target.value = ''
   }
 
   const resetForm = () => {
@@ -267,18 +341,98 @@ export default function AdminPanel() {
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="bg-blue-600 text-white rounded-xl p-6 mb-8">
-          <h1 className="text-3xl font-bold mb-2">Panel de Administración - Solo Frontend</h1>
-          <p className="text-blue-100">✨ Gestión de productos con Firebase Storage y archivos JSON locales</p>
-          <div className="mt-4 flex gap-4">
+          <h1 className="text-3xl font-bold mb-2">Panel de Administración - Persistencia en JSON</h1>
+          <p className="text-blue-100">
+            ✨ Los cambios se guardan en `client/public/data/products.json` en tu entorno local.
+          </p>
+          <p className="text-blue-100 font-semibold mt-2">
+            ⚠️ ¡Recuerda hacer `git commit` de `products.json` y `git push` para que los cambios se vean en Netlify!
+          </p>
+          
+          <div className="mt-4 flex flex-wrap gap-4">
             <button
-              onClick={() => productService.saveProducts()}
+              onClick={handleExportData}
               className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 flex items-center gap-2"
             >
               <Download size={16} />
-              Descargar JSON actualizado
+              Exportar Datos
+            </button>
+            
+            <button
+              onClick={() => importFileRef.current?.click()}
+              className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors duration-200 flex items-center gap-2"
+            >
+              <FileUp size={16} />
+              Importar Datos
+            </button>
+            
+            <button
+              onClick={handleResetData}
+              className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200 flex items-center gap-2"
+            >
+              <RotateCcw size={16} />
+              Resetear a Original
+            </button>
+            
+            <button
+              onClick={() => setShowStats(!showStats)}
+              className="bg-purple-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors duration-200 flex items-center gap-2"
+            >
+              <BarChart3 size={16} />
+              {showStats ? 'Ocultar' : 'Ver'} Estadísticas
             </button>
           </div>
+
+          {/* Hidden file input for import */}
+          <input
+            type="file"
+            ref={importFileRef}
+            hidden
+            accept=".json"
+            onChange={handleImportData}
+          />
         </div>
+
+        {/* Stats Panel */}
+        {showStats && (
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Estadísticas del Inventario</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-blue-50 p-4 rounded-lg text-center">
+                <div className="text-2xl font-bold text-blue-600">{stats.totalProducts}</div>
+                <div className="text-sm text-gray-600">Total Productos</div>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg text-center">
+                <div className="text-2xl font-bold text-green-600">{stats.activeProducts}</div>
+                <div className="text-sm text-gray-600">Activos</div>
+              </div>
+              <div className="bg-yellow-50 p-4 rounded-lg text-center">
+                <div className="text-2xl font-bold text-yellow-600">{stats.featuredProducts}</div>
+                <div className="text-sm text-gray-600">Destacados</div>
+              </div>
+              <div className="bg-red-50 p-4 rounded-lg text-center">
+                <div className="text-2xl font-bold text-red-600">{stats.outOfStock}</div>
+                <div className="text-sm text-gray-600">Sin Stock</div>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg text-center">
+                <div className="text-2xl font-bold text-purple-600">{stats.categories}</div>
+                <div className="text-sm text-gray-600">Categorías</div>
+              </div>
+              <div className="bg-indigo-50 p-4 rounded-lg text-center">
+                <div className="text-2xl font-bold text-indigo-600">{stats.brands}</div>
+                <div className="text-sm text-gray-600">Marcas</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg text-center">
+                <div className="text-2xl font-bold text-gray-600">{formatPrice(stats.totalValue)}</div>
+                <div className="text-sm text-gray-600">Valor Total</div>
+              </div>
+              <div className="bg-orange-50 p-4 rounded-lg text-center">
+                <div className="text-xs font-bold text-orange-600">Última Act.</div>
+                <div className="text-xs text-gray-600">{stats.lastUpdated}</div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Controls */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
@@ -489,7 +643,7 @@ export default function AdminPanel() {
           )}
         </div>
 
-        {/* Modal */}
+        {/* Modal - Same as before but with better error handling */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">

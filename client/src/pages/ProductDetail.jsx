@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react'
+import { ArrowLeft, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw, MessageCircle, Phone } from 'lucide-react'
 import { productService } from "../services/productService"
+import { isProduction } from "../utils/envUtils" // Importar isProduction
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -26,6 +27,7 @@ export default function ProductDetail() {
   const fetchProduct = async () => {
     try {
       setLoading(true)
+      // productService ahora maneja si es producción o desarrollo
       const data = await productService.getProduct(id)
       setProduct(data)
     } catch (error) {
@@ -37,6 +39,7 @@ export default function ProductDetail() {
 
   const fetchRelatedProducts = async () => {
     try {
+      // productService ahora maneja si es producción o desarrollo
       const data = await productService.getProductsByCategory(product.category, 4)
       // Filter out current product
       setRelatedProducts(data.filter((p) => p.id !== product.id))
@@ -68,6 +71,19 @@ export default function ProductDetail() {
       accessories: "Accesorios",
     }
     return categoryMap[category] || category
+  }
+
+  const handleWhatsAppContact = () => {
+    const message = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}. ¿Podrías darme más información?`
+    const whatsappUrl = `https://wa.me/5491112345678?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
+  }
+
+  const handleEmailContact = () => {
+    const subject = `Consulta sobre: ${product.name}`
+    const body = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}. ¿Podrían darme más información sobre disponibilidad y formas de pago?`
+    const emailUrl = `mailto:info@lauchaBMX.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    window.open(emailUrl, '_blank')
   }
 
   if (loading) {
@@ -110,7 +126,7 @@ export default function ProductDetail() {
             </Link>
             <span>/</span>
             <Link to="/store" className="hover:text-yellow-600">
-              Tienda
+              {isProduction ? "Catálogo" : "Tienda"}
             </Link>
             <span>/</span>
             <Link to={`/store?category=${product.category}`} className="hover:text-yellow-600">
@@ -129,7 +145,7 @@ export default function ProductDetail() {
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors duration-200"
         >
           <ArrowLeft size={20} />
-          Volver a la tienda
+          Volver al {isProduction ? "catálogo" : "tienda"}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -178,7 +194,7 @@ export default function ProductDetail() {
               <p className="text-gray-600 text-lg leading-relaxed">{product.description}</p>
             </div>
 
-            {/* Price and Stock */}
+            {/* Price and Actions */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -189,57 +205,95 @@ export default function ProductDetail() {
                     </span>
                   )}
                 </div>
-                <div className="text-right">
-                  <div
-                    className={`text-sm font-medium ${
-                      product.stock > 0 ? "text-green-600" : "text-red-600"
-                    }`}
-                  >
-                    {product.stock > 0 ? `${product.stock} en stock` : "Sin stock"}
+                {!isProduction && (
+                  <div className="text-right">
+                    <div
+                      className={`text-sm font-medium ${
+                        product.stock > 0 ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {product.stock > 0 ? `${product.stock} en stock` : "Sin stock"}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {isProduction ? (
+                /* Production Mode - Contact Buttons */
+                <div className="space-y-4">
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                    <p className="text-yellow-800 text-sm font-medium">
+                      💬 Para consultas sobre disponibilidad, precios y formas de pago, contactanos directamente:
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button
+                      onClick={handleWhatsAppContact}
+                      className="flex items-center justify-center gap-2 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all duration-200"
+                    >
+                      <MessageCircle size={20} />
+                      WhatsApp
+                    </button>
+                    <button
+                      onClick={handleEmailContact}
+                      className="flex items-center justify-center gap-2 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200"
+                    >
+                      <Phone size={20} />
+                      Email
+                    </button>
+                  </div>
+
+                  <div className="text-center pt-4 border-t border-gray-200">
+                    <p className="text-gray-600 text-sm">
+                      📞 También podés llamarnos: <span className="font-semibold">+54 9 11 1234-5678</span>
+                    </p>
                   </div>
                 </div>
-              </div>
+              ) : (
+                /* Development Mode - Shopping Cart */
+                <>
+                  <div className="flex gap-4 mb-6">
+                    <div className="flex items-center border border-gray-300 rounded-lg">
+                      <button
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        className="px-3 py-2 text-gray-600 hover:text-gray-800"
+                        disabled={quantity <= 1}
+                      >
+                        -
+                      </button>
+                      <span className="px-4 py-2 border-x border-gray-300">{quantity}</span>
+                      <button
+                        onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                        className="px-3 py-2 text-gray-600 hover:text-gray-800"
+                        disabled={quantity >= product.stock}
+                      >
+                        +
+                      </button>
+                    </div>
 
-              {/* Quantity and Add to Cart */}
-              <div className="flex gap-4 mb-6">
-                <div className="flex items-center border border-gray-300 rounded-lg">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-3 py-2 text-gray-600 hover:text-gray-800"
-                    disabled={quantity <= 1}
-                  >
-                    -
-                  </button>
-                  <span className="px-4 py-2 border-x border-gray-300">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                    className="px-3 py-2 text-gray-600 hover:text-gray-800"
-                    disabled={quantity >= product.stock}
-                  >
-                    +
-                  </button>
-                </div>
+                    <button
+                      disabled={product.stock === 0}
+                      className="flex-1 bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                      <ShoppingCart size={20} />
+                      {product.stock === 0 ? "Sin stock" : "Agregar al carrito"}
+                    </button>
+                  </div>
 
-                <button
-                  disabled={product.stock === 0}
-                  className="flex-1 bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <ShoppingCart size={20} />
-                  {product.stock === 0 ? "Sin stock" : "Agregar al carrito"}
-                </button>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-2">
-                <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2">
-                  <Heart size={18} />
-                  Favoritos
-                </button>
-                <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2">
-                  <Share2 size={18} />
-                  Compartir
-                </button>
-              </div>
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2">
+                      <Heart size={18} />
+                      Favoritos
+                    </button>
+                    <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2">
+                      <Share2 size={18} />
+                      Compartir
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Specifications */}
@@ -260,22 +314,43 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Shipping Info */}
+            {/* Shipping/Contact Info */}
             <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Información de envío</h3>
+              <h3 className="text-lg font-bold text-gray-800 mb-4">
+                {isProduction ? "Información de contacto" : "Información de envío"}
+              </h3>
               <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Truck className="text-yellow-500" size={20} />
-                  <span className="text-gray-700">Envío gratis en compras mayores a $50.000</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Shield className="text-green-500" size={20} />
-                  <span className="text-gray-700">Garantía de 6 meses</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <RotateCcw className="text-blue-500" size={20} />
-                  <span className="text-gray-700">Devoluciones hasta 30 días</span>
-                </div>
+                {isProduction ? (
+                  <>
+                    <div className="flex items-center gap-3">
+                      <MessageCircle className="text-green-500" size={20} />
+                      <span className="text-gray-700">Consultá disponibilidad por WhatsApp</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Phone className="text-blue-500" size={20} />
+                      <span className="text-gray-700">Atención personalizada por teléfono</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Shield className="text-green-500" size={20} />
+                      <span className="text-gray-700">Garantía de 6 meses en todos los productos</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3">
+                      <Truck className="text-yellow-500" size={20} />
+                      <span className="text-gray-700">Envío gratis en compras mayores a $50.000</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Shield className="text-green-500" size={20} />
+                      <span className="text-gray-700">Garantía de 6 meses</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <RotateCcw className="text-blue-500" size={20} />
+                      <span className="text-gray-700">Devoluciones hasta 30 días</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

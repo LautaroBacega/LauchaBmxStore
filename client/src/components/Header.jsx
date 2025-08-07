@@ -3,10 +3,10 @@
 import { Link } from "react-router-dom"
 import { useUser } from "../hooks/useUser"
 import { User, Home, Store, Settings } from 'lucide-react'
+import { isDevelopment, isProduction } from "../utils/envUtils"
 
 export default function Header() {
   const { currentUser } = useUser()
-  const isDevelopment = import.meta.env.DEV
 
   return (
     <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-black shadow-lg border-b border-gray-700">
@@ -54,25 +54,44 @@ export default function Header() {
               </Link>
             )}
 
-            <Link to="/profile" className="group flex items-center gap-2">
-              {currentUser ? (
-                <div className="flex items-center gap-2">
-                  <img
-                    src={currentUser.profilePicture || "/placeholder.svg"}
-                    alt="profile"
-                    className="h-8 w-8 rounded-full object-cover ring-2 ring-yellow-500 group-hover:ring-yellow-400 transition-all duration-200"
-                  />
-                  <span className="hidden sm:block text-gray-300 group-hover:text-white font-medium transition-colors duration-200">
-                    Perfil
-                  </span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200">
-                  <User size={18} className="group-hover:scale-110 transition-transform duration-200" />
-                  <span className="font-medium">Iniciar Sesión</span>
-                </div>
-              )}
-            </Link>
+            {/* Authentication - Only show in development OR if user is already logged in */}
+            {(isDevelopment || currentUser) && (
+              <Link to="/profile" className="group flex items-center gap-2">
+                {currentUser ? (
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={currentUser.profilePicture || "/placeholder.svg"}
+                      alt="profile"
+                      className="h-8 w-8 rounded-full object-cover ring-2 ring-yellow-500 group-hover:ring-yellow-400 transition-all duration-200"
+                    />
+                    <span className="hidden sm:block text-gray-300 group-hover:text-white font-medium transition-colors duration-200">
+                      Perfil
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200">
+                    <User size={18} className="group-hover:scale-110 transition-transform duration-200" />
+                    <span className="font-medium">Iniciar Sesión</span>
+                  </div>
+                )}
+              </Link>
+            )}
+
+            {/* Production mode indicator */}
+            {isProduction && (
+              <div className="hidden md:flex items-center gap-2 text-gray-400 text-sm">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Catálogo Online</span>
+              </div>
+            )}
+
+            {/* Development mode indicator */}
+            {isDevelopment && (
+              <div className="hidden md:flex items-center gap-2 text-blue-400 text-sm">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <span>Desarrollo</span>
+              </div>
+            )}
           </ul>
         </nav>
       </div>

@@ -1,9 +1,11 @@
 "use client"
 
 import { Link } from "react-router-dom"
-import { ShoppingCart, Eye } from 'lucide-react'
+import { ShoppingCart, Eye, MessageCircle } from 'lucide-react'
 
 export default function ProductCard({ product }) {
+  const isProduction = import.meta.env.PROD
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat("es-AR", {
       style: "currency",
@@ -27,6 +29,12 @@ export default function ProductCard({ product }) {
       accessories: "Accesorios",
     }
     return categoryMap[category] || category
+  }
+
+  const handleContactClick = () => {
+    const message = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}`
+    const whatsappUrl = `https://wa.me/5491112345678?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
   }
 
   return (
@@ -53,17 +61,28 @@ export default function ProductCard({ product }) {
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
             <Link
-              to={`/products/${product._id}`}
+              to={`/products/${product.id}`}
               className="bg-white text-gray-800 p-2 rounded-full hover:bg-yellow-500 hover:text-black transition-colors duration-200"
             >
               <Eye size={20} />
             </Link>
-            <button
-              className="bg-yellow-500 text-black p-2 rounded-full hover:bg-yellow-600 transition-colors duration-200"
-              disabled={product.stock === 0}
-            >
-              <ShoppingCart size={20} />
-            </button>
+            
+            {isProduction ? (
+              <button
+                onClick={handleContactClick}
+                className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition-colors duration-200"
+                title="Consultar por WhatsApp"
+              >
+                <MessageCircle size={20} />
+              </button>
+            ) : (
+              <button
+                className="bg-yellow-500 text-black p-2 rounded-full hover:bg-yellow-600 transition-colors duration-200"
+                disabled={product.stock === 0}
+              >
+                <ShoppingCart size={20} />
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -86,17 +105,31 @@ export default function ProductCard({ product }) {
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-2xl font-bold text-gray-800">{formatPrice(product.price)}</span>
-            <span className="text-xs text-gray-500">
-              Stock: {product.stock > 0 ? product.stock : "Sin stock"}
-            </span>
+            {!isProduction && (
+              <span className="text-xs text-gray-500">
+                Stock: {product.stock > 0 ? product.stock : "Sin stock"}
+              </span>
+            )}
           </div>
 
-          <Link
-            to={`/products/${product._id}`}
-            className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 hover:text-black transition-all duration-200 text-sm font-medium"
-          >
-            Ver Detalles
-          </Link>
+          <div className="flex flex-col gap-2">
+            <Link
+              to={`/products/${product.id}`}
+              className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 hover:text-black transition-all duration-200 text-sm font-medium text-center"
+            >
+              Ver Detalles
+            </Link>
+            
+            {isProduction && (
+              <button
+                onClick={handleContactClick}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-200 text-sm font-medium flex items-center justify-center gap-1"
+              >
+                <MessageCircle size={14} />
+                Consultar
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
