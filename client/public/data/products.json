@@ -47,6 +47,30 @@
       "tags": [],
       "createdAt": "2025-08-07T20:06:53.654Z",
       "updatedAt": "2025-08-07T20:06:53.654Z"
+    },
+    {
+      "id": "1754597651093",
+      "name": "Bici Completa",
+      "description": "asasdefegrhthtj",
+      "price": 125000,
+      "category": "handlebars",
+      "brand": "Sunday",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754597641079_0_completebike-Broc%20Raiford%20Darkwave%20Authentic-9.jpg?alt=media&token=45ef73f6-97db-472d-8de9-a220520442ab"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "",
+        "color": "",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-07T20:14:11.093Z",
+      "updatedAt": "2025-08-07T20:14:11.093Z"
     }
   ],
   "categories": []
