@@ -36,14 +36,6 @@ export default function Header() {
               <span className="hidden sm:block font-medium">Inicio</span>
             </Link>
 
-            <Link
-              to="/store"
-              className="group flex items-center gap-2 text-gray-300 hover:text-yellow-400 transition-colors duration-200"
-            >
-              <Store size={18} className="group-hover:scale-110 transition-transform duration-200" />
-              <span className="hidden sm:block font-medium">Tienda</span>
-            </Link>
-
             {/* Admin Panel - Only in development */}
             {isDevelopment && currentUser && (
               <Link
