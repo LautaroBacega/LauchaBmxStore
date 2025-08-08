@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { useUser } from "../hooks/useUser"
 import { User, Home, Store, Settings } from 'lucide-react'
 import { isDevelopment, isProduction } from "../utils/envUtils"
+import logo from "../../public/LauchaBmxStore-logosinfondo.png"
 
 export default function Header() {
   const { currentUser } = useUser()
@@ -13,7 +14,7 @@ export default function Header() {
       <div className="flex justify-between items-center max-w-7xl mx-auto p-4">
         <Link to="/" className="group flex items-center gap-3">
           <img
-            src="/images/logo-bmx.png"
+            src={logo}
             alt="Laucha BMX Store"
             className="w-10 h-10 group-hover:scale-110 transition-transform duration-200"
           />
@@ -86,12 +87,12 @@ export default function Header() {
             )}
 
             {/* Development mode indicator */}
-            {isDevelopment && (
+            {/* {isDevelopment && (
               <div className="hidden md:flex items-center gap-2 text-blue-400 text-sm">
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                 <span>Desarrollo</span>
               </div>
-            )}
+            )} */}
           </ul>
         </nav>
       </div>

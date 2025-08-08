@@ -80,14 +80,7 @@ export default function App() {
           )}
         </Route>
       </Routes>
-      
-      {/* Only show auth-related components in development */}
-      {isDevelopment && (
-        <>
-          <SessionExpiredModal />
-          <TokenTimers />
-        </>
-      )}
     </BrowserRouter>
   )
+  
 }

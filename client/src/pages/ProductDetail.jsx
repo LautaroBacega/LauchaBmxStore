@@ -280,18 +280,6 @@ export default function ProductDetail() {
                       {product.stock === 0 ? "Sin stock" : "Agregar al carrito"}
                     </button>
                   </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-2">
-                    <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2">
-                      <Heart size={18} />
-                      Favoritos
-                    </button>
-                    <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2">
-                      <Share2 size={18} />
-                      Compartir
-                    </button>
-                  </div>
                 </>
               )}
             </div>

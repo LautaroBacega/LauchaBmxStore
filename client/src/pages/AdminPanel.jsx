@@ -342,12 +342,7 @@ export default function AdminPanel() {
         {/* Header */}
         <div className="bg-blue-600 text-white rounded-xl p-6 mb-8">
           <h1 className="text-3xl font-bold mb-2">Panel de Administración - Persistencia en JSON</h1>
-          <p className="text-blue-100">
-            ✨ Los cambios se guardan en `client/public/data/products.json` en tu entorno local.
-          </p>
-          <p className="text-blue-100 font-semibold mt-2">
-            ⚠️ ¡Recuerda hacer `git commit` de `products.json` y `git push` para que los cambios se vean en Netlify!
-          </p>
+          
           
           <div className="mt-4 flex flex-wrap gap-4">
             <button

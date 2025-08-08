@@ -6,6 +6,7 @@ import ProductCard from "../components/ProductCard"
 import CategoryFilter from "../components/CategoryFilter"
 import { productService } from "../services/productService"
 import { isProduction } from "../utils/envUtils" // Importar isProduction
+import logo from "../../public/LauchaBmxStore-logosinfondo.png"
 
 export default function Store() {
   const [products, setProducts] = useState([])
@@ -61,13 +62,13 @@ export default function Store() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-16">
+      <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8">
             <img
-              src="/images/logo-bmx.png"
+              src={logo}
               alt="Laucha BMX Store"
-              className="w-32 h-32 mx-auto mb-6"
+              className="h-60 mx-auto"
             />
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
               <span className="text-yellow-500">LAUCHA</span> BMX STORE
