@@ -238,8 +238,8 @@ export default function ProductDetail() {
                 )}
               </div>
 
-              {isProduction ? (
-                /* Production Mode - Contact Buttons */
+              
+                {/* Production Mode - Contact Buttons */}
                 <div className="space-y-4">
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
                     <p className="text-yellow-800 text-sm font-medium">
@@ -257,38 +257,7 @@ export default function ProductDetail() {
                     </button>
                   </div>
                 </div>
-              ) : (
-                /* Development Mode - Shopping Cart */
-                <>
-                  <div className="flex gap-4 mb-6">
-                    <div className="flex items-center border border-gray-300 rounded-lg">
-                      <button
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="px-3 py-2 text-gray-600 hover:text-gray-800"
-                        disabled={quantity <= 1}
-                      >
-                        -
-                      </button>
-                      <span className="px-4 py-2 border-x border-gray-300">{quantity}</span>
-                      <button
-                        onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                        className="px-3 py-2 text-gray-600 hover:text-gray-800"
-                        disabled={quantity >= product.stock}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <button
-                      disabled={product.stock === 0}
-                      className="flex-1 bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
-                    >
-                      <ShoppingCart size={20} />
-                      {product.stock === 0 ? "Sin stock" : "Agregar al carrito"}
-                    </button>
-                  </div>
-                </>
-              )}
+              
             </div>
 
             {/* Specifications */}

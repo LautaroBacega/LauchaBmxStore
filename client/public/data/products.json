@@ -1,76 +1,29 @@
 {
   "products": [
     {
-      "name": "aaa",
-      "description": "aaaa",
-      "price": 12,
-      "category": "wheels",
-      "brand": "aaa",
-      "stock": 2,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754588448486_0_Captura%20de%20pantalla%202025-07-26%20125125.png?alt=media&token=6f74e2bb-953c-4778-864a-acdec891d366"
-      ],
-      "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "",
-        "color": "",
-        "compatibility": ""
-      },
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "id": "1754588457526",
-      "createdAt": "2025-08-07T17:40:57.526Z",
-      "updatedAt": "2025-08-07T17:40:57.526Z"
-    },
-    {
-      "id": "1754597213654",
-      "name": "asas",
-      "description": "adasasas",
-      "price": 12,
+      "id": "1754756251203",
+      "name": "Cuadro Total Hangover",
+      "description": "Cuadro Total Hangover 20.6, excelente estado, igual a nuevo.",
+      "price": 420000,
       "category": "frames",
-      "brand": "aaa",
-      "stock": 11,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754597205316_0_product-odysseyPath-tire-1.jpg?alt=media&token=733869c9-ba8c-4241-a2eb-68a9f69b5d44"
-      ],
-      "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "",
-        "color": "",
-        "compatibility": ""
-      },
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-07T20:06:53.654Z",
-      "updatedAt": "2025-08-07T20:06:53.654Z"
-    },
-    {
-      "id": "1754597651093",
-      "name": "Bici Completa",
-      "description": "asasdefegrhthtj",
-      "price": 125000,
-      "category": "handlebars",
-      "brand": "Sunday",
+      "brand": "Total",
       "stock": 1,
       "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754597641079_0_completebike-Broc%20Raiford%20Darkwave%20Authentic-9.jpg?alt=media&token=45ef73f6-97db-472d-8de9-a220520442ab"
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754756189286_0_IMG_2007.jpg?alt=media&token=95c10533-ef70-4518-b003-6fadb236040d",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754756223237_2_IMG_2014.jpg?alt=media&token=ac1faea6-49c9-4e54-b4d8-ca4790dee164"
       ],
       "specifications": {
         "material": "",
         "weight": "",
-        "size": "",
-        "color": "",
+        "size": "20.6",
+        "color": "Negro",
         "compatibility": ""
       },
       "featured": false,
       "active": true,
       "tags": [],
-      "createdAt": "2025-08-07T20:14:11.093Z",
-      "updatedAt": "2025-08-09T15:22:26.534Z"
+      "createdAt": "2025-08-09T16:17:31.203Z",
+      "updatedAt": "2025-08-09T16:17:31.204Z"
     }
   ],
   "categories": []
