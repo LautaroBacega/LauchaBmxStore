@@ -145,7 +145,7 @@ export default function ProductDetail() {
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors duration-200"
         >
           <ArrowLeft size={20} />
-          Volver a la {isProduction ? "catálogo" : "tienda"}
+          Volver a la tienda
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -223,11 +223,11 @@ export default function ProductDetail() {
                 <div className="space-y-4">
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
                     <p className="text-yellow-800 text-sm font-medium">
-                      💬 Para consultas sobre disponibilidad, precios y formas de pago, contactanos directamente:
+                      Para consultas sobre disponibilidad, precios y formas de pago, contactanos directamente:
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3">
                     <button
                       onClick={handleWhatsAppContact}
                       className="flex items-center justify-center gap-2 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all duration-200"
@@ -235,19 +235,6 @@ export default function ProductDetail() {
                       <MessageCircle size={20} />
                       WhatsApp
                     </button>
-                    <button
-                      onClick={handleEmailContact}
-                      className="flex items-center justify-center gap-2 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-all duration-200"
-                    >
-                      <Phone size={20} />
-                      Email
-                    </button>
-                  </div>
-
-                  <div className="text-center pt-4 border-t border-gray-200">
-                    <p className="text-gray-600 text-sm">
-                      📞 También podés llamarnos: <span className="font-semibold">+54 9 11 1234-5678</span>
-                    </p>
                   </div>
                 </div>
               ) : (
@@ -317,10 +304,6 @@ export default function ProductDetail() {
                     <div className="flex items-center gap-3">
                       <Phone className="text-blue-500" size={20} />
                       <span className="text-gray-700">Atención personalizada por teléfono</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Shield className="text-green-500" size={20} />
-                      <span className="text-gray-700">Garantía de 6 meses en todos los productos</span>
                     </div>
                   </>
                 ) : (

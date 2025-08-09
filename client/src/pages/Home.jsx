@@ -153,32 +153,19 @@ export default function Home() {
 
             {/* Search Bar integrada en el hero */}
             <div className="max-w-2xl mx-auto mb-8">
-  <div className="relative">
-    <input
-      type="text"
-      placeholder="Buscar productos..."
-      className="w-full p-4 pl-12 rounded-lg text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-      value={filters.search}
-      onChange={(e) => handleFilterChange({ search: e.target.value })}
-    />
-    <div className="text-gray-400 absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-      <Search />
-    </div>
-  </div>
-</div>
-
-
-            {/* Production mode banner */}
-            {isProduction && (
-              <div className="bg-yellow-500/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto border border-yellow-500/20">
-                <div className="text-center">
-                  <h3 className="font-bold text-yellow-400 text-lg mb-2">🏪 Catálogo Online</h3>
-                  <p className="text-gray-300 text-sm">
-                    Explorá nuestra selección de productos BMX. Para consultas y pedidos, contactanos directamente.
-                  </p>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Buscar productos..."
+                  className="w-full p-4 pl-12 rounded-lg text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  value={filters.search}
+                  onChange={(e) => handleFilterChange({ search: e.target.value })}
+                />
+                <div className="text-gray-400 absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Search />
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
