@@ -105,7 +105,7 @@ export default function ProductDetail() {
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Producto no encontrado</h2>
           <p className="text-gray-600 mb-6">El producto que buscas no existe o ha sido eliminado.</p>
           <Link
-            to="/store"
+            to="/"
             className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-200"
           >
             Volver a la tienda
@@ -125,11 +125,11 @@ export default function ProductDetail() {
               Inicio
             </Link>
             <span>/</span>
-            <Link to="/store" className="hover:text-yellow-600">
+            <Link to="/" className="hover:text-yellow-600">
               {isProduction ? "Catálogo" : "Tienda"}
             </Link>
             <span>/</span>
-            <Link to={`/store?category=${product.category}`} className="hover:text-yellow-600">
+            <Link to={`/category=${product.category}`} className="hover:text-yellow-600">
               {getCategoryName(product.category)}
             </Link>
             <span>/</span>
@@ -138,14 +138,14 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Back Button */}
         <Link
-          to="/store"
+          to="/"
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors duration-200"
         >
           <ArrowLeft size={20} />
-          Volver al {isProduction ? "catálogo" : "tienda"}
+          Volver a la {isProduction ? "catálogo" : "tienda"}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -327,15 +327,7 @@ export default function ProductDetail() {
                   <>
                     <div className="flex items-center gap-3">
                       <Truck className="text-yellow-500" size={20} />
-                      <span className="text-gray-700">Envío gratis en compras mayores a $50.000</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Shield className="text-green-500" size={20} />
-                      <span className="text-gray-700">Garantía de 6 meses</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RotateCcw className="text-blue-500" size={20} />
-                      <span className="text-gray-700">Devoluciones hasta 30 días</span>
+                      <span className="text-gray-700">Envíos a todo el país al mejor precio a traves Andreani.</span>
                     </div>
                   </>
                 )}

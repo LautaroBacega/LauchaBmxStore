@@ -1,6 +1,6 @@
 "use client"
 
-import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, MessageCircle  } from 'lucide-react'
+import { MapPin, Instagram, MessageCircle  } from 'lucide-react'
 
 export default function Footer() {
   const handleWhatsAppClick = () => {

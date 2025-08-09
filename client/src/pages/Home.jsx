@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useUser } from '../hooks/useUser'
-import { Store, Star, Truck, Shield, ArrowRight, Grid, List } from 'lucide-react'
+import { Store, Star, Truck, Shield, ArrowRight, Grid, List, Search } from 'lucide-react'
 import ProductCard from "../components/ProductCard"
 import CategoryFilter from "../components/CategoryFilter"
 import { productService } from "../services/productService"
@@ -134,7 +134,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-10">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-10">
         <div className="max-w-7xl mx-auto px-4">
@@ -148,24 +148,24 @@ export default function Home() {
               <span className="text-yellow-500">LAUCHA</span> BMX STORE
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              {isProduction 
-                ? "Catálogo online de las mejores partes y accesorios BMX. Descubrí nuestra selección de productos premium."
-                : "Las mejores partes y accesorios para tu BMX. Calidad profesional para riders que no se conforman con menos."
-              }
+              Partes y accesorios para tu BMX.
             </p>
 
             {/* Search Bar integrada en el hero */}
             <div className="max-w-2xl mx-auto mb-8">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Buscar productos..."
-                  className="w-full p-4 rounded-lg text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  value={filters.search}
-                  onChange={(e) => handleFilterChange({ search: e.target.value })}
-                />
-              </div>
-            </div>
+  <div className="relative">
+    <input
+      type="text"
+      placeholder="Buscar productos..."
+      className="w-full p-4 pl-12 rounded-lg text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+      value={filters.search}
+      onChange={(e) => handleFilterChange({ search: e.target.value })}
+    />
+    <div className="text-gray-400 absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <Search />
+    </div>
+  </div>
+</div>
 
 
             {/* Production mode banner */}
@@ -202,7 +202,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                  {hasActiveFilters ? 'Productos Filtrados' : 'Nuestro Catálogo'}
+                  {hasActiveFilters ? 'Productos Filtrados' : 'Catálogo'}
                 </h2>
                 <p className="text-gray-600">
                   {pagination.totalProducts > 0 
@@ -321,43 +321,21 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <div className="py-16 bg-white">
+      <div className="py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1  gap-8">
             <div className="text-center p-6">
-              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="text-yellow-600" size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Calidad Premium</h3>
-              <p className="text-gray-600">
-                Solo trabajamos con las mejores marcas y productos de máxima calidad para riders exigentes.
-              </p>
-            </div>
-
-            <div className="text-center p-6">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Truck className="text-green-600" size={32} />
+              <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Truck className="text-red-600" size={32} />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">
                 {isProduction ? "Consulta Envíos" : "Envío Rápido"}
               </h3>
               <p className="text-gray-600">
-                {isProduction 
-                  ? "Consultanos por opciones de envío a todo el país. Trabajamos con las mejores empresas de logística."
-                  : "Envío gratis en compras mayores a $50.000. Recibí tus partes en tiempo récord."
-                }
+                Envíos a todo el país al mejor precio a traves Andreani. Consultá costos y tiempos.
               </p>
             </div>
 
-            <div className="text-center p-6">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="text-blue-600" size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Garantía Total</h3>
-              <p className="text-gray-600">
-                6 meses de garantía en todos nuestros productos. Tu inversión está protegida.
-              </p>
-            </div>
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@ export default function Header() {
   const { currentUser } = useUser()
 
   return (
-    <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-black shadow-lg border-b border-gray-700">
+    <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-black shadow-lg border-b border-gray-700 fixed top-0 left-0 w-full z-50">
       <div className="flex justify-between items-center max-w-7xl mx-auto p-4">
         <Link to="/" className="group flex items-center gap-3">
           <img
