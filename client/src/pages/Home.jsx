@@ -316,7 +316,7 @@ export default function Home() {
                 <Truck className="text-red-600" size={32} />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">
-                {isProduction ? "Consulta Envíos" : "Envío Rápido"}
+                Consultá Envíos
               </h3>
               <p className="text-gray-600">
                 Envíos a todo el país al mejor precio a traves Andreani. Consultá costos y tiempos.
