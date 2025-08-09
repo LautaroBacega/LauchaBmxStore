@@ -69,22 +69,6 @@ export default function Header() {
                 )}
               </Link>
             )}
-
-            {/* Production mode indicator */}
-            {isProduction && (
-              <div className="hidden md:flex items-center gap-2 text-gray-400 text-sm">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span>Catálogo Online</span>
-              </div>
-            )}
-
-            {/* Development mode indicator */}
-            {/* {isDevelopment && (
-              <div className="hidden md:flex items-center gap-2 text-blue-400 text-sm">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                <span>Desarrollo</span>
-              </div>
-            )} */}
           </ul>
         </nav>
       </div>
