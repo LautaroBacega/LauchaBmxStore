@@ -1,10 +1,15 @@
 "use client"
 
-import { AlertTriangle, Home, Store } from 'lucide-react'
+import { AlertTriangle, Home, Store } from "lucide-react"
 import { Link } from "react-router-dom"
 import { isProduction } from "../utils/envUtils"
+import { scrollToTop } from "../hooks/useScrollToTop"
 
 export default function ProductionGuard({ children }) {
+  const handleLinkClick = () => {
+    scrollToTop()
+  }
+
   if (isProduction) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -12,20 +17,18 @@ export default function ProductionGuard({ children }) {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full mb-6">
             <AlertTriangle className="h-8 w-8 text-yellow-600" />
           </div>
-          
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            Función no disponible
-          </h1>
-          
+
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Función no disponible</h1>
+
           <p className="text-gray-600 mb-6">
-            Esta función está disponible solo en modo desarrollo. 
-            Explorá nuestro catálogo de productos BMX.
+            Esta función está disponible solo en modo desarrollo. Explorá nuestro catálogo de productos BMX.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               to="/"
               className="flex items-center justify-center gap-2 bg-gray-800 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200"
+              onClick={handleLinkClick}
             >
               <Home size={18} />
               Inicio
@@ -33,6 +36,7 @@ export default function ProductionGuard({ children }) {
             <Link
               to="/"
               className="flex items-center justify-center gap-2 bg-yellow-500 text-black px-4 py-3 rounded-lg hover:bg-yellow-600 transition-colors duration-200"
+              onClick={handleLinkClick}
             >
               <Store size={18} />
               Ver Catálogo

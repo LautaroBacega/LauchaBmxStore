@@ -1,9 +1,10 @@
 "use client"
 
 import { Link } from "react-router-dom"
-import { ShoppingCart, Eye, MessageCircle } from 'lucide-react'
+import { ShoppingCart, Eye, MessageCircle } from "lucide-react"
+import { scrollToTop } from "../hooks/useScrollToTop"
 
-export default function ProductCard({ product, viewMode = 'grid' }) {
+export default function ProductCard({ product, viewMode = "grid" }) {
   const isProduction = import.meta.env.PROD
 
   const formatPrice = (price) => {
@@ -34,10 +35,14 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
   const handleContactClick = () => {
     const message = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}`
     const whatsappUrl = `https://wa.me/5492915092263?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
+    window.open(whatsappUrl, "_blank")
   }
 
-  if (viewMode === 'list') {
+  const handleProductClick = () => {
+    scrollToTop()
+  }
+
+  if (viewMode === "list") {
     return (
       <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
         <div className="flex">
@@ -91,10 +96,11 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
               <Link
                 to={`/product/${product.id}`}
                 className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 hover:text-black transition-all duration-200 text-sm font-medium text-center"
+                onClick={handleProductClick}
               >
                 Ver Detalles
               </Link>
-              
+
               {isProduction ? (
                 <button
                   onClick={handleContactClick}
@@ -146,10 +152,11 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
             <Link
               to={`/product/${product.id}`}
               className="bg-white text-gray-800 p-2 rounded-full hover:bg-yellow-500 hover:text-black transition-colors duration-200"
+              onClick={handleProductClick}
             >
               <Eye size={20} />
             </Link>
-            
+
             {isProduction ? (
               <button
                 onClick={handleContactClick}
@@ -173,9 +180,7 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
       {/* Product Info */}
       <div className="p-4">
         <div className="mb-2">
-          <span className="text-xs text-gray-500 uppercase tracking-wide">
-            {getCategoryName(product.category)}
-          </span>
+          <span className="text-xs text-gray-500 uppercase tracking-wide">{getCategoryName(product.category)}</span>
           <span className="text-xs text-gray-400 ml-2">• {product.brand}</span>
         </div>
 
@@ -189,9 +194,7 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
           <div className="flex flex-col">
             <span className="text-2xl font-bold text-gray-800">{formatPrice(product.price)}</span>
             {!isProduction && (
-              <span className="text-xs text-gray-500">
-                Stock: {product.stock > 0 ? product.stock : "Sin stock"}
-              </span>
+              <span className="text-xs text-gray-500">Stock: {product.stock > 0 ? product.stock : "Sin stock"}</span>
             )}
           </div>
 
@@ -199,10 +202,11 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
             <Link
               to={`/product/${product.id}`}
               className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 hover:text-black transition-all duration-200 text-sm font-medium text-center"
+              onClick={handleProductClick}
             >
               Ver Detalles
             </Link>
-            
+
             {isProduction && (
               <button
                 onClick={handleContactClick}

@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, ShoppingCart, Heart, Share2, Truck, Shield, RotateCcw, MessageCircle, Phone } from 'lucide-react'
+import { ArrowLeft, ShoppingCart, Truck, MessageCircle, Phone } from "lucide-react"
 import { productService } from "../services/productService"
-import { isProduction } from "../utils/envUtils" // Importar isProduction
+import { isProduction } from "../utils/envUtils"
+import { scrollToTop } from "../hooks/useScrollToTop"
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -76,14 +77,26 @@ export default function ProductDetail() {
   const handleWhatsAppContact = () => {
     const message = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}. ¿Podrías darme más información?`
     const whatsappUrl = `https://wa.me/5492915092263?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
+    window.open(whatsappUrl, "_blank")
   }
 
   const handleEmailContact = () => {
     const subject = `Consulta sobre: ${product.name}`
     const body = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}. ¿Podrían darme más información sobre disponibilidad y formas de pago?`
     const emailUrl = `mailto:info@lauchaBMX.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    window.open(emailUrl, '_blank')
+    window.open(emailUrl, "_blank")
+  }
+
+  const handleBackToStore = () => {
+    scrollToTop()
+  }
+
+  const handleBreadcrumbClick = () => {
+    scrollToTop()
+  }
+
+  const handleRelatedProductClick = () => {
+    scrollToTop()
   }
 
   if (loading) {
@@ -107,6 +120,7 @@ export default function ProductDetail() {
           <Link
             to="/"
             className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-200"
+            onClick={handleBackToStore}
           >
             Volver a la tienda
           </Link>
@@ -121,15 +135,19 @@ export default function ProductDetail() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Link to="/" className="hover:text-yellow-600">
+            <Link to="/" className="hover:text-yellow-600" onClick={handleBreadcrumbClick}>
               Inicio
             </Link>
             <span>/</span>
-            <Link to="/" className="hover:text-yellow-600">
+            <Link to="/" className="hover:text-yellow-600" onClick={handleBreadcrumbClick}>
               {isProduction ? "Catálogo" : "Tienda"}
             </Link>
             <span>/</span>
-            <Link to={`/category=${product.category}`} className="hover:text-yellow-600">
+            <Link
+              to={`/category=${product.category}`}
+              className="hover:text-yellow-600"
+              onClick={handleBreadcrumbClick}
+            >
               {getCategoryName(product.category)}
             </Link>
             <span>/</span>
@@ -143,6 +161,7 @@ export default function ProductDetail() {
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors duration-200"
+          onClick={handleBackToStore}
         >
           <ArrowLeft size={20} />
           Volver a la tienda
@@ -155,8 +174,9 @@ export default function ProductDetail() {
               <img
                 src={
                   product.images[selectedImage] ||
-                  "/placeholder.svg?height=500&width=500&query=bmx part"
-                 || "/placeholder.svg"}
+                  "/placeholder.svg?height=500&width=500&query=bmx part" ||
+                  "/placeholder.svg"
+                }
                 alt={product.name}
                 className="w-full h-96 object-cover"
               />
@@ -173,7 +193,11 @@ export default function ProductDetail() {
                       selectedImage === index ? "border-yellow-500" : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
-                    <img src={image || "/placeholder.svg"} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={image || "/placeholder.svg"}
+                      alt={`${product.name} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -207,11 +231,7 @@ export default function ProductDetail() {
                 </div>
                 {!isProduction && (
                   <div className="text-right">
-                    <div
-                      className={`text-sm font-medium ${
-                        product.stock > 0 ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
+                    <div className={`text-sm font-medium ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}>
                       {product.stock > 0 ? `${product.stock} en stock` : "Sin stock"}
                     </div>
                   </div>
@@ -326,12 +346,13 @@ export default function ProductDetail() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
                 <div key={relatedProduct.id} className="bg-white rounded-xl shadow-lg overflow-hidden group">
-                  <Link to={`/products/${relatedProduct.id}`}>
+                  <Link to={`/product/${relatedProduct.id}`} onClick={handleRelatedProductClick}>
                     <img
                       src={
                         relatedProduct.images[0] ||
-                        "/placeholder.svg?height=200&width=250&query=bmx part"
-                       || "/placeholder.svg"}
+                        "/placeholder.svg?height=200&width=250&query=bmx part" ||
+                        "/placeholder.svg"
+                      }
                       alt={relatedProduct.name}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />

@@ -1,14 +1,14 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { useUser } from '../hooks/useUser'
-import { Store, Star, Truck, Shield, ArrowRight, Grid, List, Search } from 'lucide-react'
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import { useUser } from "../hooks/useUser"
+import { Truck, Grid, List, Search } from "lucide-react"
 import ProductCard from "../components/ProductCard"
 import CategoryFilter from "../components/CategoryFilter"
 import { productService } from "../services/productService"
-import { isDevelopment, isProduction } from "../utils/envUtils"
-import { useLocation } from 'react-router-dom'
+import { useLocation } from "react-router-dom"
+import { scrollToTop } from "../hooks/useScrollToTop"
 
 export default function Home() {
   const { currentUser } = useUser()
@@ -16,15 +16,15 @@ export default function Home() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState("grid") // 'grid' or 'list'
   const [filters, setFilters] = useState({
-    category: '',
-    brand: '',
-    search: '',
-    minPrice: '',
-    maxPrice: '',
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
+    category: "",
+    brand: "",
+    search: "",
+    minPrice: "",
+    maxPrice: "",
+    sortBy: "createdAt",
+    sortOrder: "desc",
     page: 1,
     limit: 12,
   })
@@ -39,22 +39,22 @@ export default function Home() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
-    const searchFromUrl = urlParams.get('search')
-    const categoryFromUrl = urlParams.get('category')
-    
+    const searchFromUrl = urlParams.get("search")
+    const categoryFromUrl = urlParams.get("category")
+
     if (searchFromUrl && searchFromUrl !== filters.search) {
-      setFilters(prev => ({
+      setFilters((prev) => ({
         ...prev,
         search: searchFromUrl,
-        page: 1
+        page: 1,
       }))
     }
-    
+
     if (categoryFromUrl && categoryFromUrl !== filters.category) {
-      setFilters(prev => ({
+      setFilters((prev) => ({
         ...prev,
         category: categoryFromUrl,
-        page: 1
+        page: 1,
       }))
     }
   }, [location.search])
@@ -76,8 +76,8 @@ export default function Home() {
         setBrands(brandData)
         setFeaturedProducts(featuredData)
       } catch (err) {
-        console.error('Error fetching data:', err)
-        setError('Failed to load products or filters. Please try again later.')
+        console.error("Error fetching data:", err)
+        setError("Failed to load products or filters. Please try again later.")
       } finally {
         setLoading(false)
       }
@@ -111,13 +111,13 @@ export default function Home() {
 
   const clearFilters = () => {
     setFilters({
-      category: '',
-      brand: '',
-      search: '',
-      minPrice: '',
-      maxPrice: '',
-      sortBy: 'createdAt',
-      sortOrder: 'desc',
+      category: "",
+      brand: "",
+      search: "",
+      minPrice: "",
+      maxPrice: "",
+      sortBy: "createdAt",
+      sortOrder: "desc",
       page: 1,
       limit: 12,
     })
@@ -139,17 +139,11 @@ export default function Home() {
       <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center">
-            <img
-              src="/LauchaBmxStore-logosinfondo.png"
-              alt="Laucha BMX Store"
-              className="h-60 mx-auto"
-            />
+            <img src="/LauchaBmxStore-logosinfondo.png" alt="Laucha BMX Store" className="h-60 mx-auto" />
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
               <span className="text-yellow-500">LAUCHA</span> BMX STORE
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Partes y accesorios para tu BMX.
-            </p>
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">Partes y accesorios para tu BMX.</p>
 
             {/* Search Bar integrada en el hero */}
             <div className="max-w-2xl mx-auto mb-8">
@@ -189,13 +183,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                  {hasActiveFilters ? 'Productos Filtrados' : 'Catálogo'}
+                  {hasActiveFilters ? "Productos Filtrados" : "Catálogo"}
                 </h2>
                 <p className="text-gray-600">
-                  {pagination.totalProducts > 0 
+                  {pagination.totalProducts > 0
                     ? `${pagination.totalProducts} productos encontrados`
-                    : 'No se encontraron productos'
-                  }
+                    : "No se encontraron productos"}
                 </p>
               </div>
 
@@ -206,7 +199,7 @@ export default function Home() {
                   className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
                   value={`${filters.sortBy}-${filters.sortOrder}`}
                   onChange={(e) => {
-                    const [sortBy, sortOrder] = e.target.value.split('-')
+                    const [sortBy, sortOrder] = e.target.value.split("-")
                     handleFilterChange({ sortBy, sortOrder })
                   }}
                 >
@@ -221,14 +214,14 @@ export default function Home() {
                 {/* View Mode Toggle */}
                 <div className="flex border border-gray-300 rounded-lg overflow-hidden">
                   <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 ${viewMode === 'grid' ? 'bg-yellow-500 text-black' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+                    onClick={() => setViewMode("grid")}
+                    className={`p-2 ${viewMode === "grid" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
                   >
                     <Grid size={20} />
                   </button>
                   <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 ${viewMode === 'list' ? 'bg-yellow-500 text-black' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+                    onClick={() => setViewMode("list")}
+                    className={`p-2 ${viewMode === "list" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
                   >
                     <List size={20} />
                   </button>
@@ -250,10 +243,9 @@ export default function Home() {
             ) : products.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-gray-600 text-xl mb-4">
-                  {hasActiveFilters 
-                    ? 'No se encontraron productos que coincidan con los filtros seleccionados.'
-                    : 'No hay productos disponibles en este momento.'
-                  }
+                  {hasActiveFilters
+                    ? "No se encontraron productos que coincidan con los filtros seleccionados."
+                    : "No hay productos disponibles en este momento."}
                 </p>
                 {hasActiveFilters && (
                   <button
@@ -267,13 +259,13 @@ export default function Home() {
             ) : (
               <>
                 {/* Products Grid/List */}
-                <div className={
-                  viewMode === 'grid' 
-                    ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8"
-                    : "space-y-4 mb-8"
-                }>
+                <div
+                  className={
+                    viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8" : "space-y-4 mb-8"
+                  }
+                >
                   {products.map((product) => (
-                    <Link key={product.id} to={`/product/${product.id}`}>
+                    <Link key={product.id} to={`/product/${product.id}`} onClick={() => scrollToTop()}>
                       <ProductCard product={product} viewMode={viewMode} />
                     </Link>
                   ))}
@@ -315,19 +307,14 @@ export default function Home() {
               <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Truck className="text-red-600" size={32} />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Consultá Envíos
-              </h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Consultá Envíos</h3>
               <p className="text-gray-600">
                 Envíos a todo el país al mejor precio a traves Andreani. Consultá costos y tiempos.
               </p>
             </div>
-
           </div>
         </div>
       </div>
-
-      
     </div>
   )
 }

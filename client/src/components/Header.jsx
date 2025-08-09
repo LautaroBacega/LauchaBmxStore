@@ -2,19 +2,24 @@
 
 import { Link } from "react-router-dom"
 import { useUser } from "../hooks/useUser"
-import { User, Home, Store, Settings } from 'lucide-react'
-import { isDevelopment, isProduction } from "../utils/envUtils"
+import { User, Home, Settings } from "lucide-react"
+import { isDevelopment } from "../utils/envUtils"
+import { scrollToTop } from "../hooks/useScrollToTop"
 import logo from "../../public/LauchaBmxStore-logosinfondo.png"
 
 export default function Header() {
   const { currentUser } = useUser()
 
+  const handleLinkClick = () => {
+    scrollToTop()
+  }
+
   return (
     <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-black shadow-lg border-b border-gray-700 fixed top-0 left-0 w-full z-50">
       <div className="flex justify-between items-center max-w-7xl mx-auto p-4">
-        <Link to="/" className="group flex items-center gap-3">
+        <Link to="/" className="group flex items-center gap-3" onClick={handleLinkClick}>
           <img
-            src={logo}
+            src={logo || "/placeholder.svg"}
             alt="Laucha BMX Store"
             className="w-10 h-10 group-hover:scale-110 transition-transform duration-200"
           />
@@ -31,6 +36,7 @@ export default function Header() {
             <Link
               to="/"
               className="group flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200"
+              onClick={handleLinkClick}
             >
               <Home size={18} className="group-hover:scale-110 transition-transform duration-200" />
               <span className="hidden sm:block font-medium">Inicio</span>
@@ -41,6 +47,7 @@ export default function Header() {
               <Link
                 to="/admin"
                 className="group flex items-center gap-2 text-gray-300 hover:text-red-400 transition-colors duration-200"
+                onClick={handleLinkClick}
               >
                 <Settings size={18} className="group-hover:scale-110 transition-transform duration-200" />
                 <span className="hidden sm:block font-medium">Admin</span>
@@ -49,7 +56,7 @@ export default function Header() {
 
             {/* Authentication - Only show in development OR if user is already logged in */}
             {(isDevelopment || currentUser) && (
-              <Link to="/profile" className="group flex items-center gap-2">
+              <Link to="/profile" className="group flex items-center gap-2" onClick={handleLinkClick}>
                 {currentUser ? (
                   <div className="flex items-center gap-2">
                     <img
