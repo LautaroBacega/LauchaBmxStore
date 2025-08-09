@@ -33,7 +33,7 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
 
   const handleContactClick = () => {
     const message = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}`
-    const whatsappUrl = `https://wa.me/5491112345678?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/5492915092263?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
   }
 
