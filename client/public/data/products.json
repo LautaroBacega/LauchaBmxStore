@@ -55,6 +55,37 @@
       "tags": [],
       "createdAt": "2025-08-10T21:30:00.302Z",
       "updatedAt": "2025-08-10T21:30:16.742Z"
+    },
+    {
+      "id": "1754862230063",
+      "name": "Cuadro Total SandStorm",
+      "description": "dddddd",
+      "price": 300000,
+      "category": "frames",
+      "brand": "Total",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861683016_img_0_d751of1_IMG_5943.jpg?alt=media&token=11d12bd3-b93a-4ff5-a91e-db6e404d2c5b",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861683017_img_1_0rqyyt0_IMG_5944.jpg?alt=media&token=be3879c2-400b-45cb-b3b0-66e88e957a50",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861683017_img_2_l80ockg_IMG_5945.jpg?alt=media&token=bf219f7a-5da3-4c56-92da-b8fb1b8a2da0",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861683018_img_3_uqld72a_IMG_5946.jpg?alt=media&token=140d13b7-3a6c-4c0f-918d-92b440f883a3",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861683018_img_4_lt4lt8h_IMG_5947.jpg?alt=media&token=0603fc3a-fe1b-4218-a892-f45d1086942a",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861683018_img_5_ki7a0hw_IMG_5948.jpg?alt=media&token=10f54d63-79a3-4fff-aa84-3d627c2c5b23",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861683019_img_6_o7w8lrz_IMG_5949.jpg?alt=media&token=b3831ce1-5654-4bf1-a906-219d95a76ca2",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861683019_img_7_k4d8roj_IMG_5950.jpg?alt=media&token=a354075a-e071-4862-bb54-df42e349a428"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "20.5",
+        "color": "gris",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-10T21:43:50.063Z",
+      "updatedAt": "2025-08-10T21:43:50.063Z"
     }
   ],
   "categories": []

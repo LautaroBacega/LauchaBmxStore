@@ -14,6 +14,8 @@ import {
   FileUp,
   CheckCircle,
   AlertCircle,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app } from "../firebase"
@@ -22,6 +24,57 @@ import { isDevelopment } from "../utils/envUtils" // Importar isDevelopment
 
 // Global counter for unique image IDs
 let uniqueImageIdCounter = 0
+
+// Utility function for image compression
+const compressImage = (file, maxWidth = 1280, maxHeight = 1280, quality = 0.8) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = (event) => {
+      const img = new Image()
+      img.src = event.target.result
+      img.onload = () => {
+        const canvas = document.createElement("canvas")
+        let width = img.width
+        let height = img.height
+
+        // Calculate new dimensions to fit within maxWidth/maxHeight while maintaining aspect ratio
+        if (width > maxWidth || height > maxHeight) {
+          const aspectRatio = width / height
+          if (width > height) {
+            width = maxWidth
+            height = width / aspectRatio
+          } else {
+            height = maxHeight
+            width = height * aspectRatio
+          }
+        }
+
+        canvas.width = width
+        canvas.height = height
+
+        const ctx = canvas.getContext("2d")
+        ctx.drawImage(img, 0, 0, width, height)
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              // Create a new File object from the blob, preserving original name and type
+              const compressedFile = new File([blob], file.name, { type: file.type, lastModified: Date.now() })
+              resolve(compressedFile)
+            } else {
+              reject(new Error("Canvas toBlob failed"))
+            }
+          },
+          file.type, // Use original file type for blob
+          quality,
+        )
+      }
+      img.onerror = (error) => reject(error)
+    }
+    reader.onerror = (error) => reject(error)
+  })
+}
 
 export default function AdminPanel() {
   const [products, setProducts] = useState([])
@@ -38,6 +91,7 @@ export default function AdminPanel() {
   // Estados para manejo de imágenes
   const fileInputRef = useRef(null) // Single ref for multi-file input
   const importFileRef = useRef(null) // Declare importFileRef here
+  const [currentImageIndex, setCurrentImageIndex] = useState(0) // Nuevo estado para el carrusel
 
   const [formData, setFormData] = useState({
     name: "",
@@ -144,7 +198,7 @@ export default function AdminPanel() {
       return
     }
 
-    // Validar tamaño (máximo 5MB)
+    // Validar tamaño (máximo 5MB) - This check is less critical now with client-side compression
     if (file.size > 5 * 1024 * 1024) {
       setFormData((prev) => ({
         ...prev,
@@ -190,28 +244,53 @@ export default function AdminPanel() {
   }
 
   // Handle multiple file selection
-  const handleFileSelect = (e) => {
+  const handleFileSelect = async (e) => {
+    // Make it async
     const files = Array.from(e.target.files)
     if (files.length === 0) return
 
-    const newImageObjects = files.map((file) => ({
-      id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`, // More robust unique ID
-      url: null,
-      file: file,
-      progress: 0,
-      error: null,
-    }))
-
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...newImageObjects],
-    }))
-
-    newImageObjects.forEach((fileObject) => {
-      uploadFileToFirebase(fileObject)
+    const newImageObjectsPromises = files.map(async (file) => {
+      // Map to promises
+      try {
+        const compressedFile = await compressImage(file) // Compress the image
+        return {
+          id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`,
+          url: null,
+          file: compressedFile, // Use the compressed file
+          progress: 0,
+          error: null,
+        }
+      } catch (error) {
+        console.error("Error compressing image:", error)
+        return {
+          id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`,
+          url: null,
+          file: file, // Fallback to original file if compression fails
+          progress: 0,
+          error: "Error al procesar la imagen para subirla.",
+        }
+      }
     })
 
-    // Clear the input so the same files can be selected again if needed
+    const newImageObjects = await Promise.all(newImageObjectsPromises) // Wait for all compressions
+
+    setFormData((prev) => {
+      const updatedImages = [...prev.images, ...newImageObjects]
+      // Set the current image to the first newly added image
+      setCurrentImageIndex(updatedImages.length - 1) // Update index based on final array length
+      return {
+        ...prev,
+        images: updatedImages,
+      }
+    })
+
+    newImageObjects.forEach((fileObject) => {
+      if (!fileObject.error) {
+        // Only upload if no compression error
+        uploadFileToFirebase(fileObject)
+      }
+    })
+
     e.target.value = ""
   }
 
@@ -278,6 +357,7 @@ export default function AdminPanel() {
       })),
     })
     setShowModal(true)
+    setCurrentImageIndex(0) // Reset carousel to first image when editing
   }
 
   const handleDelete = async (productId) => {
@@ -377,6 +457,7 @@ export default function AdminPanel() {
       active: true,
       tags: "",
     })
+    setCurrentImageIndex(0) // Reset carousel index
   }
 
   const removeImage = (idToRemove) => {
@@ -387,6 +468,17 @@ export default function AdminPanel() {
       if (removedImage && removedImage.file && removedImage.url === null) {
         URL.revokeObjectURL(removedImage.file)
       }
+
+      // Adjust currentImageIndex if the removed image was the current one,
+      // or if the index is now out of bounds.
+      let newIndex = currentImageIndex
+      if (updatedImages.length === 0) {
+        newIndex = 0 // No images left
+      } else if (currentImageIndex >= updatedImages.length) {
+        newIndex = Math.max(0, updatedImages.length - 1) // If last image was removed or index out of bounds
+      }
+      setCurrentImageIndex(newIndex) // Update the state for current image index
+
       return {
         ...prev,
         images: updatedImages,
@@ -399,6 +491,14 @@ export default function AdminPanel() {
       style: "currency",
       currency: "ARS",
     }).format(price)
+  }
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? formData.images.length - 1 : prevIndex - 1))
+  }
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex === formData.images.length - 1 ? 0 : prevIndex + 1))
   }
 
   return (
@@ -789,59 +889,114 @@ export default function AdminPanel() {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Imágenes del Producto</label>
                         <div className="space-y-4">
-                          {formData.images.map((img, index) => (
-                            <div key={img.id} className="border border-gray-200 rounded-lg p-4">
-                              <div className="flex items-center justify-between mb-3">
-                                <span className="text-sm font-medium text-gray-700">Imagen {index + 1}</span>
-                                <button
-                                  type="button"
-                                  onClick={() => removeImage(img.id)}
-                                  className="text-red-600 hover:text-red-800"
-                                >
-                                  <X size={16} />
-                                </button>
-                              </div>
+                          {formData.images.length > 0 ? (
+                            <div className="relative border border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center">
+                              {/* Carousel Navigation */}
+                              {formData.images.length > 1 && (
+                                <>
+                                  <button
+                                    type="button"
+                                    onClick={handlePrevImage}
+                                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 z-10"
+                                  >
+                                    <ChevronLeft size={20} />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={handleNextImage}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 z-10"
+                                  >
+                                    <ChevronRight size={20} />
+                                  </button>
+                                </>
+                              )}
 
-                              {/* Preview de imagen */}
-                              {(img.url || (img.file && URL.createObjectURL(img.file))) && (
-                                <div className="mb-3">
-                                  <img
-                                    src={img.url || (img.file ? URL.createObjectURL(img.file) : "/placeholder.svg")}
-                                    alt={`Preview ${index + 1}`}
-                                    className="w-full h-32 object-cover rounded-lg border"
-                                  />
+                              {/* Current Image Display */}
+                              {formData.images[currentImageIndex] && (
+                                <div className="space-y-4 w-full">
+                                  <div className="flex items-center justify-between mb-3">
+                                    <span className="text-sm font-medium text-gray-700">
+                                      Imagen {currentImageIndex + 1} de {formData.images.length}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => removeImage(formData.images[currentImageIndex].id)}
+                                      className="text-red-600 hover:text-red-800"
+                                    >
+                                      <X size={16} />
+                                    </button>
+                                  </div>
+
+                                  {/* Preview de imagen */}
+                                  <div className="mb-3 flex items-center justify-center w-full max-h-64 overflow-hidden">
+                                    <img
+                                      src={
+                                        formData.images[currentImageIndex].url ||
+                                        (formData.images[currentImageIndex].file
+                                          ? URL.createObjectURL(formData.images[currentImageIndex].file)
+                                          : "/placeholder.svg")
+                                      }
+                                      alt={`Preview ${currentImageIndex + 1}`}
+                                      className="max-h-64 w-auto object-contain rounded-lg border"
+                                    />
+                                  </div>
+
+                                  {/* Botón de subida o estado */}
+                                  <div className="space-y-2">
+                                    {formData.images[currentImageIndex].progress !== null &&
+                                    formData.images[currentImageIndex].progress < 100 &&
+                                    !formData.images[currentImageIndex].error ? (
+                                      <div className="space-y-2">
+                                        <div className="flex items-center gap-2 text-blue-600">
+                                          <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                                          <span className="text-sm">
+                                            Subiendo: {formData.images[currentImageIndex].progress}%
+                                          </span>
+                                        </div>
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                          <div
+                                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                                            style={{ width: `${formData.images[currentImageIndex].progress}%` }}
+                                          ></div>
+                                        </div>
+                                      </div>
+                                    ) : formData.images[currentImageIndex].error ? (
+                                      <div className="flex items-center gap-2 text-red-600">
+                                        <AlertCircle size={16} />
+                                        <span className="text-sm">{formData.images[currentImageIndex].error}</span>
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center gap-2 text-green-600">
+                                        <CheckCircle size={16} />
+                                        <span className="text-sm">Subida completa</span>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                               )}
 
-                              {/* Botón de subida o estado */}
-                              <div className="space-y-2">
-                                {img.progress !== null && img.progress < 100 && !img.error ? (
-                                  <div className="space-y-2">
-                                    <div className="flex items-center gap-2 text-blue-600">
-                                      <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                                      <span className="text-sm">Subiendo: {img.progress}%</span>
-                                    </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2">
-                                      <div
-                                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                                        style={{ width: `${img.progress}%` }}
-                                      ></div>
-                                    </div>
-                                  </div>
-                                ) : img.error ? (
-                                  <div className="flex items-center gap-2 text-red-600">
-                                    <AlertCircle size={16} />
-                                    <span className="text-sm">{img.error}</span>
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center gap-2 text-green-600">
-                                    <CheckCircle size={16} />
-                                    <span className="text-sm">Subida completa</span>
-                                  </div>
-                                )}
-                              </div>
+                              {/* Carousel Indicators */}
+                              {formData.images.length > 1 && (
+                                <div className="flex justify-center gap-2 mt-4">
+                                  {formData.images.map((_, idx) => (
+                                    <button
+                                      key={idx}
+                                      type="button"
+                                      onClick={() => setCurrentImageIndex(idx)}
+                                      className={`w-2 h-2 rounded-full ${
+                                        idx === currentImageIndex ? "bg-yellow-500" : "bg-gray-300"
+                                      }`}
+                                      aria-label={`Go to image ${idx + 1}`}
+                                    ></button>
+                                  ))}
+                                </div>
+                              )}
                             </div>
-                          ))}
+                          ) : (
+                            <div className="border border-gray-200 rounded-lg p-4 text-center text-gray-500">
+                              No hay imágenes seleccionadas.
+                            </div>
+                          )}
 
                           {/* Hidden file input for multiple selection */}
                           <input
