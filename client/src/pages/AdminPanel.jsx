@@ -18,22 +18,38 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { getDownloadURL, getStorage, ref, uploadBytesResumable, deleteObject } from "firebase/storage"
+import { getAuth, signInAnonymously } from "firebase/auth"
 import { app } from "../firebase"
 import { productService } from "../services/productService"
-import { isDevelopment } from "../utils/envUtils" // Importar isDevelopment
+import { isDevelopment } from "../utils/envUtils"
 
 // Global counter for unique image IDs
 let uniqueImageIdCounter = 0
 
-// Agregar esta función después de las importaciones y antes del componente
+// Función mejorada para eliminar imágenes de Firebase con autenticación anónima
 const deleteImageFromFirebase = async (imageUrl) => {
   try {
-    if (!imageUrl || !imageUrl.includes("firebase")) return
+    if (!imageUrl || !imageUrl.includes("firebase")) {
+      console.log("⚠️ URL no válida o no es de Firebase:", imageUrl)
+      return
+    }
+
+    // Asegurar autenticación anónima
+    const auth = getAuth(app)
+    if (!auth.currentUser) {
+      console.log("🔐 Autenticando anónimamente para eliminar imagen...")
+      await signInAnonymously(auth)
+    }
+
+    console.log("✅ Usuario autenticado:", auth.currentUser.uid)
 
     const storage = getStorage(app)
     // Extraer el path de la URL de Firebase
     const urlParts = imageUrl.split("/o/")[1]
-    if (!urlParts) return
+    if (!urlParts) {
+      console.log("⚠️ No se pudo extraer el path de la URL:", imageUrl)
+      return
+    }
 
     const imagePath = decodeURIComponent(urlParts.split("?")[0])
     const imageRef = ref(storage, imagePath)
@@ -41,7 +57,14 @@ const deleteImageFromFirebase = async (imageUrl) => {
     await deleteObject(imageRef)
     console.log("✅ Imagen eliminada de Firebase:", imagePath)
   } catch (error) {
-    console.error("❌ Error eliminando imagen de Firebase:", error)
+    if (error.code === "storage/unauthorized") {
+      console.warn("⚠️ Sin permisos para eliminar imagen de Firebase:", imageUrl)
+      console.warn("💡 Verifica las reglas de Firebase Storage")
+    } else if (error.code === "storage/object-not-found") {
+      console.log("ℹ️ La imagen ya no existe en Firebase:", imageUrl)
+    } else {
+      console.error("❌ Error eliminando imagen de Firebase:", error)
+    }
   }
 }
 
@@ -96,6 +119,22 @@ const compressImage = (file, maxWidth = 1280, maxHeight = 1280, quality = 0.8) =
   })
 }
 
+// Función para inicializar autenticación anónima
+const initializeFirebaseAuth = async () => {
+  try {
+    const auth = getAuth(app)
+    if (!auth.currentUser) {
+      console.log("🔐 Iniciando autenticación anónima...")
+      await signInAnonymously(auth)
+      console.log("✅ Autenticación anónima exitosa:", auth.currentUser.uid)
+    } else {
+      console.log("✅ Usuario ya autenticado:", auth.currentUser.uid)
+    }
+  } catch (error) {
+    console.error("❌ Error en autenticación anónima:", error)
+  }
+}
+
 export default function AdminPanel() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -109,9 +148,9 @@ export default function AdminPanel() {
   const [showStats, setShowStats] = useState(false)
 
   // Estados para manejo de imágenes
-  const fileInputRef = useRef(null) // Single ref for multi-file input
-  const importFileRef = useRef(null) // Declare importFileRef here
-  const [currentImageIndex, setCurrentImageIndex] = useState(0) // Nuevo estado para el carrusel
+  const fileInputRef = useRef(null)
+  const importFileRef = useRef(null)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -120,7 +159,7 @@ export default function AdminPanel() {
     category: "",
     brand: "",
     stock: "",
-    images: [], // Now an array of objects: { id, url, file, progress, error }
+    images: [],
     specifications: {
       material: "",
       weight: "",
@@ -150,7 +189,8 @@ export default function AdminPanel() {
 
   useEffect(() => {
     if (isDevelopment) {
-      // Solo cargar productos y estadísticas en desarrollo
+      // Inicializar autenticación al cargar el componente
+      initializeFirebaseAuth()
       fetchProducts()
       fetchStats()
     }
@@ -178,15 +218,20 @@ export default function AdminPanel() {
         limit: 20,
         search: searchTerm,
         category: selectedCategory,
-        active: undefined, // Para admin, queremos ver todos los productos (activos/inactivos)
+        active: undefined,
       }
 
-      const data = await productService.getAllProductsAdmin(filters) // Usar getAllProductsAdmin
+      const data = await productService.getAllProductsAdmin(filters)
       setProducts(data.products)
       setPagination(data.pagination)
     } catch (error) {
       console.error("Error fetching products:", error)
-      alert("Error al cargar productos: " + error.message)
+      // Mostrar un mensaje más específico según el tipo de error
+      if (error.message.includes("ECONNREFUSED")) {
+        alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+      } else {
+        alert("Error al cargar productos: " + error.message)
+      }
     } finally {
       setLoading(false)
     }
@@ -198,12 +243,22 @@ export default function AdminPanel() {
       setStats(statsData)
     } catch (error) {
       console.error("Error fetching stats:", error)
-      alert("Error al cargar estadísticas: " + error.message)
+      // No mostrar alert para estadísticas, solo log
+      setStats({
+        totalProducts: 0,
+        activeProducts: 0,
+        featuredProducts: 0,
+        outOfStock: 0,
+        categories: 0,
+        brands: 0,
+        totalValue: 0,
+        lastUpdated: "Error",
+      })
     }
   }
 
   // Function to upload a single image to Firebase
-  const uploadFileToFirebase = (fileObject) => {
+  const uploadFileToFirebase = async (fileObject) => {
     const file = fileObject.file
     const tempId = fileObject.id
 
@@ -218,7 +273,7 @@ export default function AdminPanel() {
       return
     }
 
-    // Validar tamaño (máximo 5MB) - This check is less critical now with client-side compression
+    // Validar tamaño (máximo 5MB)
     if (file.size > 5 * 1024 * 1024) {
       setFormData((prev) => ({
         ...prev,
@@ -229,54 +284,63 @@ export default function AdminPanel() {
       return
     }
 
-    const storage = getStorage(app)
-    const fileName = `products/${Date.now()}_${tempId}_${file.name}`
-    const storageRef = ref(storage, fileName)
-    const uploadTask = uploadBytesResumable(storageRef, file)
+    try {
+      // Asegurar autenticación antes de subir
+      await initializeFirebaseAuth()
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        setFormData((prev) => ({
-          ...prev,
-          images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: Math.round(progress) } : img)),
-        }))
-      },
-      (error) => {
-        console.error("Error uploading image:", error)
-        setFormData((prev) => ({
-          ...prev,
-          images: prev.images.map((img) => (img.id === tempId ? { ...img, error: "Error al subir la imagen" } : img)),
-        }))
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      const storage = getStorage(app)
+      const fileName = `products/${Date.now()}_${tempId}_${file.name}`
+      const storageRef = ref(storage, fileName)
+      const uploadTask = uploadBytesResumable(storageRef, file)
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           setFormData((prev) => ({
             ...prev,
-            images: prev.images.map((img) =>
-              img.id === tempId ? { ...img, url: downloadURL, file: null, progress: 100 } : img,
-            ),
+            images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: Math.round(progress) } : img)),
           }))
-        })
-      },
-    )
+        },
+        (error) => {
+          console.error("Error uploading image:", error)
+          setFormData((prev) => ({
+            ...prev,
+            images: prev.images.map((img) => (img.id === tempId ? { ...img, error: "Error al subir la imagen" } : img)),
+          }))
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setFormData((prev) => ({
+              ...prev,
+              images: prev.images.map((img) =>
+                img.id === tempId ? { ...img, url: downloadURL, file: null, progress: 100 } : img,
+              ),
+            }))
+          })
+        },
+      )
+    } catch (error) {
+      console.error("Error in uploadFileToFirebase:", error)
+      setFormData((prev) => ({
+        ...prev,
+        images: prev.images.map((img) => (img.id === tempId ? { ...img, error: "Error de autenticación" } : img)),
+      }))
+    }
   }
 
   // Handle multiple file selection
   const handleFileSelect = async (e) => {
-    // Make it async
     const files = Array.from(e.target.files)
     if (files.length === 0) return
 
     const newImageObjectsPromises = files.map(async (file) => {
-      // Map to promises
       try {
-        const compressedFile = await compressImage(file) // Compress the image
+        const compressedFile = await compressImage(file)
         return {
           id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`,
           url: null,
-          file: compressedFile, // Use the compressed file
+          file: compressedFile,
           progress: 0,
           error: null,
         }
@@ -285,19 +349,18 @@ export default function AdminPanel() {
         return {
           id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`,
           url: null,
-          file: file, // Fallback to original file if compression fails
+          file: file,
           progress: 0,
           error: "Error al procesar la imagen para subirla.",
         }
       }
     })
 
-    const newImageObjects = await Promise.all(newImageObjectsPromises) // Wait for all compressions
+    const newImageObjects = await Promise.all(newImageObjectsPromises)
 
     setFormData((prev) => {
       const updatedImages = [...prev.images, ...newImageObjects]
-      // Set the current image to the first newly added image
-      setCurrentImageIndex(updatedImages.length - 1) // Update index based on final array length
+      setCurrentImageIndex(updatedImages.length - 1)
       return {
         ...prev,
         images: updatedImages,
@@ -306,7 +369,6 @@ export default function AdminPanel() {
 
     newImageObjects.forEach((fileObject) => {
       if (!fileObject.error) {
-        // Only upload if no compression error
         uploadFileToFirebase(fileObject)
       }
     })
@@ -339,7 +401,7 @@ export default function AdminPanel() {
           .split(",")
           .map((tag) => tag.trim())
           .filter(Boolean),
-        images: formData.images.map((img) => img.url).filter(Boolean), // Send only URLs
+        images: formData.images.map((img) => img.url).filter(Boolean),
       }
 
       if (editingProduct) {
@@ -356,7 +418,11 @@ export default function AdminPanel() {
       alert("Producto guardado correctamente.")
     } catch (error) {
       console.error("Error saving product:", error)
-      alert("Error al guardar el producto: " + error.message)
+      if (error.message.includes("ECONNREFUSED")) {
+        alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+      } else {
+        alert("Error al guardar el producto: " + error.message)
+      }
     }
   }
 
@@ -367,17 +433,16 @@ export default function AdminPanel() {
       price: product.price.toString(),
       stock: product.stock.toString(),
       tags: product.tags.join(", "),
-      // Convert existing image URLs to the new object format for editing
       images: product.images.map((url) => ({
-        id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`, // Generate a new ID for existing images
+        id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`,
         url: url,
         file: null,
-        progress: 100, // Already uploaded
+        progress: 100,
         error: null,
       })),
     })
     setShowModal(true)
-    setCurrentImageIndex(0) // Reset carousel to first image when editing
+    setCurrentImageIndex(0)
   }
 
   const handleDelete = async (productId) => {
@@ -386,22 +451,30 @@ export default function AdminPanel() {
         // Encontrar el producto para obtener sus imágenes
         const productToDelete = products.find((p) => p.id === productId)
 
-        // Eliminar el producto del backend
+        // Eliminar el producto del backend primero
         await productService.deleteProduct(productId)
 
-        // Eliminar imágenes de Firebase
+        // Intentar eliminar imágenes de Firebase (sin bloquear si falla)
         if (productToDelete && productToDelete.images) {
-          for (const imageUrl of productToDelete.images) {
-            await deleteImageFromFirebase(imageUrl)
-          }
+          // Ejecutar eliminación de imágenes en paralelo sin esperar
+          productToDelete.images.forEach((imageUrl) => {
+            deleteImageFromFirebase(imageUrl).catch((error) => {
+              // Error ya manejado en la función deleteImageFromFirebase
+            })
+          })
         }
 
+        // Actualizar la UI inmediatamente
         fetchProducts()
         fetchStats()
         alert("Producto eliminado correctamente.")
       } catch (error) {
         console.error("Error deleting product:", error)
-        alert("Error al eliminar el producto: " + error.message)
+        if (error.message.includes("ECONNREFUSED")) {
+          alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+        } else {
+          alert("Error al eliminar el producto: " + error.message)
+        }
       }
     }
   }
@@ -423,7 +496,11 @@ export default function AdminPanel() {
         }
       } catch (error) {
         console.error("Error resetting data:", error)
-        alert("Error al resetear los datos: " + error.message)
+        if (error.message.includes("ECONNREFUSED")) {
+          alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+        } else {
+          alert("Error al resetear los datos: " + error.message)
+        }
       }
     }
   }
@@ -434,7 +511,11 @@ export default function AdminPanel() {
       alert("Datos exportados correctamente.")
     } catch (error) {
       console.error("Error exporting data:", error)
-      alert("Error al exportar los datos: " + error.message)
+      if (error.message.includes("ECONNREFUSED")) {
+        alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+      } else {
+        alert("Error al exportar los datos: " + error.message)
+      }
     }
   }
 
@@ -454,20 +535,22 @@ export default function AdminPanel() {
         alert("Datos importados correctamente.")
       } catch (error) {
         console.error("Error importing data:", error)
-        alert("Error al importar los datos: " + error.message)
+        if (error.message.includes("ECONNREFUSED")) {
+          alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+        } else {
+          alert("Error al importar los datos: " + error.message)
+        }
       }
     }
 
-    // Reset file input
     e.target.value = ""
   }
 
   const resetForm = () => {
-    // Eliminar imágenes de Firebase que no se guardaron
-    formData.images.forEach(async (img) => {
+    // Eliminar imágenes de Firebase que no se guardaron (sin bloquear)
+    formData.images.forEach((img) => {
       if (img.url && img.file) {
-        // Si tiene URL pero también file, significa que se subió pero no se guardó el producto
-        await deleteImageFromFirebase(img.url)
+        deleteImageFromFirebase(img.url).catch(() => {})
       }
       if (img.file && img.url === null) {
         URL.revokeObjectURL(img.file)
@@ -501,9 +584,9 @@ export default function AdminPanel() {
       const imageToRemove = prev.images.find((img) => img.id === idToRemove)
       const updatedImages = prev.images.filter((img) => img.id !== idToRemove)
 
-      // Eliminar de Firebase si ya se subió
+      // Eliminar de Firebase si ya se subió (sin bloquear)
       if (imageToRemove && imageToRemove.url) {
-        deleteImageFromFirebase(imageToRemove.url)
+        deleteImageFromFirebase(imageToRemove.url).catch(() => {})
       }
 
       // Revoke object URL if it was a local file not yet uploaded
@@ -542,12 +625,33 @@ export default function AdminPanel() {
     setCurrentImageIndex((prevIndex) => (prevIndex === formData.images.length - 1 ? 0 : prevIndex + 1))
   }
 
+  // Mostrar mensaje si no está en desarrollo
+  if (!isDevelopment) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-24 flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="text-6xl mb-4">🔒</div>
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">Panel de Administración</h1>
+            <p className="text-gray-600 mb-6">El panel de administración solo está disponible en modo desarrollo.</p>
+            <p className="text-sm text-gray-500">
+              Para acceder, ejecuta la aplicación en modo desarrollo con el servidor backend corriendo.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-24">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="bg-blue-600 text-white rounded-xl p-6 mb-8">
           <h1 className="text-3xl font-bold mb-2">Panel de Administración - Persistencia en JSON</h1>
+          <p className="text-blue-100 mb-4">
+            Asegúrate de que el servidor backend esté corriendo en el puerto configurado.
+          </p>
 
           <div className="mt-4 flex flex-wrap gap-4">
             <button
@@ -581,6 +685,13 @@ export default function AdminPanel() {
               <BarChart3 size={16} />
               {showStats ? "Ocultar" : "Ver"} Estadísticas
             </button>
+
+            <button
+              onClick={initializeFirebaseAuth}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors duration-200 flex items-center gap-2"
+            >
+              🔐 Inicializar Auth
+            </button>
           </div>
 
           {/* Hidden file input for import */}
@@ -593,36 +704,36 @@ export default function AdminPanel() {
             <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Estadísticas del Inventario</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg text-center">
-                <div className="text-2xl font-bold text-blue-600">{stats.totalProducts}</div>
+                <div className="text-2xl font-bold text-blue-600">{stats.totalProducts || 0}</div>
                 <div className="text-sm text-gray-600">Total Productos</div>
               </div>
               <div className="bg-green-50 p-4 rounded-lg text-center">
-                <div className="text-2xl font-bold text-green-600">{stats.activeProducts}</div>
+                <div className="text-2xl font-bold text-green-600">{stats.activeProducts || 0}</div>
                 <div className="text-sm text-gray-600">Activos</div>
               </div>
               <div className="bg-yellow-50 p-4 rounded-lg text-center">
-                <div className="text-2xl font-bold text-yellow-600">{stats.featuredProducts}</div>
+                <div className="text-2xl font-bold text-yellow-600">{stats.featuredProducts || 0}</div>
                 <div className="text-sm text-gray-600">Destacados</div>
               </div>
               <div className="bg-red-50 p-4 rounded-lg text-center">
-                <div className="text-2xl font-bold text-red-600">{stats.outOfStock}</div>
+                <div className="text-2xl font-bold text-red-600">{stats.outOfStock || 0}</div>
                 <div className="text-sm text-gray-600">Sin Stock</div>
               </div>
               <div className="bg-purple-50 p-4 rounded-lg text-center">
-                <div className="text-2xl font-bold text-purple-600">{stats.categories}</div>
+                <div className="text-2xl font-bold text-purple-600">{stats.categories || 0}</div>
                 <div className="text-sm text-gray-600">Categorías</div>
               </div>
               <div className="bg-indigo-50 p-4 rounded-lg text-center">
-                <div className="text-2xl font-bold text-indigo-600">{stats.brands}</div>
+                <div className="text-2xl font-bold text-indigo-600">{stats.brands || 0}</div>
                 <div className="text-sm text-gray-600">Marcas</div>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg text-center">
-                <div className="text-2xl font-bold text-gray-600">{formatPrice(stats.totalValue)}</div>
+                <div className="text-2xl font-bold text-gray-600">{formatPrice(stats.totalValue || 0)}</div>
                 <div className="text-sm text-gray-600">Valor Total</div>
               </div>
               <div className="bg-orange-50 p-4 rounded-lg text-center">
                 <div className="text-xs font-bold text-orange-600">Última Act.</div>
-                <div className="text-xs text-gray-600">{stats.lastUpdated}</div>
+                <div className="text-xs text-gray-600">{stats.lastUpdated || "N/A"}</div>
               </div>
             </div>
           </div>
@@ -833,7 +944,7 @@ export default function AdminPanel() {
           )}
         </div>
 
-        {/* Modal - Same as before but with better error handling */}
+        {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -921,6 +1032,15 @@ export default function AdminPanel() {
                             className="mr-2"
                           />
                           Producto activo
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={formData.featured}
+                            onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                            className="mr-2"
+                          />
+                          Producto destacado
                         </label>
                       </div>
                     </div>
@@ -1045,7 +1165,7 @@ export default function AdminPanel() {
                             ref={fileInputRef}
                             hidden
                             accept="image/*"
-                            multiple // Allow multiple file selection
+                            multiple
                             onChange={handleFileSelect}
                           />
                           <button
@@ -1101,6 +1221,18 @@ export default function AdminPanel() {
                       rows="4"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                       required
+                    />
+                  </div>
+
+                  {/* Tags */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Tags (separados por comas)</label>
+                    <input
+                      type="text"
+                      value={formData.tags}
+                      onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                      placeholder="bmx, freestyle, street, park"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     />
                   </div>
 
