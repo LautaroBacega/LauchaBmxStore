@@ -83,11 +83,6 @@ export default function ProductCard({ product, viewMode = "grid" }) {
 
               <div className="flex items-center gap-4">
                 <span className="text-xl font-bold text-gray-800">{formatPrice(product.price)}</span>
-                {!isProduction && (
-                  <span className="text-xs text-gray-500">
-                    Stock: {product.stock > 0 ? product.stock : "Sin stock"}
-                  </span>
-                )}
               </div>
             </div>
 
@@ -193,9 +188,6 @@ export default function ProductCard({ product, viewMode = "grid" }) {
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-2xl font-bold text-gray-800">{formatPrice(product.price)}</span>
-            {!isProduction && (
-              <span className="text-xs text-gray-500">Stock: {product.stock > 0 ? product.stock : "Sin stock"}</span>
-            )}
           </div>
 
           <div className="flex flex-col gap-2">
@@ -207,7 +199,7 @@ export default function ProductCard({ product, viewMode = "grid" }) {
               Ver Detalles
             </Link>
 
-            {isProduction && (
+            
               <button
                 onClick={handleContactClick}
                 className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-200 text-sm font-medium flex items-center justify-center gap-1"
@@ -215,7 +207,7 @@ export default function ProductCard({ product, viewMode = "grid" }) {
                 <MessageCircle size={14} />
                 Consultar
               </button>
-            )}
+            
           </div>
         </div>
       </div>
