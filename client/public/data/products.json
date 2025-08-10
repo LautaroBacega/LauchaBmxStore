@@ -1,4 +1,37 @@
 {
-  "products": [],
+  "products": [
+    {
+      "id": "1754869796668",
+      "name": "Cuadro Total Hangover v3",
+      "description": "1 mes de uso, igual a nuevo.",
+      "price": 420000,
+      "category": "frames",
+      "brand": "Total",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970147_img_42_qqt5bl2_IMG_2007.jpg?alt=media&token=472f35e8-ee4a-44a5-a874-b377c451c9f4",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970147_img_50_6d6glgw_IMG_2008.jpg?alt=media&token=c8af2218-d1ee-4fbc-a32d-3b8fc94dc0ae",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970148_img_43_xgl1r4f_IMG_2009.jpg?alt=media&token=b42983da-e5da-421a-95ad-23ca9ad96254",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970148_img_44_8p4f6po_IMG_2010.jpg?alt=media&token=a141dd3e-7f20-4d55-8ac1-a84fc9a77571",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970148_img_45_xts4w38_IMG_2011.jpg?alt=media&token=417975d9-164b-479a-a272-14330255d5cc",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970148_img_48_0ml5ca5_IMG_2012.jpg?alt=media&token=a999a7d9-8bb5-4df8-b3af-93b3fd015267",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970148_img_47_nq35j0l_IMG_2013.jpg?alt=media&token=3c82a007-dcc3-45c8-8d02-e078a7507d0b",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970148_img_46_78y2tyj_IMG_2014.jpg?alt=media&token=65a1b41e-3453-4ae1-8341-2282b33a641f",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970149_img_49_tvz5a1o_IMG_2015.jpg?alt=media&token=c9442758-9119-49c5-b0d7-a8bbf50f0349"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "20.6",
+        "color": "Negro",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-10T23:49:56.668Z",
+      "updatedAt": "2025-08-10T23:52:59.115Z"
+    }
+  ],
   "categories": []
 }
