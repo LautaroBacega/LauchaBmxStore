@@ -1,11 +1,24 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Plus, Edit, Trash2, Search, Upload, X, ImageIcon, Download, RotateCcw, BarChart3, FileUp } from 'lucide-react'
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Search,
+  Upload,
+  X,
+  ImageIcon,
+  Download,
+  RotateCcw,
+  BarChart3,
+  FileUp,
+  Crop,
+} from "lucide-react"
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app } from "../firebase"
 import { productService } from "../services/productService"
-import { isDevelopment } from "../utils/envUtils" // Importar isDevelopment
+import { isDevelopment } from "../utils/envUtils"
 
 export default function AdminPanel() {
   const [products, setProducts] = useState([])
@@ -22,7 +35,12 @@ export default function AdminPanel() {
   // Estados para manejo de imágenes
   const [uploadingImages, setUploadingImages] = useState({})
   const [imageErrors, setImageErrors] = useState({})
+  const [pendingImages, setPendingImages] = useState([]) // Imágenes seleccionadas pendientes de procesar
+  const [showCropModal, setShowCropModal] = useState(false)
+  const [currentCropImage, setCurrentCropImage] = useState(null)
+  const [currentCropIndex, setCurrentCropIndex] = useState(null)
   const fileInputRefs = useRef([])
+  const multipleFileInputRef = useRef(null)
   const importFileRef = useRef(null)
 
   const [formData, setFormData] = useState({
@@ -61,7 +79,7 @@ export default function AdminPanel() {
   ]
 
   useEffect(() => {
-    if (isDevelopment) { // Solo cargar productos y estadísticas en desarrollo
+    if (isDevelopment) {
       fetchProducts()
       fetchStats()
     }
@@ -70,16 +88,16 @@ export default function AdminPanel() {
   const fetchProducts = async () => {
     try {
       setLoading(true)
-      
+
       const filters = {
         page: currentPage,
         limit: 20,
         search: searchTerm,
         category: selectedCategory,
-        active: undefined, // Para admin, queremos ver todos los productos (activos/inactivos)
+        active: undefined,
       }
 
-      const data = await productService.getAllProductsAdmin(filters) // Usar getAllProductsAdmin
+      const data = await productService.getAllProductsAdmin(filters)
       setProducts(data.products)
       setPagination(data.pagination)
     } catch (error) {
@@ -100,80 +118,188 @@ export default function AdminPanel() {
     }
   }
 
-  // Función para subir imagen a Firebase
+  // Manejar selección múltiple de imágenes
+  const handleMultipleImageSelection = (e) => {
+    const files = Array.from(e.target.files)
+    if (files.length === 0) return
+
+    // Validar archivos
+    const validFiles = files.filter((file) => {
+      if (!file.type.startsWith("image/")) {
+        alert(`${file.name} no es un archivo de imagen válido`)
+        return false
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`${file.name} es demasiado grande (máximo 5MB)`)
+        return false
+      }
+      return true
+    })
+
+    if (validFiles.length === 0) return
+
+    // Crear URLs temporales para preview y agregar a pendientes
+    const newPendingImages = validFiles.map((file, index) => ({
+      id: Date.now() + index,
+      file,
+      preview: URL.createObjectURL(file),
+      processed: false,
+    }))
+
+    setPendingImages((prev) => [...prev, ...newPendingImages])
+
+    // Limpiar input
+    e.target.value = ""
+  }
+
+  // Procesar imagen individual (abrir modal de recorte)
+  const handleProcessImage = (pendingImage, targetIndex = null) => {
+    setCurrentCropImage(pendingImage)
+    setCurrentCropIndex(targetIndex)
+    setShowCropModal(true)
+  }
+
+  // Callback cuando se completa el recorte
+  const handleCropComplete = async (croppedBlob, targetIndex) => {
+    try {
+      // Si es para reemplazar una imagen existente
+      if (targetIndex !== null) {
+        setUploadingImages((prev) => ({ ...prev, [targetIndex]: { progress: 0, uploading: true } }))
+        setImageErrors((prev) => ({ ...prev, [targetIndex]: null }))
+
+        const storage = getStorage(app)
+        const fileName = `products/${Date.now()}_${targetIndex}_cropped.jpg`
+        const storageRef = ref(storage, fileName)
+        const uploadTask = uploadBytesResumable(storageRef, croppedBlob)
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            setUploadingImages((prev) => ({
+              ...prev,
+              [targetIndex]: { progress: Math.round(progress), uploading: true },
+            }))
+          },
+          (error) => {
+            console.error("Error uploading cropped image:", error)
+            setImageErrors((prev) => ({
+              ...prev,
+              [targetIndex]: "Error al subir la imagen recortada",
+            }))
+            setUploadingImages((prev) => ({ ...prev, [targetIndex]: null }))
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              const newImages = [...formData.images]
+              newImages[targetIndex] = downloadURL
+              setFormData({ ...formData, images: newImages })
+              setUploadingImages((prev) => ({ ...prev, [targetIndex]: null }))
+            })
+          },
+        )
+      } else {
+        // Es una imagen nueva de la selección múltiple
+        const imageIndex = formData.images.findIndex((img) => img === "")
+        const finalIndex = imageIndex !== -1 ? imageIndex : formData.images.length
+
+        setUploadingImages((prev) => ({ ...prev, [finalIndex]: { progress: 0, uploading: true } }))
+
+        const storage = getStorage(app)
+        const fileName = `products/${Date.now()}_${finalIndex}_cropped.jpg`
+        const storageRef = ref(storage, fileName)
+        const uploadTask = uploadBytesResumable(storageRef, croppedBlob)
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            setUploadingImages((prev) => ({
+              ...prev,
+              [finalIndex]: { progress: Math.round(progress), uploading: true },
+            }))
+          },
+          (error) => {
+            console.error("Error uploading cropped image:", error)
+            setImageErrors((prev) => ({
+              ...prev,
+              [finalIndex]: "Error al subir la imagen recortada",
+            }))
+            setUploadingImages((prev) => ({ ...prev, [finalIndex]: null }))
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              const newImages = [...formData.images]
+              if (finalIndex >= newImages.length) {
+                newImages.push(downloadURL)
+              } else {
+                newImages[finalIndex] = downloadURL
+              }
+              setFormData({ ...formData, images: newImages })
+              setUploadingImages((prev) => ({ ...prev, [finalIndex]: null }))
+
+              // Marcar imagen como procesada y remover de pendientes
+              setPendingImages((prev) => prev.filter((img) => img.id !== currentCropImage.id))
+            })
+          },
+        )
+      }
+
+      setShowCropModal(false)
+      setCurrentCropImage(null)
+      setCurrentCropIndex(null)
+    } catch (error) {
+      console.error("Error processing cropped image:", error)
+      alert("Error al procesar la imagen recortada")
+    }
+  }
+
+  // Función para subir imagen individual (método anterior)
   const handleImageUpload = async (file, imageIndex) => {
     if (!file) return
 
-    // Validar tipo de archivo
-    if (!file.type.startsWith('image/')) {
-      setImageErrors(prev => ({
+    if (!file.type.startsWith("image/")) {
+      setImageErrors((prev) => ({
         ...prev,
-        [imageIndex]: 'Solo se permiten archivos de imagen'
+        [imageIndex]: "Solo se permiten archivos de imagen",
       }))
       return
     }
 
-    // Validar tamaño (máximo 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setImageErrors(prev => ({
+      setImageErrors((prev) => ({
         ...prev,
-        [imageIndex]: 'La imagen debe ser menor a 5MB'
+        [imageIndex]: "La imagen debe ser menor a 5MB",
       }))
       return
     }
 
-    try {
-      setUploadingImages(prev => ({ ...prev, [imageIndex]: { progress: 0, uploading: true } }))
-      setImageErrors(prev => ({ ...prev, [imageIndex]: null }))
-
-      const storage = getStorage(app)
-      const fileName = `products/${Date.now()}_${imageIndex}_${file.name}`
-      const storageRef = ref(storage, fileName)
-      const uploadTask = uploadBytesResumable(storageRef, file)
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          setUploadingImages(prev => ({
-            ...prev,
-            [imageIndex]: { progress: Math.round(progress), uploading: true }
-          }))
-        },
-        (error) => {
-          console.error("Error uploading image:", error)
-          setImageErrors(prev => ({
-            ...prev,
-            [imageIndex]: 'Error al subir la imagen'
-          }))
-          setUploadingImages(prev => ({ ...prev, [imageIndex]: null }))
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            const newImages = [...formData.images]
-            newImages[imageIndex] = downloadURL
-            setFormData({ ...formData, images: newImages })
-            setUploadingImages(prev => ({ ...prev, [imageIndex]: null }))
-          })
-        }
-      )
-    } catch (error) {
-      console.error("Error uploading image:", error)
-      setImageErrors(prev => ({
-        ...prev,
-        [imageIndex]: 'Error al subir la imagen'
-      }))
-      setUploadingImages(prev => ({ ...prev, [imageIndex]: null }))
+    // Crear imagen temporal para recorte
+    const tempImage = {
+      id: Date.now(),
+      file,
+      preview: URL.createObjectURL(file),
+      processed: false,
     }
+
+    handleProcessImage(tempImage, imageIndex)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     // Verificar que no hay subidas en progreso
-    const hasUploading = Object.values(uploadingImages).some(upload => upload?.uploading)
+    const hasUploading = Object.values(uploadingImages).some((upload) => upload?.uploading)
     if (hasUploading) {
       alert("Espera a que terminen de subirse todas las imágenes")
+      return
+    }
+
+    // Verificar que no hay imágenes pendientes sin procesar
+    if (pendingImages.length > 0) {
+      alert(
+        "Hay imágenes seleccionadas que no han sido procesadas. Por favor, recorta o elimina las imágenes pendientes.",
+      )
       return
     }
 
@@ -182,7 +308,10 @@ export default function AdminPanel() {
         ...formData,
         price: Number(formData.price),
         stock: Number(formData.stock),
-        tags: formData.tags.split(",").map((tag) => tag.trim()).filter(Boolean),
+        tags: formData.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
         images: formData.images.filter(Boolean),
       }
 
@@ -221,7 +350,7 @@ export default function AdminPanel() {
         await productService.deleteProduct(productId)
         fetchProducts()
         fetchStats()
-        alert("Producto eliminado correctamente. ")
+        alert("Producto eliminado correctamente.")
       } catch (error) {
         console.error("Error deleting product:", error)
         alert("Error al eliminar el producto: " + error.message)
@@ -230,7 +359,11 @@ export default function AdminPanel() {
   }
 
   const handleResetData = async () => {
-    if (window.confirm("¿Estás seguro de que quieres resetear todos los datos a los originales del JSON? Esto eliminará todos los cambios realizados.")) {
+    if (
+      window.confirm(
+        "¿Estás seguro de que quieres resetear todos los datos a los originales del JSON? Esto eliminará todos los cambios realizados.",
+      )
+    ) {
       try {
         const success = await productService.resetToOriginal()
         if (success) {
@@ -261,7 +394,11 @@ export default function AdminPanel() {
     const file = e.target.files[0]
     if (!file) return
 
-    if (window.confirm("¿Estás seguro de que quieres importar estos datos? Esto reemplazará todos los productos actuales.")) {
+    if (
+      window.confirm(
+        "¿Estás seguro de que quieres importar estos datos? Esto reemplazará todos los productos actuales.",
+      )
+    ) {
       try {
         await productService.importData(file)
         fetchProducts()
@@ -273,8 +410,7 @@ export default function AdminPanel() {
       }
     }
 
-    // Reset file input
-    e.target.value = ''
+    e.target.value = ""
   }
 
   const resetForm = () => {
@@ -299,6 +435,7 @@ export default function AdminPanel() {
     })
     setUploadingImages({})
     setImageErrors({})
+    setPendingImages([])
     fileInputRefs.current = []
   }
 
@@ -315,17 +452,26 @@ export default function AdminPanel() {
   const removeImageField = (index) => {
     const newImages = formData.images.filter((_, i) => i !== index)
     setFormData({ ...formData, images: newImages })
-    
-    // Limpiar estados relacionados con esta imagen
-    setUploadingImages(prev => {
+
+    setUploadingImages((prev) => {
       const newState = { ...prev }
       delete newState[index]
       return newState
     })
-    setImageErrors(prev => {
+    setImageErrors((prev) => {
       const newState = { ...prev }
       delete newState[index]
       return newState
+    })
+  }
+
+  const removePendingImage = (imageId) => {
+    setPendingImages((prev) => {
+      const imageToRemove = prev.find((img) => img.id === imageId)
+      if (imageToRemove) {
+        URL.revokeObjectURL(imageToRemove.preview)
+      }
+      return prev.filter((img) => img.id !== imageId)
     })
   }
 
@@ -342,8 +488,7 @@ export default function AdminPanel() {
         {/* Header */}
         <div className="bg-blue-600 text-white rounded-xl p-6 mb-8">
           <h1 className="text-3xl font-bold mb-2">Panel de Administración - Persistencia en JSON</h1>
-          
-          
+
           <div className="mt-4 flex flex-wrap gap-4">
             <button
               onClick={handleExportData}
@@ -352,7 +497,7 @@ export default function AdminPanel() {
               <Download size={16} />
               Exportar Datos
             </button>
-            
+
             <button
               onClick={() => importFileRef.current?.click()}
               className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors duration-200 flex items-center gap-2"
@@ -360,7 +505,7 @@ export default function AdminPanel() {
               <FileUp size={16} />
               Importar Datos
             </button>
-            
+
             <button
               onClick={handleResetData}
               className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200 flex items-center gap-2"
@@ -368,24 +513,17 @@ export default function AdminPanel() {
               <RotateCcw size={16} />
               Resetear a Original
             </button>
-            
+
             <button
               onClick={() => setShowStats(!showStats)}
               className="bg-purple-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-600 transition-colors duration-200 flex items-center gap-2"
             >
               <BarChart3 size={16} />
-              {showStats ? 'Ocultar' : 'Ver'} Estadísticas
+              {showStats ? "Ocultar" : "Ver"} Estadísticas
             </button>
           </div>
 
-          {/* Hidden file input for import */}
-          <input
-            type="file"
-            ref={importFileRef}
-            hidden
-            accept=".json"
-            onChange={handleImportData}
-          />
+          <input type="file" ref={importFileRef} hidden accept=".json" onChange={handleImportData} />
         </div>
 
         {/* Stats Panel */}
@@ -563,9 +701,7 @@ export default function AdminPanel() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`text-sm font-medium ${
-                            product.stock > 0 ? "text-green-600" : "text-red-600"
-                          }`}
+                          className={`text-sm font-medium ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}
                         >
                           {product.stock}
                         </span>
@@ -574,9 +710,7 @@ export default function AdminPanel() {
                         <div className="flex gap-1">
                           <span
                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              product.active
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
+                              product.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                             }`}
                           >
                             {product.active ? "Activo" : "Inactivo"}
@@ -615,8 +749,8 @@ export default function AdminPanel() {
           {pagination.totalPages > 1 && (
             <div className="bg-gray-50 px-6 py-3 flex justify-between items-center">
               <div className="text-sm text-gray-700">
-                Mostrando {(currentPage - 1) * 20 + 1} a{" "}
-                {Math.min(currentPage * 20, pagination.totalProducts)} de {pagination.totalProducts} productos
+                Mostrando {(currentPage - 1) * 20 + 1} a {Math.min(currentPage * 20, pagination.totalProducts)} de{" "}
+                {pagination.totalProducts} productos
               </div>
               <div className="flex gap-2">
                 <button
@@ -638,17 +772,17 @@ export default function AdminPanel() {
           )}
         </div>
 
-        {/* Modal - Same as before but with better error handling */}
+        {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">
                   {editingProduct ? "Editar Producto" : "Nuevo Producto"}
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Basic Info */}
                     <div className="space-y-4">
                       <div>
@@ -718,7 +852,6 @@ export default function AdminPanel() {
                       </div>
 
                       <div className="flex gap-4">
-
                         <label className="flex items-center">
                           <input
                             type="checkbox"
@@ -729,21 +862,107 @@ export default function AdminPanel() {
                           Producto activo
                         </label>
                       </div>
+
+                      {/* Specifications */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Especificaciones</label>
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            placeholder="Tamaño"
+                            value={formData.specifications.size}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                specifications: { ...formData.specifications, size: e.target.value },
+                              })
+                            }
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Color"
+                            value={formData.specifications.color}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                specifications: { ...formData.specifications, color: e.target.value },
+                              })
+                            }
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                          />
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Images and Specs */}
+                    {/* Images Section */}
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Imágenes del Producto
-                        </label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Imágenes del Producto</label>
+
+                        {/* Selección múltiple de imágenes */}
+                        <div className="mb-4">
+                          <input
+                            type="file"
+                            ref={multipleFileInputRef}
+                            hidden
+                            accept="image/*"
+                            multiple
+                            onChange={handleMultipleImageSelection}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => multipleFileInputRef.current?.click()}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-blue-300 rounded-lg text-blue-600 hover:border-blue-500 hover:text-blue-800 transition-colors duration-200 bg-blue-50 hover:bg-blue-100"
+                          >
+                            <Upload size={20} />
+                            Seleccionar múltiples imágenes
+                          </button>
+                        </div>
+
+                        {/* Imágenes pendientes de procesar */}
+                        {pendingImages.length > 0 && (
+                          <div className="mb-4">
+                            <h4 className="text-sm font-medium text-gray-700 mb-2">
+                              Imágenes seleccionadas ({pendingImages.length})
+                            </h4>
+                            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+                              {pendingImages.map((pendingImage) => (
+                                <div key={pendingImage.id} className="relative border border-gray-200 rounded-lg p-2">
+                                  <img
+                                    src={pendingImage.preview || "/placeholder.svg"}
+                                    alt="Preview"
+                                    className="w-full h-20 object-cover rounded"
+                                  />
+                                  <div className="flex justify-between items-center mt-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleProcessImage(pendingImage)}
+                                      className="flex items-center gap-1 px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600"
+                                    >
+                                      <Crop size={12} />
+                                      Recortar
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => removePendingImage(pendingImage.id)}
+                                      className="text-red-600 hover:text-red-800"
+                                    >
+                                      <X size={16} />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Imágenes actuales del producto */}
                         <div className="space-y-4">
                           {formData.images.map((image, index) => (
                             <div key={index} className="border border-gray-200 rounded-lg p-4">
                               <div className="flex items-center justify-between mb-3">
-                                <span className="text-sm font-medium text-gray-700">
-                                  Imagen {index + 1}
-                                </span>
+                                <span className="text-sm font-medium text-gray-700">Imagen {index + 1}</span>
                                 {formData.images.length > 1 && (
                                   <button
                                     type="button"
@@ -786,9 +1005,7 @@ export default function AdminPanel() {
                                   <div className="space-y-2">
                                     <div className="flex items-center gap-2 text-blue-600">
                                       <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                                      <span className="text-sm">
-                                        Subiendo: {uploadingImages[index].progress}%
-                                      </span>
+                                      <span className="text-sm">Subiendo: {uploadingImages[index].progress}%</span>
                                     </div>
                                     <div className="w-full bg-gray-200 rounded-full h-2">
                                       <div
@@ -798,21 +1015,38 @@ export default function AdminPanel() {
                                     </div>
                                   </div>
                                 ) : (
-                                  <button
-                                    type="button"
-                                    onClick={() => fileInputRefs.current[index]?.click()}
-                                    className="w-full flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-yellow-500 hover:text-yellow-600 transition-colors duration-200"
-                                  >
-                                    <Upload size={20} />
-                                    {image ? "Cambiar imagen" : "Subir imagen"}
-                                  </button>
+                                  <div className="flex gap-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => fileInputRefs.current[index]?.click()}
+                                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-yellow-500 hover:text-yellow-600 transition-colors duration-200"
+                                    >
+                                      <Upload size={20} />
+                                      {image ? "Cambiar imagen" : "Subir imagen"}
+                                    </button>
+                                    {image && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const tempImage = {
+                                            id: Date.now(),
+                                            file: null,
+                                            preview: image,
+                                            processed: false,
+                                          }
+                                          handleProcessImage(tempImage, index)
+                                        }}
+                                        className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200 flex items-center gap-1"
+                                        title="Recortar imagen actual"
+                                      >
+                                        <Crop size={16} />
+                                      </button>
+                                    )}
+                                  </div>
                                 )}
 
                                 {/* Error de imagen */}
-                                {imageErrors[index] && (
-                                  <p className="text-red-600 text-sm">{imageErrors[index]}</p>
-                                )}
-
+                                {imageErrors[index] && <p className="text-red-600 text-sm">{imageErrors[index]}</p>}
                               </div>
                             </div>
                           ))}
@@ -825,38 +1059,6 @@ export default function AdminPanel() {
                             <ImageIcon size={20} />
                             Agregar otra imagen
                           </button>
-                        </div>
-                      </div>
-
-                      {/* Specifications */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Especificaciones</label>
-                        <div className="space-y-2">
-                          
-                          <input
-                            type="text"
-                            placeholder="Tamaño"
-                            value={formData.specifications.size}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                specifications: { ...formData.specifications, size: e.target.value },
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Color"
-                            value={formData.specifications.color}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                specifications: { ...formData.specifications, color: e.target.value },
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                          />
                         </div>
                       </div>
                     </div>
@@ -889,12 +1091,19 @@ export default function AdminPanel() {
                     </button>
                     <button
                       type="submit"
-                      disabled={Object.values(uploadingImages).some(upload => upload?.uploading)}
+                      disabled={
+                        Object.values(uploadingImages).some((upload) => upload?.uploading) || pendingImages.length > 0
+                      }
                       className="px-6 py-2 bg-yellow-500 text-black rounded-lg font-semibold hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {Object.values(uploadingImages).some(upload => upload?.uploading) 
-                        ? "Subiendo imágenes..." 
-                        : editingProduct ? "Actualizar" : "Crear"} Producto
+                      {Object.values(uploadingImages).some((upload) => upload?.uploading)
+                        ? "Subiendo imágenes..."
+                        : pendingImages.length > 0
+                          ? "Procesa las imágenes pendientes"
+                          : editingProduct
+                            ? "Actualizar"
+                            : "Crear"}{" "}
+                      Producto
                     </button>
                   </div>
                 </form>
@@ -902,6 +1111,7 @@ export default function AdminPanel() {
             </div>
           </div>
         )}
+
       </div>
     </div>
   )

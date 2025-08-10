@@ -24,6 +24,33 @@
       "tags": [],
       "createdAt": "2025-08-09T16:17:31.203Z",
       "updatedAt": "2025-08-09T16:17:31.204Z"
+    },
+    {
+      "id": "1754860511622",
+      "name": "asasasas",
+      "description": "ssss",
+      "price": 222,
+      "category": "wheels",
+      "brand": "asasasasa",
+      "stock": 2,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754860470906_0_cropped.jpg?alt=media&token=058785d5-7db2-42a3-a566-3a4e1df601a0",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754860483457_1_cropped.jpg?alt=media&token=39ff0701-2a07-4227-baaa-94b570f1af71",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754860488917_2_cropped.jpg?alt=media&token=5b24ffa2-f14f-498e-abd2-0c725795a4bb",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754860496181_3_cropped.jpg?alt=media&token=0ed4b907-9013-4a6c-b21f-51690e5aa7fd"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "aa",
+        "color": "aa",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-10T21:15:11.622Z",
+      "updatedAt": "2025-08-10T21:15:11.622Z"
     }
   ],
   "categories": []
