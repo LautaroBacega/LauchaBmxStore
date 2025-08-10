@@ -26,31 +26,35 @@
       "updatedAt": "2025-08-09T16:17:31.204Z"
     },
     {
-      "id": "1754860511622",
-      "name": "asasasas",
-      "description": "ssss",
-      "price": 222,
-      "category": "wheels",
-      "brand": "asasasasa",
-      "stock": 2,
+      "id": "1754861400302",
+      "name": "Bici completa",
+      "description": "sasasasa",
+      "price": 250000,
+      "category": "frames",
+      "brand": "Mo Bikeco",
+      "stock": 1,
       "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754860470906_0_cropped.jpg?alt=media&token=058785d5-7db2-42a3-a566-3a4e1df601a0",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754860483457_1_cropped.jpg?alt=media&token=39ff0701-2a07-4227-baaa-94b570f1af71",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754860488917_2_cropped.jpg?alt=media&token=5b24ffa2-f14f-498e-abd2-0c725795a4bb",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754860496181_3_cropped.jpg?alt=media&token=0ed4b907-9013-4a6c-b21f-51690e5aa7fd"
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861354812_img_0_p67ifcl_IMG_5934.jpg?alt=media&token=2dd17e65-8a1e-4a08-9b50-4696e93cb85f",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861354813_img_1_mg22kyf_IMG_5935.jpg?alt=media&token=e35bcfe3-9520-4e5d-9937-e8d10d39bb92",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861354813_img_2_cy1q4fz_IMG_5936.jpg?alt=media&token=50c5e439-5cc5-409a-a5ed-eccaa35b8c84",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861354814_img_3_ccydx3t_IMG_5937.jpg?alt=media&token=8ccf5e20-7403-4434-b7e0-fb6b13cc7ae7",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861354814_img_4_nmxtdbw_IMG_5938.jpg?alt=media&token=edf5007b-001c-405a-8bdb-bee5f78f3bdf",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861354814_img_5_gau2i46_IMG_5939.jpg?alt=media&token=f84f35d9-e50c-409a-8c36-764f0225395d",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861354815_img_6_4scoq73_IMG_5940.jpg?alt=media&token=007c4ac7-c3a0-4893-b313-a7310d83d441",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754861354816_img_7_qk61fy1_IMG_5941.jpg?alt=media&token=45200aaf-a465-47b6-9c65-74154f10c7eb"
       ],
       "specifications": {
         "material": "",
         "weight": "",
-        "size": "aa",
-        "color": "aa",
+        "size": "rodado 16",
+        "color": "amarillo",
         "compatibility": ""
       },
       "featured": false,
       "active": true,
       "tags": [],
-      "createdAt": "2025-08-10T21:15:11.622Z",
-      "updatedAt": "2025-08-10T21:15:11.622Z"
+      "createdAt": "2025-08-10T21:30:00.302Z",
+      "updatedAt": "2025-08-10T21:30:16.742Z"
     }
   ],
   "categories": []
