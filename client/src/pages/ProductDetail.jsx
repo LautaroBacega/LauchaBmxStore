@@ -317,11 +317,6 @@ Por favor, cotizá el envío para proceder con la compra.`
 
                 {/* Production Mode - Contact Buttons */}
                 <div className="space-y-4">
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-                    <p className="text-yellow-800 text-sm font-medium">
-                      Para consultas sobre disponibilidad, precios y formas de pago, contactame por Whatsapp:
-                    </p>
-                  </div>
 
                   <div className="grid grid-cols-1 gap-3">
                     <button
@@ -367,25 +362,10 @@ Por favor, cotizá el envío para proceder con la compra.`
                   {isProduction ? "Información de contacto" : "Información de envío"}
                 </h3>
                 <div className="space-y-3">
-                  {isProduction ? (
-                    <>
-                      <div className="flex items-center gap-3">
-                        <MessageCircle className="text-green-500" size={20} />
-                        <span className="text-gray-700">Consultá disponibilidad por WhatsApp</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Phone className="text-blue-500" size={20} />
-                        <span className="text-gray-700">Atención personalizada por teléfono</span>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-3">
-                        <Truck className="text-yellow-500" size={20} />
-                        <span className="text-gray-700">Envíos a todo el país al mejor precio a traves Andreani.</span>
-                      </div>
-                    </>
-                  )}
+                    <div className="flex items-center gap-3">
+                      <Truck className="text-yellow-500" size={20} />
+                      <span className="text-gray-700">Envíos a todo el país al mejor precio a traves Andreani.</span>
+                    </div>
                 </div>
               </div>
             </div>
