@@ -23,7 +23,7 @@ export default function Footer() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6 bg-gray-700 rounded-xl hover:bg-gray-600 transition-colors duration-200">
-              <div className="bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MessageCircle  className="text-green-600" size={24} />
               </div>
               <h3 className="font-bold text-white mb-2">WhatsApp</h3>
@@ -36,7 +36,7 @@ export default function Footer() {
             </div>
 
             <div className="text-center p-6 bg-gray-700 rounded-xl hover:bg-gray-600 ">
-              <div className="bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Instagram className="text-red-600" size={24} />
               </div>
               <h3 className="font-bold text-white mb-2">Instragram</h3>
@@ -44,7 +44,7 @@ export default function Footer() {
             </div>
 
             <div className="text-center p-6 bg-gray-700 rounded-xl hover:bg-gray-600 ">
-              <div className="bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="text-yellow-600" size={24} />
               </div>
               <h3 className="font-bold text-white mb-2">Ubicación</h3>
