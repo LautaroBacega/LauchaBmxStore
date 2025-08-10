@@ -1,4 +1,4 @@
-import { isDevelopment, isProduction } from "../utils/envUtils"
+import { isProduction } from "../utils/envUtils"
 import { apiInterceptor } from "../utils/apiInterceptor"
 import { buildApiUrl } from "../config/api"
 
@@ -67,9 +67,7 @@ class ProductService {
         filteredProducts = filteredProducts.filter((p) => p.category === filters.category)
       }
       if (filters.brand) {
-        filteredProducts = filteredProducts.filter((p) =>
-          p.brand.toLowerCase().includes(filters.brand.toLowerCase()),
-        )
+        filteredProducts = filteredProducts.filter((p) => p.brand.toLowerCase().includes(filters.brand.toLowerCase()))
       }
       if (filters.search) {
         const searchTerm = filters.search.toLowerCase()
@@ -127,9 +125,7 @@ class ProductService {
     } else {
       // Modo desarrollo: llamar al backend
       const queryParams = new URLSearchParams(filters).toString()
-      const res = await apiInterceptor.fetchWithAuth(
-        buildApiUrl(`/api/products?${queryParams}`),
-      )
+      const res = await apiInterceptor.fetchWithAuth(buildApiUrl(`/api/products?${queryParams}`))
       if (!res.ok) throw new Error("Failed to fetch products from API")
       return res.json()
     }
@@ -160,9 +156,7 @@ class ProductService {
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, limit)
     } else {
-      const res = await apiInterceptor.fetchWithAuth(
-        buildApiUrl(`/api/products/featured?limit=${limit}`),
-      )
+      const res = await apiInterceptor.fetchWithAuth(buildApiUrl(`/api/products/featured?limit=${limit}`))
       if (!res.ok) throw new Error("Failed to fetch featured products from API")
       return res.json()
     }
@@ -177,9 +171,7 @@ class ProductService {
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, limit)
     } else {
-      const res = await apiInterceptor.fetchWithAuth(
-        buildApiUrl(`/api/products/category/${category}?limit=${limit}`),
-      )
+      const res = await apiInterceptor.fetchWithAuth(buildApiUrl(`/api/products/category/${category}?limit=${limit}`))
       if (!res.ok) throw new Error("Failed to fetch products by category from API")
       return res.json()
     }
@@ -190,9 +182,11 @@ class ProductService {
     if (isProduction) {
       await this.loadStaticProducts()
       const categoryCounts = {}
-      this.productsCache.filter((p) => p.active).forEach((p) => {
-        categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
-      })
+      this.productsCache
+        .filter((p) => p.active)
+        .forEach((p) => {
+          categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
+        })
 
       return this.categoriesCache.map((cat) => ({
         ...cat,
@@ -252,9 +246,7 @@ class ProductService {
   async getAllProductsAdmin(filters = {}) {
     if (isProduction) throw new Error("Operación no permitida en modo producción.")
     const queryParams = new URLSearchParams(filters).toString()
-    const res = await apiInterceptor.fetchWithAuth(
-      buildApiUrl(`/api/products/admin/all?${queryParams}`),
-    )
+    const res = await apiInterceptor.fetchWithAuth(buildApiUrl(`/api/products/admin/all?${queryParams}`))
     if (!res.ok) throw new Error("Failed to fetch all products for admin via API")
     return res.json()
   }
@@ -265,14 +257,14 @@ class ProductService {
     if (!res.ok) throw new Error("Failed to export data via API")
     // Descargar el archivo
     const blob = await res.blob()
-    const disposition = res.headers.get('Content-Disposition');
-    let filename = 'laucha-bmx-products.json';
-    if (disposition && disposition.indexOf('attachment') !== -1) {
-        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        const matches = filenameRegex.exec(disposition);
-        if (matches != null && matches[1]) {
-            filename = matches[1].replace(/['"]/g, '');
-        }
+    const disposition = res.headers.get("Content-Disposition")
+    let filename = "laucha-bmx-products.json"
+    if (disposition && disposition.indexOf("attachment") !== -1) {
+      const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+      const matches = filenameRegex.exec(disposition)
+      if (matches != null && matches[1]) {
+        filename = matches[1].replace(/['"]/g, "")
+      }
     }
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
@@ -300,12 +292,9 @@ class ProductService {
 
   async resetToOriginal() {
     if (isProduction) throw new Error("Operación no permitida en modo producción.")
-    const res = await apiInterceptor.fetchWithAuth(
-      buildApiUrl("/api/products/admin/reset-original"),
-      {
-        method: "POST",
-      },
-    )
+    const res = await apiInterceptor.fetchWithAuth(buildApiUrl("/api/products/admin/reset-original"), {
+      method: "POST",
+    })
     if (!res.ok) throw new Error("Failed to reset data via API")
     return res.json()
   }
@@ -314,35 +303,50 @@ class ProductService {
   async getStats() {
     if (isProduction) {
       await this.loadStaticProducts()
+      const activeProducts = this.productsCache.filter((p) => p.active)
       const stats = {
         totalProducts: this.productsCache.length,
-        activeProducts: this.productsCache.filter(p => p.active).length,
-        featuredProducts: this.productsCache.filter(p => p.featured).length,
-        outOfStock: this.productsCache.filter(p => p.stock === 0).length,
+        activeProducts: activeProducts.length,
+        featuredProducts: this.productsCache.filter((p) => p.featured && p.active).length,
+        outOfStock: this.productsCache.filter((p) => p.stock === 0).length,
         categories: this.categoriesCache.length,
         brands: this.brandsCache.length,
-        totalValue: this.productsCache.reduce((sum, p) => sum + (p.price * p.stock), 0),
-        lastUpdated: new Date(this.lastLoadTime).toLocaleDateString()
+        totalValue: activeProducts.reduce((sum, p) => sum + p.price * (p.stock || 0), 0),
+        lastUpdated: new Date(this.lastLoadTime).toLocaleDateString("es-AR"),
       }
       return stats
     } else {
-      // En desarrollo, podemos obtener estadísticas más detalladas si el backend las proporciona
-      // Por ahora, simulamos con los datos cargados por getProducts
-      const { products } = await this.getProducts({ active: undefined, limit: 9999 }) // Obtener todos los productos
-      const brands = [...new Set(products.map(p => p.brand))].length
-      const categories = [...new Set(products.map(p => p.category))].length
+      try {
+        // En desarrollo, obtener todos los productos para calcular estadísticas
+        const { products } = await this.getAllProductsAdmin({ limit: 9999 })
+        const activeProducts = products.filter((p) => p.active)
+        const brands = [...new Set(products.map((p) => p.brand))].length
+        const categories = [...new Set(products.map((p) => p.category))].length
 
-      const stats = {
-        totalProducts: products.length,
-        activeProducts: products.filter(p => p.active).length,
-        featuredProducts: products.filter(p => p.featured).length,
-        outOfStock: products.filter(p => p.stock === 0).length,
-        categories: categories,
-        brands: brands,
-        totalValue: products.reduce((sum, p) => sum + (p.price * p.stock), 0),
-        lastUpdated: new Date().toLocaleDateString() // O la fecha de la última modificación del archivo
+        const stats = {
+          totalProducts: products.length,
+          activeProducts: activeProducts.length,
+          featuredProducts: products.filter((p) => p.featured && p.active).length,
+          outOfStock: products.filter((p) => (p.stock || 0) === 0).length,
+          categories: categories,
+          brands: brands,
+          totalValue: activeProducts.reduce((sum, p) => sum + p.price * (p.stock || 0), 0),
+          lastUpdated: new Date().toLocaleDateString("es-AR"),
+        }
+        return stats
+      } catch (error) {
+        console.error("Error getting stats:", error)
+        return {
+          totalProducts: 0,
+          activeProducts: 0,
+          featuredProducts: 0,
+          outOfStock: 0,
+          categories: 0,
+          brands: 0,
+          totalValue: 0,
+          lastUpdated: "Error",
+        }
       }
-      return stats
     }
   }
 }

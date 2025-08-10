@@ -36,6 +36,23 @@ export default function Home() {
   const [categories, setCategories] = useState([])
   const [brands, setBrands] = useState([])
   const [featuredProducts, setFeaturedProducts] = useState([])
+  const [searchSuggestions, setSearchSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+      if (window.innerWidth < 768) {
+        setViewMode("grid")
+      }
+    }
+
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
@@ -125,6 +142,48 @@ export default function Home() {
 
   const hasActiveFilters = filters.category || filters.brand || filters.search || filters.minPrice || filters.maxPrice
 
+  const searchSuggestionsFunc = async (searchTerm) => {
+    if (!searchTerm.trim()) {
+      setSearchSuggestions([])
+      setShowSuggestions(false)
+      return
+    }
+
+    try {
+      setSearchLoading(true)
+      const data = await productService.getProducts({
+        search: searchTerm,
+        limit: 5,
+      })
+      setSearchSuggestions(data.products)
+      setShowSuggestions(true)
+    } catch (error) {
+      console.error("Error fetching search suggestions:", error)
+      setSearchSuggestions([])
+    } finally {
+      setSearchLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (filters.search) {
+        searchSuggestionsFunc(filters.search)
+      } else {
+        setShowSuggestions(false)
+      }
+    }, 300)
+
+    return () => clearTimeout(timeoutId)
+  }, [filters.search])
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "ARS",
+    }).format(price)
+  }
+
   if (loading && products.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -132,6 +191,8 @@ export default function Home() {
       </div>
     )
   }
+
+  const effectiveViewMode = isMobile ? "grid" : viewMode
 
   return (
     <div className="min-h-screen bg-gray-50 pt-10">
@@ -146,7 +207,7 @@ export default function Home() {
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">Partes y accesorios para tu BMX.</p>
 
             {/* Search Bar integrada en el hero */}
-            <div className="max-w-2xl mx-auto mb-8">
+            <div className="max-w-2xl mx-auto mb-8 relative">
               <div className="relative">
                 <input
                   type="text"
@@ -154,11 +215,56 @@ export default function Home() {
                   className="w-full p-4 pl-12 rounded-lg text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   value={filters.search}
                   onChange={(e) => handleFilterChange({ search: e.target.value })}
+                  onFocus={() => filters.search && setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 />
                 <div className="text-gray-400 absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <Search />
                 </div>
               </div>
+
+              {/* Search Suggestions Dropdown */}
+              {showSuggestions && (
+                <div className="absolute top-full left-0 right-0 bg-white rounded-lg shadow-xl border border-gray-200 mt-2 z-50 max-h-96 overflow-y-auto">
+                  {searchLoading ? (
+                    <div className="p-4 text-center">
+                      <div className="w-6 h-6 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                      <span className="text-gray-600">Buscando...</span>
+                    </div>
+                  ) : searchSuggestions.length > 0 ? (
+                    <div className="py-2">
+                      {searchSuggestions.map((product) => (
+                        <Link
+                          key={product.id}
+                          to={`/product/${product.id}`}
+                          className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-200"
+                          onClick={() => {
+                            setShowSuggestions(false)
+                            scrollToTop()
+                          }}
+                        >
+                          <img
+                            src={product.images[0] || "/placeholder.svg?height=40&width=40&query=bmx part"}
+                            alt={product.name}
+                            className="w-10 h-10 rounded-lg object-cover"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-800 truncate">{product.name}</h4>
+                            <p className="text-sm text-gray-600">{formatPrice(product.price)}</p>
+                          </div>
+                        </Link>
+                      ))}
+                      {searchSuggestions.length === 5 && (
+                        <div className="px-4 py-2 text-center border-t border-gray-100">
+                          <span className="text-sm text-gray-500">Presiona Enter para ver todos los resultados</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : filters.search ? (
+                    <div className="p-4 text-center text-gray-500">No se encontraron productos</div>
+                  ) : null}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -211,8 +317,8 @@ export default function Home() {
                   <option value="name-desc">Nombre: Z-A</option>
                 </select>
 
-                {/* View Mode Toggle */}
-                <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+                {/* View Mode Toggle - Solo en desktop */}
+                <div className="hidden md:flex border border-gray-300 rounded-lg overflow-hidden">
                   <button
                     onClick={() => setViewMode("grid")}
                     className={`p-2 ${viewMode === "grid" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
@@ -261,12 +367,14 @@ export default function Home() {
                 {/* Products Grid/List */}
                 <div
                   className={
-                    viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8" : "space-y-4 mb-8"
+                    effectiveViewMode === "grid"
+                      ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8"
+                      : "space-y-4 mb-8"
                   }
                 >
                   {products.map((product) => (
                     <Link key={product.id} to={`/product/${product.id}`} onClick={() => scrollToTop()}>
-                      <ProductCard product={product} viewMode={viewMode} />
+                      <ProductCard product={product} viewMode={effectiveViewMode} />
                     </Link>
                   ))}
                 </div>

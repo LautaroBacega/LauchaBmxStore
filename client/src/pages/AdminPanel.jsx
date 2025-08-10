@@ -17,13 +17,33 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
+import { getDownloadURL, getStorage, ref, uploadBytesResumable, deleteObject } from "firebase/storage"
 import { app } from "../firebase"
 import { productService } from "../services/productService"
 import { isDevelopment } from "../utils/envUtils" // Importar isDevelopment
 
 // Global counter for unique image IDs
 let uniqueImageIdCounter = 0
+
+// Agregar esta función después de las importaciones y antes del componente
+const deleteImageFromFirebase = async (imageUrl) => {
+  try {
+    if (!imageUrl || !imageUrl.includes("firebase")) return
+
+    const storage = getStorage(app)
+    // Extraer el path de la URL de Firebase
+    const urlParts = imageUrl.split("/o/")[1]
+    if (!urlParts) return
+
+    const imagePath = decodeURIComponent(urlParts.split("?")[0])
+    const imageRef = ref(storage, imagePath)
+
+    await deleteObject(imageRef)
+    console.log("✅ Imagen eliminada de Firebase:", imagePath)
+  } catch (error) {
+    console.error("❌ Error eliminando imagen de Firebase:", error)
+  }
+}
 
 // Utility function for image compression
 const compressImage = (file, maxWidth = 1280, maxHeight = 1280, quality = 0.8) => {
@@ -363,10 +383,22 @@ export default function AdminPanel() {
   const handleDelete = async (productId) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
       try {
+        // Encontrar el producto para obtener sus imágenes
+        const productToDelete = products.find((p) => p.id === productId)
+
+        // Eliminar el producto del backend
         await productService.deleteProduct(productId)
+
+        // Eliminar imágenes de Firebase
+        if (productToDelete && productToDelete.images) {
+          for (const imageUrl of productToDelete.images) {
+            await deleteImageFromFirebase(imageUrl)
+          }
+        }
+
         fetchProducts()
         fetchStats()
-        alert("Producto eliminado correctamente. ")
+        alert("Producto eliminado correctamente.")
       } catch (error) {
         console.error("Error deleting product:", error)
         alert("Error al eliminar el producto: " + error.message)
@@ -431,8 +463,12 @@ export default function AdminPanel() {
   }
 
   const resetForm = () => {
-    // Revoke any remaining object URLs from the current session before resetting
-    formData.images.forEach((img) => {
+    // Eliminar imágenes de Firebase que no se guardaron
+    formData.images.forEach(async (img) => {
+      if (img.url && img.file) {
+        // Si tiene URL pero también file, significa que se subió pero no se guardó el producto
+        await deleteImageFromFirebase(img.url)
+      }
       if (img.file && img.url === null) {
         URL.revokeObjectURL(img.file)
       }
@@ -445,7 +481,7 @@ export default function AdminPanel() {
       category: "",
       brand: "",
       stock: "",
-      images: [], // Reset to empty array
+      images: [],
       specifications: {
         material: "",
         weight: "",
@@ -457,27 +493,32 @@ export default function AdminPanel() {
       active: true,
       tags: "",
     })
-    setCurrentImageIndex(0) // Reset carousel index
+    setCurrentImageIndex(0)
   }
 
-  const removeImage = (idToRemove) => {
+  const removeImage = async (idToRemove) => {
     setFormData((prev) => {
+      const imageToRemove = prev.images.find((img) => img.id === idToRemove)
       const updatedImages = prev.images.filter((img) => img.id !== idToRemove)
-      // Revoke object URL if it was a local file not yet uploaded
-      const removedImage = prev.images.find((img) => img.id === idToRemove)
-      if (removedImage && removedImage.file && removedImage.url === null) {
-        URL.revokeObjectURL(removedImage.file)
+
+      // Eliminar de Firebase si ya se subió
+      if (imageToRemove && imageToRemove.url) {
+        deleteImageFromFirebase(imageToRemove.url)
       }
 
-      // Adjust currentImageIndex if the removed image was the current one,
-      // or if the index is now out of bounds.
+      // Revoke object URL if it was a local file not yet uploaded
+      if (imageToRemove && imageToRemove.file && imageToRemove.url === null) {
+        URL.revokeObjectURL(imageToRemove.file)
+      }
+
+      // Adjust currentImageIndex
       let newIndex = currentImageIndex
       if (updatedImages.length === 0) {
-        newIndex = 0 // No images left
+        newIndex = 0
       } else if (currentImageIndex >= updatedImages.length) {
-        newIndex = Math.max(0, updatedImages.length - 1) // If last image was removed or index out of bounds
+        newIndex = Math.max(0, updatedImages.length - 1)
       }
-      setCurrentImageIndex(newIndex) // Update the state for current image index
+      setCurrentImageIndex(newIndex)
 
       return {
         ...prev,
