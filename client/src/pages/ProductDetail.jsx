@@ -347,7 +347,19 @@ Por favor, cotizá el envío para proceder con la compra.`
                       ([key, value]) =>
                         value && (
                           <div key={key} className="flex justify-between py-2 border-b border-gray-100 last:border-b-0">
-                            <span className="text-gray-600 capitalize">{key.replace(/([A-Z])/g, " $1")}</span>
+                            <span className="text-gray-600 capitalize">
+                              {key === "size"
+                                ? "Medida"
+                                : key === "color"
+                                  ? "Color"
+                                  : key === "material"
+                                    ? "Material"
+                                    : key === "weight"
+                                      ? "Peso"
+                                      : key === "compatibility"
+                                        ? "Compatibilidad"
+                                        : key.replace(/([A-Z])/g, " $1")}
+                            </span>
                             <span className="text-gray-800 font-medium">{value}</span>
                           </div>
                         ),
