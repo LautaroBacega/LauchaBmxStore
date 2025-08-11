@@ -2,8 +2,8 @@
   "products": [
     {
       "id": "1754869796668",
-      "name": "Cuadro Total Hangover v3",
-      "description": "1 mes de uso, igual a nuevo.",
+      "name": "Cuadro Total Hangover H3",
+      "description": "1 mes de uso, igual a nuevo.\n\nMaterial: 4130 Chromoly\nSignature: Alex Coleborn\nVainas: 12,8”\nDirección: Integrado\nGyro tabs: Sí\nHerradura de freno: Soportes de freno extraíbles\nCaja: MID\nAbrazadera de asiento: Integrado\nDropouts: Tratamiento térmico de 6 mm de espesor con ajustadores de cadena integrados\nPeso: 2,15 kg",
       "price": 420000,
       "category": "frames",
       "brand": "Total",
@@ -30,7 +30,260 @@
       "active": true,
       "tags": [],
       "createdAt": "2025-08-10T23:49:56.668Z",
-      "updatedAt": "2025-08-10T23:52:59.115Z"
+      "updatedAt": "2025-08-11T14:00:00.425Z"
+    },
+    {
+      "id": "1754920950601",
+      "name": "Stem Sunday Freeze",
+      "description": "- Material: Aluminio 6061 T6\n- Altura: 34 mm.\n- Largo: 48 mm.\n- Tipo: Top Load.\n- Peso Aproximado: 294 Gramos.",
+      "price": 40000,
+      "category": "handlebars",
+      "brand": "Sunday",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939236_img_3_vln1np5_IMG_1988.jpg?alt=media&token=23ef0ed4-08ba-4795-b7c6-8b3d4a96d036",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939237_img_2_gzg797w_IMG_1989.jpg?alt=media&token=f9293e8e-6345-47c9-8971-fbda916cc94a",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939237_img_0_5e2uvfg_IMG_1990.jpg?alt=media&token=ca63386d-e20b-4fdc-b358-5eb72263349e",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939237_img_1_7tv5xlg_IMG_1991.jpg?alt=media&token=4e9ad9b3-a771-4c85-b73e-74d1c7c6a67c"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "",
+        "color": "Pulido",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:02:30.601Z",
+      "updatedAt": "2025-08-11T14:02:30.601Z"
+    },
+    {
+      "id": "1754921125755",
+      "name": "Horquilla Krow Big 341",
+      "description": "- Material: Full cromo 4130, con tratamiento térmico.\n- Peso Aproximado: 1028 gramos.",
+      "price": 155000,
+      "category": "frames",
+      "brand": "Krow",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110853_img_9_ze6yorf_IMG_1999.jpg?alt=media&token=54fffdc2-60e9-4f8f-84ef-06b67906b2d1",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_8_dai3n6b_IMG_2001.jpg?alt=media&token=41cf47c3-d6ab-4924-9ef6-cd68a7d530c5",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_5_c5393eb_IMG_2002.jpg?alt=media&token=8ee84285-6a0d-4632-b224-26c67366bdbe",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_6_j8uks2h_IMG_2003.jpg?alt=media&token=b1220d83-6193-45b3-a414-80b2663a69e7",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_7_gl43c9x_IMG_2004.jpg?alt=media&token=bd41ef43-501f-4a94-b8f0-76f8f18b55de",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_4_re0s1r5_IMG_2005.jpg?alt=media&token=3f371226-0c9c-41cb-9200-8b3667eb3bea"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "25mm",
+        "color": "Negro",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:05:25.755Z",
+      "updatedAt": "2025-08-11T14:05:25.755Z"
+    },
+    {
+      "id": "1754921229002",
+      "name": "Palancas genericas + pedales de regalo",
+      "description": "Palancas genericas derecha, 1 fisura reparada, con Pedales genericos ",
+      "price": 20000,
+      "category": "frames",
+      "brand": "Generico",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_13_9cru74f_IMG_1983.jpg?alt=media&token=642ca6a4-8305-474e-8218-61831937b999",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_10_89zo2do_IMG_1984.jpg?alt=media&token=abf213b1-49f8-4c57-826f-523bfb3bb69d",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_12_wc77wyc_IMG_1985.jpg?alt=media&token=980ba52e-e287-49ed-88e2-87afeac8c0bd",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_11_0qaxzr4_IMG_1986.jpg?alt=media&token=6930363f-358e-48b9-beaf-fc96aa372633"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "175mm",
+        "color": "Negro",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:07:09.002Z",
+      "updatedAt": "2025-08-11T14:07:09.002Z"
+    },
+    {
+      "id": "1754921300462",
+      "name": "Caja Mid",
+      "description": "Caja Mid generica 19mm",
+      "price": 15000,
+      "category": "chains",
+      "brand": "Generica",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921288675_img_16_somly5c_IMG_1974.jpg?alt=media&token=4b504144-a218-41c4-900f-5d9d3f6b5837",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921288676_img_15_c3d539z_IMG_1975.jpg?alt=media&token=0555657d-4780-422c-b47e-62669ef64b89",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921288676_img_14_8hlpu4v_IMG_1976.jpg?alt=media&token=1af71534-fd59-4e6d-9296-4f2072e7e063"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "19mm",
+        "color": "",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:08:20.462Z",
+      "updatedAt": "2025-08-11T14:08:20.462Z"
+    },
+    {
+      "id": "1754921417583",
+      "name": "Rueda delantera",
+      "description": "Rueda delantera:\n- Maza Rival KK a bulones\n- Aro Supra Dome doble pared\n- Cubierta Maxxis Rizer 2.30",
+      "price": 105000,
+      "category": "wheels",
+      "brand": "Rival, Supra Dome, Maxxis",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372262_img_22_13w3xiq_IMG_2025.jpg?alt=media&token=5a85f922-0bdd-463c-ad71-a192f85ef16f",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_20_5787s2p_IMG_2026.jpg?alt=media&token=a2617cf3-04bd-4270-a043-1fcb56ca64e5",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_21_88k3gcq_IMG_2027.jpg?alt=media&token=6f04bfb0-8bc9-46ca-9798-d881e7cca273",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_18_f7f0ad8_IMG_2028.jpg?alt=media&token=14354fcd-2bf3-4be8-9069-6c674f3320fa",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_17_es64yza_IMG_2029.jpg?alt=media&token=56e43ab5-f452-414b-91a5-13cac1265953",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_19_skosmhe_IMG_2030.jpg?alt=media&token=c2903c65-36da-41b4-8e43-5db0c14792ef"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "Rodado 20",
+        "color": "",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:10:17.583Z",
+      "updatedAt": "2025-08-11T14:10:17.583Z"
+    },
+    {
+      "id": "1754921662655",
+      "name": "Horquilla Krow Big 341",
+      "description": "1 firsura reparada",
+      "price": 90000,
+      "category": "handlebars",
+      "brand": "Krow",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_24_nypkur9_IMG_3405.jpg?alt=media&token=76287a9a-4dbc-4bf3-a98b-45013e2364e7",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_26_8ukfvnk_IMG_3406.jpg?alt=media&token=c4ca7ac4-ff57-4627-87ae-a3fd3e1dd8ef",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_27_hh9xzqj_IMG_3407.jpg?alt=media&token=d4ab88e6-0d01-4549-9263-2702d2bda7f7",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_23_3joyw8o_IMG_3409.jpg?alt=media&token=097d24bc-5871-4e79-90b4-6814e300e011",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_25_jxamqn4_IMG_3410.jpg?alt=media&token=a058d749-2309-449b-8f72-c3505becf80d"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "25mm",
+        "color": "Negro",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:14:22.655Z",
+      "updatedAt": "2025-08-11T14:14:22.655Z"
+    },
+    {
+      "id": "1754921756491",
+      "name": "Asiento Glint poste integrado",
+      "description": ".",
+      "price": 9000,
+      "category": "seats",
+      "brand": "Glint",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921705003_img_31_1u3v24o_IMG_4385.jpg?alt=media&token=b7cfbb2a-0563-4055-9652-227b2f627df9",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921705003_img_30_aetao3i_IMG_4386.jpg?alt=media&token=aa0c7ec0-19b4-45a2-8125-e70397ee65ff"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "",
+        "color": "",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:15:56.491Z",
+      "updatedAt": "2025-08-11T14:15:56.492Z"
+    },
+    {
+      "id": "1754921806002",
+      "name": "Cuadro Total SandStorm",
+      "description": "1 fisura reparada",
+      "price": 300000,
+      "category": "frames",
+      "brand": "Total",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_36_u6ftxl2_IMG_5943.jpg?alt=media&token=e48657b9-676c-499e-9227-bc9b75dcebae",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_35_lzs4y00_IMG_5944.jpg?alt=media&token=995d58ec-715c-4670-9e33-c943637cf3e4",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_34_19t0bn6_IMG_5945.jpg?alt=media&token=f36bd730-d750-46fa-9eca-c325f8216efa",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_38_um1sk1h_IMG_5946.jpg?alt=media&token=7c4fba40-2449-4759-9207-ce2c6fe8b53e",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_39_y5ez5qm_IMG_5947.jpg?alt=media&token=35948e1e-edc1-42ec-93a4-be08c854e4a5",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_37_9oz9ivj_IMG_5948.jpg?alt=media&token=1b534f00-6d7c-4cce-bb5c-0c7630c38735",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_32_l0cy39i_IMG_5949.jpg?alt=media&token=0441d4aa-bf42-4a9d-ac8c-1f906dd34d93",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_33_ai2g8h4_IMG_5950.jpg?alt=media&token=1c44244e-0072-4269-a011-40dc9368fccd"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "20.5",
+        "color": "",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:16:46.002Z",
+      "updatedAt": "2025-08-11T14:16:46.003Z"
+    },
+    {
+      "id": "1754921921673",
+      "name": "Bicicleta Completa Rodado 16'",
+      "description": "- CUADRO ACERO 16\" SOLDADURA TIG \n- HORQUILLA ACERO A-HEAD \n- ASIENTO bmx \n- LLANTA  ALUMINIO de 36 agujeros\n- MAZAS DRIVER 9\n- MANUBRIO ACERO 8\" \n- STEM ALUMINIO \n- PEDAL PLASTICO \n- PLATO ACERO 25T \n- BIELA NEGRA \n- FRENO TRASERO U-BRAKE ALUMINIO \n- CUBIERTAS hartex 16' \n- PUÑOS IZHAVEL",
+      "price": 250000,
+      "category": "frames",
+      "brand": "MoBikeco",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_47_jzosr6l_IMG_5934.jpg?alt=media&token=7c81da4d-89b7-483a-b33d-9ca75296fb2e",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_44_pkcdw1e_IMG_5935.jpg?alt=media&token=d67af30a-9ee3-4670-8e6d-aba4d919cd52",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_43_5xk2dpm_IMG_5936.jpg?alt=media&token=df54dfd8-55b0-4947-ad15-2f711ed9964e",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_46_hthi25n_IMG_5937.jpg?alt=media&token=b9a2363e-5a5a-48b6-b160-8192f5270588",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_41_dca9k34_IMG_5938.jpg?alt=media&token=3b73dfa5-5b0e-4ccd-9eb6-6faee5676f6f",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_42_e1xomne_IMG_5939.jpg?alt=media&token=f3aa6ed1-3fc4-4bf1-8371-a579ab76b2d1",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_40_aqmvter_IMG_5940.jpg?alt=media&token=bc7b0652-e444-4b8f-9158-76c65d56f4c1",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901682_img_45_4yuudy4_IMG_5941.jpg?alt=media&token=00b30cd0-f31d-4afb-a396-f205acbd46fd"
+      ],
+      "specifications": {
+        "material": "",
+        "weight": "",
+        "size": "Rodado 16'",
+        "color": "Amarillo",
+        "compatibility": ""
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-11T14:18:41.673Z",
+      "updatedAt": "2025-08-11T14:18:41.674Z"
     }
   ],
   "categories": []

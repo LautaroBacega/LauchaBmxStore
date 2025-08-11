@@ -1033,15 +1033,6 @@ export default function AdminPanel() {
                           />
                           Producto activo
                         </label>
-                        <label className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={formData.featured}
-                            onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                            className="mr-2"
-                          />
-                          Producto destacado
-                        </label>
                       </div>
                     </div>
 
@@ -1221,18 +1212,6 @@ export default function AdminPanel() {
                       rows="4"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                       required
-                    />
-                  </div>
-
-                  {/* Tags */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Tags (separados por comas)</label>
-                    <input
-                      type="text"
-                      value={formData.tags}
-                      onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                      placeholder="bmx, freestyle, street, park"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     />
                   </div>
 
