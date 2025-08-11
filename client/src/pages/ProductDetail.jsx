@@ -376,7 +376,7 @@ Por favor, cotizá el envío para proceder con la compra.`
                 <div className="space-y-3">
                     <div className="flex items-center gap-3">
                       <Truck className="text-yellow-500" size={20} />
-                      <span className="text-gray-700">Envíos a todo el país al mejor precio a traves Andreani.</span>
+                      <span className="text-gray-700">Envíos a todo el país al mejor precio a traves de Andreani.</span>
                     </div>
                 </div>
               </div>
