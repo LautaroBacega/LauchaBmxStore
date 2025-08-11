@@ -207,7 +207,7 @@ Por favor, cotizá el envío para proceder con la compra.`
       {/* Contenido principal con efecto blur cuando el modal está abierto */}
       <div className={`transition-all duration-300 ${showPurchaseModal ? "blur-sm" : ""}`}>
         {/* Breadcrumb */}
-        <div className="bg-white border-b">
+        <div className="bg-white border-b pt-20">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Link to="/" className="hover:text-yellow-600" onClick={handleBreadcrumbClick}>
@@ -231,7 +231,7 @@ Por favor, cotizá el envío para proceder con la compra.`
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="max-w-7xl mx-auto px-4 py-4">
           {/* Back Button */}
           <Link
             to="/"
