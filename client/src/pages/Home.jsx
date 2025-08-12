@@ -1,14 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
 import { useUser } from "../hooks/useUser"
-import { Truck, Grid, List, Search } from "lucide-react"
-import ProductCard from "../components/ProductCard"
-import CategoryFilter from "../components/CategoryFilter"
+import { ChevronDown, ChevronUp, Recycle, Hand, Truck } from "lucide-react"
 import { productService } from "../services/productService"
 import { useLocation } from "react-router-dom"
-import { scrollToTop } from "../hooks/useScrollToTop"
 
 export default function Home() {
   const { currentUser } = useUser()
@@ -16,7 +12,7 @@ export default function Home() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [viewMode, setViewMode] = useState("grid") // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState("grid")
   const [filters, setFilters] = useState({
     category: "",
     brand: "",
@@ -33,68 +29,24 @@ export default function Home() {
     totalPages: 1,
     totalProducts: 0,
   })
-  const [categories, setCategories] = useState([])
-  const [brands, setBrands] = useState([])
   const [featuredProducts, setFeaturedProducts] = useState([])
-  const [searchSuggestions, setSearchSuggestions] = useState([])
-  const [showSuggestions, setShowSuggestions] = useState(false)
-  const [searchLoading, setSearchLoading] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-      if (window.innerWidth < 768) {
-        setViewMode("grid")
-      }
-    }
-
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search)
-    const searchFromUrl = urlParams.get("search")
-    const categoryFromUrl = urlParams.get("category")
-
-    if (searchFromUrl && searchFromUrl !== filters.search) {
-      setFilters((prev) => ({
-        ...prev,
-        search: searchFromUrl,
-        page: 1,
-      }))
-    }
-
-    if (categoryFromUrl && categoryFromUrl !== filters.category) {
-      setFilters((prev) => ({
-        ...prev,
-        category: categoryFromUrl,
-        page: 1,
-      }))
-    }
-  }, [location.search])
+  const [expandedFaq, setExpandedFaq] = useState(null)
 
   useEffect(() => {
     const fetchProductsAndFilters = async () => {
       setLoading(true)
       setError(null)
       try {
-        const [productData, categoryData, brandData, featuredData] = await Promise.all([
+        const [productData, featuredData] = await Promise.all([
           productService.getProducts(filters),
-          productService.getCategories(),
-          productService.getBrands(),
-          productService.getFeaturedProducts(8),
+          productService.getFeaturedProducts(3),
         ])
         setProducts(productData.products)
         setPagination(productData.pagination)
-        setCategories(categoryData)
-        setBrands(brandData)
         setFeaturedProducts(featuredData)
       } catch (err) {
         console.error("Error fetching data:", err)
-        setError("Failed to load products or filters. Please try again later.")
+        setError("Failed to load products. Please try again later.")
       } finally {
         setLoading(false)
       }
@@ -103,80 +55,6 @@ export default function Home() {
     fetchProductsAndFilters()
   }, [filters])
 
-  const handleFilterChange = (newFilters) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      ...newFilters,
-      page: 1, // Reset page when filters change
-    }))
-  }
-
-  const handleCategoryChange = (category) => {
-    handleFilterChange({ category })
-  }
-
-  const handleBrandChange = (brand) => {
-    handleFilterChange({ brand })
-  }
-
-  const handlePageChange = (newPage) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      page: newPage,
-    }))
-  }
-
-  const clearFilters = () => {
-    setFilters({
-      category: "",
-      brand: "",
-      search: "",
-      minPrice: "",
-      maxPrice: "",
-      sortBy: "createdAt",
-      sortOrder: "desc",
-      page: 1,
-      limit: 12,
-    })
-  }
-
-  const hasActiveFilters = filters.category || filters.brand || filters.search || filters.minPrice || filters.maxPrice
-
-  const searchSuggestionsFunc = async (searchTerm) => {
-    if (!searchTerm.trim()) {
-      setSearchSuggestions([])
-      setShowSuggestions(false)
-      return
-    }
-
-    try {
-      setSearchLoading(true)
-      const data = await productService.getProducts({
-        search: searchTerm,
-        limit: 5,
-      })
-      setSearchSuggestions(data.products)
-      setShowSuggestions(true)
-    } catch (error) {
-      console.error("Error fetching search suggestions:", error)
-      setSearchSuggestions([])
-    } finally {
-      setSearchLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (filters.search) {
-        searchSuggestionsFunc(filters.search)
-      } else {
-        setShowSuggestions(false)
-      }
-    }, 300)
-
-    return () => clearTimeout(timeoutId)
-  }, [filters.search])
-
   const formatPrice = (price) => {
     return new Intl.NumberFormat("es-AR", {
       style: "currency",
@@ -184,245 +62,257 @@ export default function Home() {
     }).format(price)
   }
 
-  if (loading && products.length === 0) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-xl">Cargando productos...</p>
-      </div>
-    )
+  const toggleFaq = (index) => {
+    setExpandedFaq(expandedFaq === index ? null : index)
   }
 
-  const effectiveViewMode = isMobile ? "grid" : viewMode
+  const faqData = [
+    {
+      question: "¿Cómo sé el estado de las prendas?",
+      answer:
+        "Todas nuestras prendas son cuidadosamente inspeccionadas y clasificadas según su estado. Proporcionamos descripciones detalladas y fotos de cualquier imperfección.",
+    },
+    {
+      question: "¿Hacen envíos?",
+      answer:
+        "Sí, realizamos envíos a todo el país. Los costos y tiempos de entrega varían según la ubicación. Puedes consultar las opciones disponibles durante el proceso de compra.",
+    },
+    {
+      question: "¿Puedo vender mi ropa?",
+      answer: "¡Claro! Evaluamos tus prendas y si encajan con el estilo, las publicamos y te pagamos cuando se vendan.",
+    },
+  ]
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-10">
+    <div className="min-h-screen bg-stone-100">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-10">
+      <div className="bg-stone-100 pt-20 pb-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <img src="/LauchaBmxStore-logosinfondo.png" alt="Laucha BMX Store" className="h-60 mx-auto" />
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="text-yellow-500">LAUCHA</span> BMX STORE
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">Partes y accesorios para tu BMX.</p>
-
-            {/* Search Bar integrada en el hero */}
-            <div className="max-w-2xl mx-auto mb-8 relative">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Buscar productos..."
-                  className="w-full p-4 pl-12 rounded-lg text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  value={filters.search}
-                  onChange={(e) => handleFilterChange({ search: e.target.value })}
-                  onFocus={() => filters.search && setShowSuggestions(true)}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                />
-                <div className="text-gray-400 absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <Search />
-                </div>
-              </div>
-
-              {/* Search Suggestions Dropdown */}
-              {showSuggestions && (
-                <div className="absolute top-full left-0 right-0 bg-white rounded-lg shadow-xl border border-gray-200 mt-2 z-50 max-h-96 overflow-y-auto">
-                  {searchLoading ? (
-                    <div className="p-4 text-center">
-                      <div className="w-6 h-6 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                      <span className="text-gray-600">Buscando...</span>
-                    </div>
-                  ) : searchSuggestions.length > 0 ? (
-                    <div className="py-2">
-                      {searchSuggestions.map((product) => (
-                        <Link
-                          key={product.id}
-                          to={`/product/${product.id}`}
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-200"
-                          onClick={() => {
-                            setShowSuggestions(false)
-                            scrollToTop()
-                          }}
-                        >
-                          <img
-                            src={product.images[0] || "/placeholder.svg?height=40&width=40&query=bmx part"}
-                            alt={product.name}
-                            className="w-10 h-10 rounded-lg object-cover"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-gray-800 truncate">{product.name}</h4>
-                            <p className="text-sm text-gray-600">{formatPrice(product.price)}</p>
-                          </div>
-                        </Link>
-                      ))}
-                      {searchSuggestions.length === 5 && (
-                        <div className="px-4 py-2 text-center border-t border-gray-100">
-                          <span className="text-sm text-gray-500">Presiona Enter para ver todos los resultados</span>
-                        </div>
-                      )}
-                    </div>
-                  ) : filters.search ? (
-                    <div className="p-4 text-center text-gray-500">No se encontraron productos</div>
-                  ) : null}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content with Sidebar */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar with Filters */}
-          <div className="lg:w-1/4">
-            <CategoryFilter
-              selectedCategory={filters.category}
-              onCategoryChange={handleCategoryChange}
-              selectedBrand={filters.brand}
-              onBrandChange={handleBrandChange}
-            />
-          </div>
-
-          {/* Main Products Area */}
-          <div className="lg:w-3/4">
-            {/* Products Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="space-y-8">
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                  {hasActiveFilters ? "Productos Filtrados" : "Catálogo"}
-                </h2>
-                <p className="text-gray-600">
-                  {pagination.totalProducts > 0
-                    ? `${pagination.totalProducts} productos encontrados`
-                    : "No se encontraron productos"}
+                <p className="text-stone-600 text-sm font-medium tracking-wider uppercase mb-4">MODA CIRCULAR</p>
+                <h1 className="text-5xl lg:text-6xl font-serif text-stone-800 leading-tight mb-6">
+                  Moda vintage con historia
+                </h1>
+                <p className="text-stone-600 text-lg leading-relaxed mb-8">
+                  Descubre ropa de segunda mano cuidadosamente seleccionada. Piezas únicas, en excelentes condiciones,
+                  listas para una nueva vida.
                 </p>
               </div>
 
-              {/* Controls */}
-              <div className="flex items-center gap-4">
-                {/* Sort Dropdown */}
-                <select
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
-                  value={`${filters.sortBy}-${filters.sortOrder}`}
-                  onChange={(e) => {
-                    const [sortBy, sortOrder] = e.target.value.split("-")
-                    handleFilterChange({ sortBy, sortOrder })
-                  }}
-                >
-                  <option value="createdAt-desc">Más recientes</option>
-                  <option value="createdAt-asc">Más antiguos</option>
-                  <option value="price-asc">Precio: menor a mayor</option>
-                  <option value="price-desc">Precio: mayor a menor</option>
-                  <option value="name-asc">Nombre: A-Z</option>
-                  <option value="name-desc">Nombre: Z-A</option>
-                </select>
-
-                {/* View Mode Toggle - Solo en desktop */}
-                <div className="hidden md:flex border border-gray-300 rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => setViewMode("grid")}
-                    className={`p-2 ${viewMode === "grid" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                  >
-                    <Grid size={20} />
-                  </button>
-                  <button
-                    onClick={() => setViewMode("list")}
-                    className={`p-2 ${viewMode === "list" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                  >
-                    <List size={20} />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Products Content */}
-            {error ? (
-              <div className="text-center py-12">
-                <p className="text-red-500 text-xl mb-4">{error}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-200"
-                >
-                  Reintentar
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200">
+                  Ver catálogo
+                </button>
+                <button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200">
+                  Vender mi ropa
                 </button>
               </div>
-            ) : products.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-600 text-xl mb-4">
-                  {hasActiveFilters
-                    ? "No se encontraron productos que coincidan con los filtros seleccionados."
-                    : "No hay productos disponibles en este momento."}
-                </p>
-                {hasActiveFilters && (
-                  <button
-                    onClick={clearFilters}
-                    className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-200"
-                  >
-                    Ver Todo el Catálogo
-                  </button>
-                )}
-              </div>
-            ) : (
-              <>
-                {/* Products Grid/List */}
-                <div
-                  className={
-                    effectiveViewMode === "grid"
-                      ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8"
-                      : "space-y-4 mb-8"
-                  }
-                >
-                  {products.map((product) => (
-                    <Link key={product.id} to={`/product/${product.id}`} onClick={() => scrollToTop()}>
-                      <ProductCard product={product} viewMode={effectiveViewMode} />
-                    </Link>
-                  ))}
-                </div>
 
-                {/* Pagination */}
-                {pagination.totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-4 mt-8">
-                    <button
-                      onClick={() => handlePageChange(pagination.currentPage - 1)}
-                      disabled={!pagination.hasPrev}
-                      className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                    >
-                      Anterior
-                    </button>
-                    <span className="text-lg font-medium">
-                      Página {pagination.currentPage} de {pagination.totalPages}
-                    </span>
-                    <button
-                      onClick={() => handlePageChange(pagination.currentPage + 1)}
-                      disabled={!pagination.hasNext}
-                      className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                    >
-                      Siguiente
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
+              {/* Features */}
+              <div className="flex flex-col sm:flex-row gap-8 pt-8">
+                <div className="flex items-center gap-3">
+                  <Recycle className="text-red-600" size={20} />
+                  <span className="text-stone-700 font-medium">Sostenible</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Hand className="text-red-600" size={20} />
+                  <span className="text-stone-700 font-medium">Curado a mano</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Truck className="text-red-600" size={20} />
+                  <span className="text-stone-700 font-medium">Envíos nacionales</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Content - Product Images */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <div className="bg-stone-200 rounded-lg overflow-hidden aspect-square">
+                  <img
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-08-11%20212820-Ta1GnwJ0yGZHkIKkpky0aoUsIb0KRZ.png"
+                    alt="Campera denim vintage"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="bg-stone-200 rounded-lg overflow-hidden aspect-square">
+                  <img
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-08-11%20212820-Ta1GnwJ0yGZHkIKkpky0aoUsIb0KRZ.png"
+                    alt="Vestido floral"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="pt-8">
+                <div className="bg-stone-200 rounded-lg overflow-hidden aspect-[4/5]">
+                  <img
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-08-11%20212820-Ta1GnwJ0yGZHkIKkpky0aoUsIb0KRZ.png"
+                    alt="Botas de cuero clásicas"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="py-10 bg-white">
+      {/* Featured Products Section */}
+      <div className="bg-stone-100 py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1  gap-8">
-            <div className="text-center p-6">
-              <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Truck className="text-red-600" size={32} />
+          <h2 className="text-4xl font-serif text-stone-800 mb-12">Piezas destacadas</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Product 1 */}
+            <div className="bg-stone-200 rounded-lg overflow-hidden">
+              <div className="aspect-square bg-stone-300">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-08-11%20212838-aEhP8MzWsgonutTxWYOe4eaa54Ngn0.png"
+                  alt="Campera denim vintage"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Consultá Envíos</h3>
-              <p className="text-gray-600">
-                Envíos a todo el país al mejor precio a traves de Andreani. Consultá costos y tiempos.
+              <div className="p-6">
+                <h3 className="text-stone-800 font-medium mb-2">Campera denim vintage</h3>
+                <p className="text-stone-600 mb-4">$18.900</p>
+                <button className="text-stone-700 hover:text-stone-900 font-medium">Ver más</button>
+              </div>
+            </div>
+
+            {/* Product 2 */}
+            <div className="bg-stone-200 rounded-lg overflow-hidden">
+              <div className="aspect-square bg-stone-300">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-08-11%20212838-aEhP8MzWsgonutTxWYOe4eaa54Ngn0.png"
+                  alt="Vestido floral 90s"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-stone-800 font-medium mb-2">Vestido floral 90s</h3>
+                <p className="text-stone-600 mb-4">$15.500</p>
+                <button className="text-stone-700 hover:text-stone-900 font-medium">Ver más</button>
+              </div>
+            </div>
+
+            {/* Product 3 */}
+            <div className="bg-stone-200 rounded-lg overflow-hidden">
+              <div className="aspect-square bg-stone-300">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-08-11%20212838-aEhP8MzWsgonutTxWYOe4eaa54Ngn0.png"
+                  alt="Botas de cuero clásicas"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-stone-800 font-medium mb-2">Botas de cuero clásicas</h3>
+                <p className="text-stone-600 mb-4">$22.400</p>
+                <button className="text-stone-700 hover:text-stone-900 font-medium">Ver más</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Values Section */}
+      <div className="bg-stone-100 py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-4xl font-serif text-stone-800 mb-12">Nuestros valores</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {/* Value 1 */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Recycle className="text-red-600" size={24} />
+                <h3 className="text-stone-800 font-medium text-lg">Economía circular</h3>
+              </div>
+              <p className="text-stone-600 leading-relaxed">
+                Extendemos la vida útil de prendas hermosas y reducimos residuos.
+              </p>
+            </div>
+
+            {/* Value 2 */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Hand className="text-red-600" size={24} />
+                <h3 className="text-stone-800 font-medium text-lg">Curaduría cuidada</h3>
+              </div>
+              <p className="text-stone-600 leading-relaxed">
+                Seleccionamos cada prenda con criterios de calidad y estilo.
+              </p>
+            </div>
+
+            {/* Value 3 */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                </div>
+                <h3 className="text-stone-800 font-medium text-lg">Impacto positivo</h3>
+              </div>
+              <p className="text-stone-600 leading-relaxed">
+                Compras conscientes para un armario con historia y carácter.
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* FAQ Section */}
+      <div className="bg-stone-100 py-16">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-4xl font-serif text-stone-800 mb-12">Preguntas frecuentes</h2>
+
+          <div className="space-y-4">
+            {faqData.map((faq, index) => (
+              <div key={index} className="border-b border-stone-300">
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full py-6 flex items-center justify-between text-left"
+                >
+                  <span className="text-stone-800 font-medium text-lg">{faq.question}</span>
+                  {expandedFaq === index ? (
+                    <ChevronUp className="text-stone-600" size={20} />
+                  ) : (
+                    <ChevronDown className="text-stone-600" size={20} />
+                  )}
+                </button>
+                {expandedFaq === index && (
+                  <div className="pb-6">
+                    <p className="text-stone-600 leading-relaxed">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-stone-100 py-8 border-t border-stone-300">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="text-stone-600 text-sm mb-4 md:mb-0">
+              © 2025 JB Ropa Usada BB. Todos los derechos reservados.
+            </div>
+            <div className="flex space-x-8 text-sm">
+              <a href="#" className="text-stone-600 hover:text-stone-800 transition-colors">
+                Catálogo
+              </a>
+              <a href="#" className="text-stone-600 hover:text-stone-800 transition-colors">
+                Valores
+              </a>
+              <a href="#" className="text-stone-600 hover:text-stone-800 transition-colors">
+                FAQ
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
