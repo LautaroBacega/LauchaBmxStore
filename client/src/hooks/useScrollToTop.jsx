@@ -17,6 +17,20 @@ export const useScrollToTop = () => {
   }, [location.pathname, location.search])
 }
 
+// Hook como exportación por defecto
+const useScrollToTopDefault = () => {
+  const location = useLocation()
+
+  useEffect(() => {
+    // Scroll suave hacia la parte superior
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    })
+  }, [location.pathname, location.search])
+}
+
 // Función utilitaria para scroll manual
 export const scrollToTop = (behavior = "smooth") => {
   window.scrollTo({
@@ -25,3 +39,5 @@ export const scrollToTop = (behavior = "smooth") => {
     behavior,
   })
 }
+
+export default useScrollToTopDefault

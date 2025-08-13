@@ -11,20 +11,26 @@ class ProductService {
     this.lastLoadTime = 0 // Para controlar la recarga en producción
     this.CACHE_DURATION = 5 * 60 * 1000 // 5 minutos de caché para producción
 
-    // Predefinir categorías si no se cargan del JSON
+    // Predefinir categorías actualizadas
     this.defaultCategories = [
-      { id: "frames", name: "Cuadros" },
-      { id: "wheels", name: "Ruedas" },
-      { id: "handlebars", name: "Manubrios" },
-      { id: "pedals", name: "Pedales" },
-      { id: "chains", name: "Cadenas" },
-      { id: "brakes", name: "Frenos" },
+      { id: "complete-bikes", name: "Bicicletas Completas" },
+      { id: "rims", name: "Aros" },
       { id: "seats", name: "Asientos" },
-      { id: "grips", name: "Puños" },
-      { id: "pegs", name: "Pegs" },
-      { id: "sprockets", name: "Platos" },
+      { id: "bottom-brackets", name: "Cajas" },
       { id: "tires", name: "Cubiertas" },
-      { id: "accessories", name: "Accesorios" },
+      { id: "frames", name: "Cuadros" },
+      { id: "brakes", name: "Frenos" },
+      { id: "forks", name: "Horquillas" },
+      { id: "headsets", name: "Juegos de Dirección" },
+      { id: "front-hubs", name: "Mazas Delanteras" },
+      { id: "rear-hubs", name: "Mazas Traseras" },
+      { id: "handlebars", name: "Manubrios" },
+      { id: "levers", name: "Palancas" },
+      { id: "pedals", name: "Pedales" },
+      { id: "posts", name: "Postes" },
+      { id: "grips", name: "Puños" },
+      { id: "spokes", name: "Rayos" },
+      { id: "stems", name: "Stems" },
     ]
   }
 
@@ -245,7 +251,7 @@ class ProductService {
     if (isProduction) throw new Error("Operación no permitida en modo producción.")
     const queryParams = new URLSearchParams(filters).toString()
     const res = await apiInterceptor.fetchWithAuth(buildApiUrl(`/api/products/admin/all?${queryParams}`))
-    if (!res.ok) throw new Error("Failed to fetch all products for admin via API")
+    if (!res.ok) throw new Error(`Failed to fetch all products for admin via API. Status: ${res.status}`)
     return res.json()
   }
 

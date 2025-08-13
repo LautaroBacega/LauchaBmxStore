@@ -72,7 +72,17 @@ export default function Home() {
         page: 1,
       }))
     }
-  }, [location.search])
+
+    // Scroll to main content if there's a hash
+    if (location.hash === "#main-content") {
+      setTimeout(() => {
+        const mainContentElement = document.querySelector("[data-main-content]")
+        if (mainContentElement) {
+          mainContentElement.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
+      }, 100)
+    }
+  }, [location.search, location.hash])
 
   useEffect(() => {
     const fetchProductsAndFilters = async () => {
@@ -175,6 +185,37 @@ export default function Home() {
     }).format(price)
   }
 
+  const getCategoryName = (category) => {
+    const categoryMap = {
+      "complete-bikes": "Bicicletas Completas",
+      rims: "Aros",
+      seats: "Asientos",
+      "bottom-brackets": "Cajas",
+      tires: "Cubiertas",
+      frames: "Cuadros",
+      brakes: "Frenos",
+      forks: "Horquillas",
+      headsets: "Juegos de Dirección",
+      "front-hubs": "Mazas Delanteras",
+      "rear-hubs": "Mazas Traseras",
+      handlebars: "Manubrios",
+      levers: "Palancas",
+      pedals: "Pedales",
+      posts: "Postes",
+      grips: "Puños",
+      spokes: "Rayos",
+      stems: "Stems",
+    }
+    return categoryMap[category] || category
+  }
+
+  const scrollToMainContent = () => {
+    const mainContentElement = document.querySelector("[data-main-content]")
+    if (mainContentElement) {
+      mainContentElement.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }
+
   if (loading && products.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -263,7 +304,7 @@ export default function Home() {
 
       {/* Main Content with Sidebar */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8" data-main-content>
           {/* Sidebar with Filters */}
           <div className="lg:w-1/4">
             <CategoryFilter selectedCategory={filters.category} onCategoryChange={handleCategoryChange} />

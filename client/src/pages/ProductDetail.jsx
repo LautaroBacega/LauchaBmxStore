@@ -90,18 +90,24 @@ export default function ProductDetail() {
 
   const getCategoryName = (category) => {
     const categoryMap = {
-      frames: "Cuadros",
-      wheels: "Ruedas",
-      handlebars: "Manubrios",
-      pedals: "Pedales",
-      chains: "Cadenas",
-      brakes: "Frenos",
+      "complete-bikes": "Bicicletas Completas",
+      rims: "Aros",
       seats: "Asientos",
-      grips: "Puños",
-      pegs: "Pegs",
-      sprockets: "Platos",
+      "bottom-brackets": "Cajas",
       tires: "Cubiertas",
-      accessories: "Accesorios",
+      frames: "Cuadros",
+      brakes: "Frenos",
+      forks: "Horquillas",
+      headsets: "Juegos de Dirección",
+      "front-hubs": "Mazas Delanteras",
+      "rear-hubs": "Mazas Traseras",
+      handlebars: "Manubrios",
+      levers: "Palancas",
+      pedals: "Pedales",
+      posts: "Postes",
+      grips: "Puños",
+      spokes: "Rayos",
+      stems: "Stems",
     }
     return categoryMap[category] || category
   }
@@ -125,6 +131,11 @@ export default function ProductDetail() {
 
   const handleBreadcrumbClick = () => {
     scrollToTop()
+  }
+
+  const handleCategoryBreadcrumbClick = () => {
+    // Navegar a la página principal con la categoría filtrada
+    window.location.href = `/?category=${product.category}#main-content`
   }
 
   const handleRelatedProductClick = () => {
@@ -218,13 +229,9 @@ Por favor, cotizá el envío para proceder con la compra.`
                 {isProduction ? "Catálogo" : "Tienda"}
               </Link>
               <span>/</span>
-              <Link
-                to={`/?category=${product.category}`}
-                className="hover:text-yellow-600"
-                onClick={handleBreadcrumbClick}
-              >
+              <button onClick={handleCategoryBreadcrumbClick} className="hover:text-yellow-600 text-left">
                 {getCategoryName(product.category)}
-              </Link>
+              </button>
               <span>/</span>
               <span className="text-gray-800 font-medium">{product.name}</span>
             </div>
@@ -250,8 +257,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                   src={
                     product.images[selectedImage] ||
                     "/placeholder.svg?height=500&width=500&query=bmx part" ||
-                    "/placeholder.svg" ||
-                    "/placeholder.svg" ||
                     "/placeholder.svg" ||
                     "/placeholder.svg"
                   }
@@ -395,8 +400,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                         src={
                           relatedProduct.images[0] ||
                           "/placeholder.svg?height=200&width=250&query=bmx part" ||
-                          "/placeholder.svg" ||
-                          "/placeholder.svg" ||
                           "/placeholder.svg" ||
                           "/placeholder.svg"
                         }
@@ -576,3 +579,4 @@ Por favor, cotizá el envío para proceder con la compra.`
     </div>
   )
 }
+

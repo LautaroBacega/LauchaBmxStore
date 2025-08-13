@@ -17,7 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
-import { getDownloadURL, getStorage, ref, uploadBytesResumable, deleteObject } from "firebase/storage"
+import { getDownloadURL, getStorage, ref, uploadBytes, deleteObject } from "firebase/storage"
 import { getAuth, signInAnonymously } from "firebase/auth"
 import { app } from "../firebase"
 import { productService } from "../services/productService"
@@ -68,57 +68,6 @@ const deleteImageFromFirebase = async (imageUrl) => {
   }
 }
 
-// Utility function for image compression
-const compressImage = (file, maxWidth = 1280, maxHeight = 1280, quality = 0.8) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = (event) => {
-      const img = new Image()
-      img.src = event.target.result
-      img.onload = () => {
-        const canvas = document.createElement("canvas")
-        let width = img.width
-        let height = img.height
-
-        // Calculate new dimensions to fit within maxWidth/maxHeight while maintaining aspect ratio
-        if (width > maxWidth || height > maxHeight) {
-          const aspectRatio = width / height
-          if (width > height) {
-            width = maxWidth
-            height = width / aspectRatio
-          } else {
-            height = maxHeight
-            width = height * aspectRatio
-          }
-        }
-
-        canvas.width = width
-        canvas.height = height
-
-        const ctx = canvas.getContext("2d")
-        ctx.drawImage(img, 0, 0, width, height)
-
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              // Create a new File object from the blob, preserving original name and type
-              const compressedFile = new File([blob], file.name, { type: file.type, lastModified: Date.now() })
-              resolve(compressedFile)
-            } else {
-              reject(new Error("Canvas toBlob failed"))
-            }
-          },
-          file.type, // Use original file type for blob
-          quality,
-        )
-      }
-      img.onerror = (error) => reject(error)
-    }
-    reader.onerror = (error) => reject(error)
-  })
-}
-
 // Función para inicializar autenticación anónima
 const initializeFirebaseAuth = async () => {
   try {
@@ -138,6 +87,7 @@ const initializeFirebaseAuth = async () => {
 export default function AdminPanel() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
@@ -146,6 +96,8 @@ export default function AdminPanel() {
   const [currentPage, setCurrentPage] = useState(1)
   const [stats, setStats] = useState({})
   const [showStats, setShowStats] = useState(false)
+  const [sortBy, setSortBy] = useState("createdAt")
+  const [sortOrder, setSortOrder] = useState("desc")
 
   // Estados para manejo de imágenes
   const fileInputRef = useRef(null)
@@ -172,21 +124,32 @@ export default function AdminPanel() {
     tags: "",
   })
 
+  // Estados para especificaciones dinámicas
+  const [customSpecs, setCustomSpecs] = useState([])
+  const [newSpecName, setNewSpecName] = useState("")
+  const [newSpecValue, setNewSpecValue] = useState("")
+
   const [dynamicSpecs, setDynamicSpecs] = useState([])
 
   const categories = [
-    { id: "frames", name: "Cuadros" },
-    { id: "wheels", name: "Ruedas" },
-    { id: "handlebars", name: "Manubrios" },
-    { id: "pedals", name: "Pedales" },
-    { id: "chains", name: "Cadenas" },
-    { id: "brakes", name: "Frenos" },
-    { id: "seats", name: "Asientos" },
-    { id: "grips", name: "Puños" },
-    { id: "pegs", name: "Pegs" },
-    { id: "sprockets", name: "Platos" },
-    { id: "tires", name: "Cubiertas" },
-    { id: "accessories", name: "Accesorios" },
+    { id: "complete-bikes", name: "Bicicletas Completas", value: "complete-bikes", label: "Bicicletas Completas" },
+    { id: "rims", name: "Aros", value: "rims", label: "Aros" },
+    { id: "seats", name: "Asientos", value: "seats", label: "Asientos" },
+    { id: "bottom-brackets", name: "Cajas", value: "bottom-brackets", label: "Cajas" },
+    { id: "tires", name: "Cubiertas", value: "tires", label: "Cubiertas" },
+    { id: "frames", name: "Cuadros", value: "frames", label: "Cuadros" },
+    { id: "brakes", name: "Frenos", value: "brakes", label: "Frenos" },
+    { id: "forks", name: "Horquillas", value: "forks", label: "Horquillas" },
+    { id: "headsets", name: "Juegos de Dirección", value: "headsets", label: "Juegos de Dirección" },
+    { id: "front-hubs", name: "Mazas Delanteras", value: "front-hubs", label: "Mazas Delanteras" },
+    { id: "rear-hubs", name: "Mazas Traseras", value: "rear-hubs", label: "Mazas Traseras" },
+    { id: "handlebars", name: "Manubrios", value: "handlebars", label: "Manubrios" },
+    { id: "levers", name: "Palancas", value: "levers", label: "Palancas" },
+    { id: "pedals", name: "Pedales", value: "pedals", label: "Pedales" },
+    { id: "posts", name: "Postes", value: "posts", label: "Postes" },
+    { id: "grips", name: "Puños", value: "grips", label: "Puños" },
+    { id: "spokes", name: "Rayos", value: "spokes", label: "Rayos" },
+    { id: "stems", name: "Stems", value: "stems", label: "Stems" },
   ]
 
   useEffect(() => {
@@ -244,6 +207,7 @@ export default function AdminPanel() {
   const fetchProducts = async () => {
     try {
       setLoading(true)
+      setError(null)
 
       const filters = {
         page: currentPage,
@@ -262,7 +226,7 @@ export default function AdminPanel() {
       if (error.message.includes("ECONNREFUSED")) {
         alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
       } else {
-        alert("Error al cargar productos: " + error.message)
+        setError("Error al cargar productos: " + error.message)
       }
     } finally {
       setLoading(false)
@@ -289,7 +253,7 @@ export default function AdminPanel() {
     }
   }
 
-  // Function to upload a single image to Firebase
+  // Function to upload a single image to Firebase - OPTIMIZADA
   const uploadFileToFirebase = async (fileObject) => {
     const file = fileObject.file
     const tempId = fileObject.id
@@ -305,12 +269,12 @@ export default function AdminPanel() {
       return
     }
 
-    // Validar tamaño (máximo 5MB)
-    if (file.size > 5 * 1024 * 1024) {
+    // Validar tamaño (máximo 10MB)
+    if (file.size > 10 * 1024 * 1024) {
       setFormData((prev) => ({
         ...prev,
         images: prev.images.map((img) =>
-          img.id === tempId ? { ...img, error: "La imagen debe ser menor a 5MB" } : img,
+          img.id === tempId ? { ...img, error: "La imagen debe ser menor a 10MB" } : img,
         ),
       }))
       return
@@ -320,75 +284,60 @@ export default function AdminPanel() {
       // Asegurar autenticación antes de subir
       await initializeFirebaseAuth()
 
+      // Mostrar progreso inmediatamente
+      setFormData((prev) => ({
+        ...prev,
+        images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: 10 } : img)),
+      }))
+
       const storage = getStorage(app)
       const fileName = `products/${Date.now()}_${tempId}_${file.name}`
       const storageRef = ref(storage, fileName)
-      const uploadTask = uploadBytesResumable(storageRef, file)
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          setFormData((prev) => ({
-            ...prev,
-            images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: Math.round(progress) } : img)),
-          }))
-        },
-        (error) => {
-          console.error("Error uploading image:", error)
-          setFormData((prev) => ({
-            ...prev,
-            images: prev.images.map((img) => (img.id === tempId ? { ...img, error: "Error al subir la imagen" } : img)),
-          }))
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setFormData((prev) => ({
-              ...prev,
-              images: prev.images.map((img) =>
-                img.id === tempId ? { ...img, url: downloadURL, file: null, progress: 100 } : img,
-              ),
-            }))
-          })
-        },
-      )
-    } catch (error) {
-      console.error("Error in uploadFileToFirebase:", error)
+      // Usar uploadBytes en lugar de uploadBytesResumable para mayor velocidad
       setFormData((prev) => ({
         ...prev,
-        images: prev.images.map((img) => (img.id === tempId ? { ...img, error: "Error de autenticación" } : img)),
+        images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: 50 } : img)),
+      }))
+
+      await uploadBytes(storageRef, file)
+
+      setFormData((prev) => ({
+        ...prev,
+        images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: 80 } : img)),
+      }))
+
+      const downloadURL = await getDownloadURL(storageRef)
+
+      setFormData((prev) => ({
+        ...prev,
+        images: prev.images.map((img) =>
+          img.id === tempId ? { ...img, url: downloadURL, file: null, progress: 100 } : img,
+        ),
+      }))
+    } catch (error) {
+      console.error("Error uploading image:", error)
+      setFormData((prev) => ({
+        ...prev,
+        images: prev.images.map((img) => (img.id === tempId ? { ...img, error: "Error al subir la imagen" } : img)),
       }))
     }
   }
 
-  // Handle multiple file selection
+  // Handle multiple file selection - OPTIMIZADO
   const handleFileSelect = async (e) => {
     const files = Array.from(e.target.files)
     if (files.length === 0) return
 
-    const newImageObjectsPromises = files.map(async (file) => {
-      try {
-        const compressedFile = await compressImage(file)
-        return {
-          id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`,
-          url: null,
-          file: compressedFile,
-          progress: 0,
-          error: null,
-        }
-      } catch (error) {
-        console.error("Error compressing image:", error)
-        return {
-          id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`,
-          url: null,
-          file: file,
-          progress: 0,
-          error: "Error al procesar la imagen para subirla.",
-        }
+    const newImageObjects = files.map((file) => {
+      return {
+        id: `img_${uniqueImageIdCounter++}_${Math.random().toString(36).substring(2, 9)}`,
+        url: null,
+        file: file,
+        progress: 0,
+        error: null,
       }
     })
-
-    const newImageObjects = await Promise.all(newImageObjectsPromises)
 
     setFormData((prev) => {
       const updatedImages = [...prev.images, ...newImageObjects]
@@ -399,11 +348,14 @@ export default function AdminPanel() {
       }
     })
 
-    newImageObjects.forEach((fileObject) => {
-      if (!fileObject.error) {
-        uploadFileToFirebase(fileObject)
-      }
-    })
+    // Subir todas las imágenes en paralelo para mayor velocidad
+    const uploadPromises = newImageObjects.map((fileObject) => uploadFileToFirebase(fileObject))
+
+    try {
+      await Promise.all(uploadPromises)
+    } catch (error) {
+      console.error("Error uploading some images:", error)
+    }
 
     e.target.value = ""
   }
@@ -688,6 +640,227 @@ export default function AdminPanel() {
     setCurrentImageIndex((prevIndex) => (prevIndex === formData.images.length - 1 ? 0 : prevIndex + 1))
   }
 
+  const openModal = (product = null) => {
+    if (product) {
+      setEditingProduct(product)
+      setFormData({
+        name: product.name || "",
+        description: product.description || "",
+        price: product.price?.toString() || "",
+        category: product.category || "",
+        brand: product.brand || "",
+        stock: product.stock?.toString() || "",
+        featured: product.featured || false,
+        images: product.images || [],
+        specifications: product.specifications || {},
+        tags: product.tags || [],
+      })
+
+      // Convertir especificaciones a formato editable
+      const specs = Object.entries(product.specifications || {}).map(([name, value]) => ({
+        name,
+        value,
+        id: Math.random().toString(36).substr(2, 9),
+      }))
+      setCustomSpecs(specs)
+    } else {
+      resetForm()
+    }
+    setShowModal(true)
+  }
+
+  const closeModal = () => {
+    setShowModal(false)
+    resetForm()
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }))
+  }
+
+  const handleImageChange = (index, value) => {
+    const newImages = [...formData.images]
+    newImages[index] = value
+    setFormData((prev) => ({ ...prev, images: newImages }))
+  }
+
+  const addImage = () => {
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ""],
+    }))
+  }
+
+  const removeImage2 = (index) => {
+    const newImages = formData.images.filter((_, i) => i !== index)
+    setFormData((prev) => ({ ...prev, images: newImages }))
+  }
+
+  const addCustomSpec = () => {
+    if (newSpecName.trim() && newSpecValue.trim()) {
+      const newSpec = {
+        name: newSpecName.trim(),
+        value: newSpecValue.trim(),
+        id: Math.random().toString(36).substr(2, 9),
+      }
+      setCustomSpecs((prev) => [...prev, newSpec])
+      setNewSpecName("")
+      setNewSpecValue("")
+    }
+  }
+
+  const removeCustomSpec = (id) => {
+    setCustomSpecs((prev) => prev.filter((spec) => spec.id !== id))
+  }
+
+  const updateCustomSpec = (id, field, value) => {
+    setCustomSpecs((prev) => prev.map((spec) => (spec.id === id ? { ...spec, [field]: value } : spec)))
+  }
+
+  const handleTagsChange = (e) => {
+    const tags = e.target.value
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag)
+    setFormData((prev) => ({ ...prev, tags }))
+  }
+
+  const handleSubmit2 = async (e) => {
+    e.preventDefault()
+
+    try {
+      // Convertir especificaciones personalizadas a objeto
+      const specifications = {}
+      customSpecs.forEach((spec) => {
+        if (spec.name.trim() && spec.value.trim()) {
+          specifications[spec.name.trim()] = spec.value.trim()
+        }
+      })
+
+      const productData = {
+        ...formData,
+        price: Number.parseFloat(formData.price),
+        stock: Number.parseInt(formData.stock),
+        images: formData.images.filter((img) => img.trim()),
+        specifications,
+      }
+
+      if (editingProduct) {
+        await productService.updateProduct(editingProduct.id, productData)
+      } else {
+        await productService.createProduct(productData)
+      }
+
+      await fetchProducts()
+      closeModal()
+    } catch (error) {
+      console.error("Error saving product:", error)
+      setError("Error al guardar producto: " + error.message)
+    }
+  }
+
+  const handleDelete2 = async (id) => {
+    if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
+      try {
+        await productService.deleteProduct(id)
+        await fetchProducts()
+      } catch (error) {
+        console.error("Error deleting product:", error)
+        setError("Error al eliminar producto: " + error.message)
+      }
+    }
+  }
+
+  const handleExport = async () => {
+    try {
+      const blob = await productService.exportProducts()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = "products.json"
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error("Error exporting products:", error)
+      setError("Error al exportar productos: " + error.message)
+    }
+  }
+
+  const handleImport = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    try {
+      await productService.importProducts(file)
+      await fetchProducts()
+      e.target.value = ""
+    } catch (error) {
+      console.error("Error importing products:", error)
+      setError("Error al importar productos: " + error.message)
+    }
+  }
+
+  const handleReset = async () => {
+    if (
+      window.confirm("¿Estás seguro de que quieres resetear todos los productos? Esta acción no se puede deshacer.")
+    ) {
+      try {
+        await productService.resetProducts()
+        await fetchProducts()
+      } catch (error) {
+        console.error("Error resetting products:", error)
+        setError("Error al resetear productos: " + error.message)
+      }
+    }
+  }
+
+  const formatPrice2 = (price) => {
+    return new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "ARS",
+    }).format(price)
+  }
+
+  const getCategoryLabel = (categoryValue) => {
+    const category = categories.find((cat) => cat.value === categoryValue)
+    return category ? category.label : categoryValue
+  }
+
+  // Filtrar y ordenar productos
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesCategory = !selectedCategory || product.category === selectedCategory
+      return matchesSearch && matchesCategory
+    })
+    .sort((a, b) => {
+      let aValue = a[sortBy]
+      let bValue = b[sortBy]
+
+      if (sortBy === "price") {
+        aValue = Number.parseFloat(aValue)
+        bValue = Number.parseFloat(bValue)
+      } else if (sortBy === "name") {
+        aValue = aValue.toLowerCase()
+        bValue = bValue.toLowerCase()
+      }
+
+      if (sortOrder === "asc") {
+        return aValue > bValue ? 1 : -1
+      } else {
+        return aValue < bValue ? 1 : -1
+      }
+    })
+
   // Mostrar mensaje si no está en desarrollo
   if (!isDevelopment) {
     return (
@@ -707,7 +880,7 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-24">
+    <div className={`min-h-screen bg-gray-50 py-24 ${showModal ? "overflow-hidden" : ""}`}>
       {/* Contenido principal con efecto blur cuando el modal está abierto */}
       <div className={`transition-all duration-300 ${showModal ? "blur-sm" : ""}`}>
         {/* Todo el contenido existente va aquí */}
@@ -1233,7 +1406,7 @@ export default function AdminPanel() {
                           className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-yellow-500 hover:text-yellow-600 flex items-center justify-center gap-2"
                         >
                           <ImageIcon size={20} />
-                          Subir Imágenes
+                          Subir Imágenes (Optimizado)
                         </button>
                       </div>
                     </div>
