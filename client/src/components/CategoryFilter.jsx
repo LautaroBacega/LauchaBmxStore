@@ -9,48 +9,36 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
   const [loading, setLoading] = useState(true)
   const [isExpanded, setIsExpanded] = useState(true)
 
-  // Mapeo de categorías para mostrar nombres legibles
+  // Mapeo de categorías para mostrar nombres legibles - CORREGIDO para coincidir con el JSON
   const categoryNames = {
-    "complete-bikes": "Bicicletas Completas",
-    rims: "Aros",
-    seats: "Asientos",
-    "bottom-brackets": "Cajas",
-    tires: "Cubiertas",
     frames: "Cuadros",
-    brakes: "Frenos",
-    forks: "Horquillas",
-    headsets: "Juegos de Dirección",
-    "front-hubs": "Mazas Delanteras",
-    "rear-hubs": "Mazas Traseras",
+    wheels: "Ruedas",
     handlebars: "Manubrios",
-    levers: "Palancas",
     pedals: "Pedales",
-    posts: "Postes",
+    chains: "Cadenas",
+    brakes: "Frenos",
+    seats: "Asientos",
     grips: "Puños",
-    spokes: "Rayos",
-    stems: "Stems",
+    pegs: "Pegs",
+    sprockets: "Platos",
+    tires: "Cubiertas",
+    accessories: "Accesorios",
   }
 
-  // Orden deseado de las categorías
+  // Orden deseado de las categorías - CORREGIDO
   const categoryOrder = [
-    "complete-bikes",
-    "rims",
-    "seats",
-    "bottom-brackets",
-    "tires",
     "frames",
-    "brakes",
-    "forks",
-    "headsets",
-    "front-hubs",
-    "rear-hubs",
+    "wheels",
     "handlebars",
-    "levers",
     "pedals",
-    "posts",
+    "chains",
+    "brakes",
+    "seats",
     "grips",
-    "spokes",
-    "stems",
+    "pegs",
+    "sprockets",
+    "tires",
+    "accessories",
   ]
 
   useEffect(() => {
@@ -59,18 +47,26 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
         setLoading(true)
         const categoryData = await productService.getCategories()
 
+        console.log("📊 Datos de categorías recibidos:", categoryData)
+
+        // Filtrar solo categorías que tienen productos (count > 0)
+        const availableCategories = categoryData.filter((cat) => cat.count > 0)
+
         // Ordenar categorías según el orden deseado
         const orderedCategories = categoryOrder
           .map((categoryKey) => {
-            const found = categoryData.find((cat) => cat.category === categoryKey)
+            const found = availableCategories.find((cat) => cat.id === categoryKey)
             return found ? found : null
           })
           .filter(Boolean) // Remover nulls
 
         // Agregar categorías que no están en el orden pero existen en los datos
-        const remainingCategories = categoryData.filter((cat) => !categoryOrder.includes(cat.category))
+        const remainingCategories = availableCategories.filter((cat) => !categoryOrder.includes(cat.id))
 
-        setCategories([...orderedCategories, ...remainingCategories])
+        const finalCategories = [...orderedCategories, ...remainingCategories]
+        console.log("📋 Categorías finales:", finalCategories)
+
+        setCategories(finalCategories)
       } catch (error) {
         console.error("Error fetching categories:", error)
         setCategories([])
@@ -92,7 +88,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
         <div className="animate-pulse">
           <div className="h-6 bg-gray-300 rounded mb-4 w-32"></div>
           <div className="space-y-3">
-            {[...Array(8)].map((_, i) => (
+            {[...Array(5)].map((_, i) => (
               <div key={i} className="flex justify-between items-center">
                 <div className="h-4 bg-gray-300 rounded w-24"></div>
                 <div className="h-4 bg-gray-300 rounded w-6"></div>
@@ -103,6 +99,8 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
       </div>
     )
   }
+
+  const totalProducts = categories.reduce((total, cat) => total + cat.count, 0)
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -124,24 +122,30 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
             }`}
           >
             <span>Todas las categorías</span>
-            <span className="text-sm text-gray-500">{categories.reduce((total, cat) => total + cat.count, 0)}</span>
+            <span className="text-sm text-gray-500">{totalProducts}</span>
           </button>
 
-          {/* Lista de categorías */}
-          {categories.map((category) => (
-            <button
-              key={category.category}
-              onClick={() => handleCategoryClick(category.category)}
-              className={`w-full text-left px-3 py-2 rounded-lg transition-colors duration-200 flex items-center justify-between ${
-                selectedCategory === category.category
-                  ? "bg-yellow-100 text-yellow-800 font-semibold"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              <span>{categoryNames[category.category] || category.category}</span>
-              <span className="text-sm text-gray-500">{category.count}</span>
-            </button>
-          ))}
+          {/* Lista de categorías disponibles */}
+          {categories.length > 0 ? (
+            categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => handleCategoryClick(category.id)}
+                className={`w-full text-left px-3 py-2 rounded-lg transition-colors duration-200 flex items-center justify-between ${
+                  selectedCategory === category.id
+                    ? "bg-yellow-100 text-yellow-800 font-semibold"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <span>{categoryNames[category.id] || category.name || category.id}</span>
+                <span className="text-sm text-gray-500">{category.count}</span>
+              </button>
+            ))
+          ) : (
+            <div className="text-center text-gray-500 py-4">
+              <p className="text-sm">No hay productos disponibles</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

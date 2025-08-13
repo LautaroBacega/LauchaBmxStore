@@ -11,50 +11,54 @@ class ProductService {
     this.lastLoadTime = 0 // Para controlar la recarga en producción
     this.CACHE_DURATION = 5 * 60 * 1000 // 5 minutos de caché para producción
 
-    // Predefinir categorías actualizadas
+    // Predefinir categorías actualizadas - CORREGIDAS para coincidir con el JSON
     this.defaultCategories = [
-      { id: "complete-bikes", name: "Bicicletas Completas" },
-      { id: "rims", name: "Aros" },
-      { id: "seats", name: "Asientos" },
-      { id: "bottom-brackets", name: "Cajas" },
-      { id: "tires", name: "Cubiertas" },
       { id: "frames", name: "Cuadros" },
-      { id: "brakes", name: "Frenos" },
-      { id: "forks", name: "Horquillas" },
-      { id: "headsets", name: "Juegos de Dirección" },
-      { id: "front-hubs", name: "Mazas Delanteras" },
-      { id: "rear-hubs", name: "Mazas Traseras" },
+      { id: "wheels", name: "Ruedas" },
       { id: "handlebars", name: "Manubrios" },
-      { id: "levers", name: "Palancas" },
       { id: "pedals", name: "Pedales" },
-      { id: "posts", name: "Postes" },
+      { id: "chains", name: "Cadenas" },
+      { id: "brakes", name: "Frenos" },
+      { id: "seats", name: "Asientos" },
       { id: "grips", name: "Puños" },
-      { id: "spokes", name: "Rayos" },
-      { id: "stems", name: "Stems" },
+      { id: "pegs", name: "Pegs" },
+      { id: "sprockets", name: "Platos" },
+      { id: "tires", name: "Cubiertas" },
+      { id: "accessories", name: "Accesorios" },
     ]
   }
 
   // Cargar productos desde el JSON estático (solo en producción)
   async loadStaticProducts() {
+    console.log("🔍 loadStaticProducts called - isProduction:", isProduction)
+    console.log("📊 Cache status - products:", this.productsCache.length, "lastLoadTime:", this.lastLoadTime)
+
     // Recargar solo si ha pasado el tiempo de caché o si no se ha cargado nunca
     if (this.productsCache.length > 0 && Date.now() - this.lastLoadTime < this.CACHE_DURATION) {
+      console.log("✅ Using cached data")
       return
     }
 
     try {
       console.log("📁 Cargando productos desde /data/products.json...")
       const response = await fetch("/data/products.json")
+      console.log("📡 Response status:", response.status, response.ok)
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
+      console.log("📦 Raw data loaded:", data)
 
       this.productsCache = data.products || []
       // Si no hay categorías en el JSON, usar las por defecto
       this.categoriesCache = data.categories && data.categories.length > 0 ? data.categories : this.defaultCategories
       this.brandsCache = [...new Set(this.productsCache.map((p) => p.brand))].sort()
       this.lastLoadTime = Date.now()
+
       console.log("✅ Productos estáticos cargados:", this.productsCache.length)
+      console.log("📋 Categorías cargadas:", this.categoriesCache)
+      console.log("🏷️ Marcas cargadas:", this.brandsCache.length)
     } catch (error) {
       console.error("❌ Error cargando productos estáticos:", error)
       this.productsCache = []
@@ -65,6 +69,8 @@ class ProductService {
 
   // Obtener todos los productos con filtros
   async getProducts(filters = {}) {
+    console.log("🔍 getProducts called with filters:", filters, "isProduction:", isProduction)
+
     if (isProduction) {
       await this.loadStaticProducts()
       let filteredProducts = [...this.productsCache]
@@ -181,25 +187,50 @@ class ProductService {
     }
   }
 
-  // Obtener categorías con conteo
+  // Obtener categorías con conteo - CORREGIDO
   async getCategories() {
+    console.log("🔍 getCategories called - isProduction:", isProduction)
+
     if (isProduction) {
       await this.loadStaticProducts()
-      const categoryCounts = {}
-      this.productsCache
-        .filter((p) => p.active)
-        .forEach((p) => {
-          categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
-        })
 
-      return this.categoriesCache.map((cat) => ({
-        ...cat,
+      console.log("📊 After loadStaticProducts:")
+      console.log("- productsCache length:", this.productsCache.length)
+      console.log("- categoriesCache:", this.categoriesCache)
+      console.log(
+        "- Sample products:",
+        this.productsCache.slice(0, 3).map((p) => ({ id: p.id, name: p.name, category: p.category, active: p.active })),
+      )
+
+      // Contar productos activos por categoría
+      const categoryCounts = {}
+      const activeProducts = this.productsCache.filter((p) => p.active)
+
+      console.log("📊 Active products:", activeProducts.length)
+
+      activeProducts.forEach((p) => {
+        categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
+      })
+
+      console.log("📊 Conteo de productos por categoría:", categoryCounts)
+
+      // Mapear categorías con sus conteos
+      const categoriesWithCount = this.categoriesCache.map((cat) => ({
+        id: cat.id,
+        name: cat.name,
         count: categoryCounts[cat.id] || 0,
       }))
+
+      console.log("📋 Categorías con conteo:", categoriesWithCount)
+
+      return categoriesWithCount
     } else {
+      console.log("🔗 Calling API for categories")
       const res = await apiInterceptor.fetchWithAuth(buildApiUrl("/api/products/categories"))
       if (!res.ok) throw new Error("Failed to fetch categories from API")
-      return res.json()
+      const result = await res.json()
+      console.log("📋 Categories from API:", result)
+      return result
     }
   }
 

@@ -65,16 +65,11 @@ export const getProducts = async (req, res, next) => {
     }
 
     if (category) filteredProducts = filteredProducts.filter((p) => p.category === category)
-    if (brand)
-      filteredProducts = filteredProducts.filter((p) =>
-        p.brand.toLowerCase().includes(brand.toLowerCase()),
-      )
+    if (brand) filteredProducts = filteredProducts.filter((p) => p.brand.toLowerCase().includes(brand.toLowerCase()))
     if (featured) filteredProducts = filteredProducts.filter((p) => p.featured === (featured === "true"))
 
-    if (minPrice)
-      filteredProducts = filteredProducts.filter((p) => p.price >= Number(minPrice))
-    if (maxPrice)
-      filteredProducts = filteredProducts.filter((p) => p.price <= Number(maxPrice))
+    if (minPrice) filteredProducts = filteredProducts.filter((p) => p.price >= Number(minPrice))
+    if (maxPrice) filteredProducts = filteredProducts.filter((p) => p.price <= Number(maxPrice))
 
     if (search) {
       const searchTermLower = search.toLowerCase()
@@ -176,15 +171,71 @@ export const getProductsByCategory = async (req, res, next) => {
   }
 }
 
-// Get all categories with product counts
+// Get all categories with product counts - CORREGIDO CON DEBUGGING
 export const getCategories = async (req, res, next) => {
   try {
-    const { products, categories: predefinedCategories } = await readProductsFile()
+    console.log("🔍 getCategories API called")
+    console.log("📁 Reading products file from:", productsFilePath)
 
+    const data = await readProductsFile()
+    console.log("📦 Data loaded:", {
+      productsCount: data.products?.length || 0,
+      categoriesCount: data.categories?.length || 0,
+      hasCategories: !!data.categories,
+      sampleCategories: data.categories?.slice(0, 3),
+    })
+
+    const { products, categories: predefinedCategories } = data
+
+    // Verificar si tenemos categorías predefinidas
+    if (!predefinedCategories || predefinedCategories.length === 0) {
+      console.warn("⚠️ No predefined categories found, using default categories")
+      const defaultCategories = [
+        { id: "frames", name: "Cuadros" },
+        { id: "wheels", name: "Ruedas" },
+        { id: "handlebars", name: "Manubrios" },
+        { id: "pedals", name: "Pedales" },
+        { id: "chains", name: "Cadenas" },
+        { id: "brakes", name: "Frenos" },
+        { id: "seats", name: "Asientos" },
+        { id: "grips", name: "Puños" },
+        { id: "pegs", name: "Pegs" },
+        { id: "sprockets", name: "Platos" },
+        { id: "tires", name: "Cubiertas" },
+        { id: "accessories", name: "Accesorios" },
+      ]
+
+      // Contar productos activos por categoría
+      const categoryCounts = {}
+      products
+        .filter((p) => p.active)
+        .forEach((p) => {
+          categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
+        })
+
+      console.log("📊 Category counts:", categoryCounts)
+
+      const formattedCategories = defaultCategories.map((cat) => ({
+        id: cat.id,
+        name: cat.name,
+        count: categoryCounts[cat.id] || 0,
+      }))
+
+      console.log("📋 Formatted categories (using defaults):", formattedCategories)
+      res.status(200).json(formattedCategories)
+      return
+    }
+
+    // Contar productos activos por categoría
     const categoryCounts = {}
-    products.filter((p) => p.active).forEach((p) => {
+    const activeProducts = products.filter((p) => p.active)
+    console.log("📊 Active products:", activeProducts.length)
+
+    activeProducts.forEach((p) => {
       categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
     })
+
+    console.log("📊 Category counts:", categoryCounts)
 
     const formattedCategories = predefinedCategories.map((cat) => ({
       id: cat.id,
@@ -192,8 +243,10 @@ export const getCategories = async (req, res, next) => {
       count: categoryCounts[cat.id] || 0,
     }))
 
+    console.log("📋 Formatted categories:", formattedCategories)
     res.status(200).json(formattedCategories)
   } catch (error) {
+    console.error("❌ Error in getCategories:", error)
     next(error)
   }
 }

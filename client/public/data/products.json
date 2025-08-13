@@ -307,29 +307,6 @@
       "tags": [],
       "createdAt": "2025-08-13T18:02:02.055Z",
       "updatedAt": "2025-08-13T18:03:11.714Z"
-    },
-    {
-      "id": "1755112510683",
-      "name": "aassss",
-      "description": "ssdad",
-      "price": 11,
-      "category": "rims",
-      "brand": "ssasa",
-      "stock": 2,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755112170155_img_0_3m6xxc1_IMG_2013.jpg?alt=media&token=f45446a2-8d9d-42e3-ba2f-e43cdb77011f",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755112341831_img_1_jy6pw75_IMG_2012.jpg?alt=media&token=54cd911b-1602-4e4a-8038-b61c96ea6fdd",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755112648196_img_4_v0og5d7_IMG_2005.jpg?alt=media&token=97702be9-e1ff-488b-93d8-bff38fe588ba",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755112972705_img_0_r22bc61_IMG_2003.jpg?alt=media&token=9c70ce49-375a-4765-89f1-bdf03dda2a81"
-      ],
-      "specifications": {
-        "ddee": "dddee"
-      },
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-13T19:15:10.683Z",
-      "updatedAt": "2025-08-13T19:23:44.140Z"
     }
   ],
   "categories": []
