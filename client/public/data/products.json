@@ -284,6 +284,28 @@
       "tags": [],
       "createdAt": "2025-08-11T14:18:41.673Z",
       "updatedAt": "2025-08-11T14:18:41.674Z"
+    },
+    {
+      "id": "1755108122055",
+      "name": "aa",
+      "description": "",
+      "price": 11,
+      "category": "frames",
+      "brand": "aa",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755108135319_img_2_gx5begr_IMG_2010.jpg?alt=media&token=cbaad9a9-2cc8-4683-8b39-a0ef1f4296f8",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755108172968_img_1_xbhmvlc_IMG_2011.jpg?alt=media&token=98d07ef1-7b03-4812-815a-b62c42d2668a"
+      ],
+      "specifications": {
+        "333": "de3e3",
+        "aaa": "aaa"
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-13T18:02:02.055Z",
+      "updatedAt": "2025-08-13T18:03:11.714Z"
     }
   ],
   "categories": []
