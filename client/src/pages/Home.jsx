@@ -19,7 +19,6 @@ export default function Home() {
   const [viewMode, setViewMode] = useState("grid") // 'grid' or 'list'
   const [filters, setFilters] = useState({
     category: "",
-    brand: "",
     search: "",
     minPrice: "",
     maxPrice: "",
@@ -34,7 +33,6 @@ export default function Home() {
     totalProducts: 0,
   })
   const [categories, setCategories] = useState([])
-  const [brands, setBrands] = useState([])
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [searchSuggestions, setSearchSuggestions] = useState([])
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -81,16 +79,14 @@ export default function Home() {
       setLoading(true)
       setError(null)
       try {
-        const [productData, categoryData, brandData, featuredData] = await Promise.all([
+        const [productData, categoryData, featuredData] = await Promise.all([
           productService.getProducts(filters),
           productService.getCategories(),
-          productService.getBrands(),
           productService.getFeaturedProducts(8),
         ])
         setProducts(productData.products)
         setPagination(productData.pagination)
         setCategories(categoryData)
-        setBrands(brandData)
         setFeaturedProducts(featuredData)
       } catch (err) {
         console.error("Error fetching data:", err)
@@ -115,10 +111,6 @@ export default function Home() {
     handleFilterChange({ category })
   }
 
-  const handleBrandChange = (brand) => {
-    handleFilterChange({ brand })
-  }
-
   const handlePageChange = (newPage) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -129,7 +121,6 @@ export default function Home() {
   const clearFilters = () => {
     setFilters({
       category: "",
-      brand: "",
       search: "",
       minPrice: "",
       maxPrice: "",
@@ -140,7 +131,7 @@ export default function Home() {
     })
   }
 
-  const hasActiveFilters = filters.category || filters.brand || filters.search || filters.minPrice || filters.maxPrice
+  const hasActiveFilters = filters.category || filters.search || filters.minPrice || filters.maxPrice
 
   const searchSuggestionsFunc = async (searchTerm) => {
     if (!searchTerm.trim()) {
@@ -275,12 +266,7 @@ export default function Home() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar with Filters */}
           <div className="lg:w-1/4">
-            <CategoryFilter
-              selectedCategory={filters.category}
-              onCategoryChange={handleCategoryChange}
-              selectedBrand={filters.brand}
-              onBrandChange={handleBrandChange}
-            />
+            <CategoryFilter selectedCategory={filters.category} onCategoryChange={handleCategoryChange} />
           </div>
 
           {/* Main Products Area */}

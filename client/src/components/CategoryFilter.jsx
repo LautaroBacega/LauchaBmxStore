@@ -1,17 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Filter } from 'lucide-react'
+import { Filter } from "lucide-react"
 import { productService } from "../services/productService"
 
-export default function CategoryFilter({ selectedCategory, onCategoryChange, selectedBrand, onBrandChange }) {
+export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
   const [categories, setCategories] = useState([])
-  const [brands, setBrands] = useState([])
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     fetchCategories()
-    fetchBrands()
   }, [])
 
   const fetchCategories = async () => {
@@ -23,15 +21,6 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange, sel
     }
   }
 
-  const fetchBrands = async () => {
-    try {
-      const data = await productService.getBrands()
-      setBrands(data)
-    } catch (error) {
-      console.error("Error fetching brands:", error)
-    }
-  }
-
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
@@ -39,10 +28,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange, sel
           <Filter size={20} />
           Filtros
         </h3>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden bg-gray-100 p-2 rounded-lg"
-        >
+        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden bg-gray-100 p-2 rounded-lg">
           <Filter size={16} />
         </button>
       </div>
@@ -55,9 +41,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange, sel
             <button
               onClick={() => onCategoryChange("")}
               className={`block w-full text-left px-3 py-2 rounded-lg transition-colors duration-200 ${
-                selectedCategory === ""
-                  ? "bg-yellow-500 text-black font-medium"
-                  : "text-gray-600 hover:bg-gray-100"
+                selectedCategory === "" ? "bg-yellow-500 text-black font-medium" : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               Todas las categorías
@@ -78,43 +62,10 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange, sel
           </div>
         </div>
 
-        {/* Brands */}
-        <div>
-          <h4 className="font-semibold text-gray-700 mb-3">Marcas</h4>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            <button
-              onClick={() => onBrandChange("")}
-              className={`block w-full text-left px-3 py-2 rounded-lg transition-colors duration-200 ${
-                selectedBrand === ""
-                  ? "bg-yellow-500 text-black font-medium"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-            >
-              Todas las marcas
-            </button>
-            {brands.map((brand) => (
-              <button
-                key={brand}
-                onClick={() => onBrandChange(brand)}
-                className={`block w-full text-left px-3 py-2 rounded-lg transition-colors duration-200 ${
-                  selectedBrand === brand
-                    ? "bg-yellow-500 text-black font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                {brand}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Clear Filters */}
-        {(selectedCategory || selectedBrand) && (
+        {selectedCategory && (
           <button
-            onClick={() => {
-              onCategoryChange("")
-              onBrandChange("")
-            }}
+            onClick={() => onCategoryChange("")}
             className="w-full bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200"
           >
             Limpiar Filtros

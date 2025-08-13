@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, ShoppingCart, Truck, MessageCircle, Phone, X, Copy, CheckCircle } from "lucide-react"
+import { ArrowLeft, ShoppingCart, Truck, MessageCircle, X, Copy, CheckCircle } from "lucide-react"
 import { productService } from "../services/productService"
 import { isProduction } from "../utils/envUtils"
 import { scrollToTop } from "../hooks/useScrollToTop"
@@ -219,7 +219,7 @@ Por favor, cotizá el envío para proceder con la compra.`
               </Link>
               <span>/</span>
               <Link
-                to={`/category=${product.category}`}
+                to={`/?category=${product.category}`}
                 className="hover:text-yellow-600"
                 onClick={handleBreadcrumbClick}
               >
@@ -250,6 +250,7 @@ Por favor, cotizá el envío para proceder con la compra.`
                   src={
                     product.images[selectedImage] ||
                     "/placeholder.svg?height=500&width=500&query=bmx part" ||
+                    "/placeholder.svg" ||
                     "/placeholder.svg" ||
                     "/placeholder.svg" ||
                     "/placeholder.svg"
@@ -317,7 +318,6 @@ Por favor, cotizá el envío para proceder con la compra.`
 
                 {/* Production Mode - Contact Buttons */}
                 <div className="space-y-4">
-
                   <div className="grid grid-cols-1 gap-3">
                     <button
                       onClick={handleWhatsAppContact}
@@ -374,10 +374,10 @@ Por favor, cotizá el envío para proceder con la compra.`
                   {isProduction ? "Información de contacto" : "Información de envío"}
                 </h3>
                 <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Truck className="text-yellow-500" size={20} />
-                      <span className="text-gray-700">Envíos a todo el país al mejor precio a traves de Andreani.</span>
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <Truck className="text-yellow-500" size={20} />
+                    <span className="text-gray-700">Envíos a todo el país al mejor precio a traves de Andreani.</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -395,6 +395,7 @@ Por favor, cotizá el envío para proceder con la compra.`
                         src={
                           relatedProduct.images[0] ||
                           "/placeholder.svg?height=200&width=250&query=bmx part" ||
+                          "/placeholder.svg" ||
                           "/placeholder.svg" ||
                           "/placeholder.svg" ||
                           "/placeholder.svg"

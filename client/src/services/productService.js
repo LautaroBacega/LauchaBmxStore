@@ -44,7 +44,8 @@ class ProductService {
       const data = await response.json()
 
       this.productsCache = data.products || []
-      this.categoriesCache = data.categories || this.defaultCategories
+      // Si no hay categorías en el JSON, usar las por defecto
+      this.categoriesCache = data.categories && data.categories.length > 0 ? data.categories : this.defaultCategories
       this.brandsCache = [...new Set(this.productsCache.map((p) => p.brand))].sort()
       this.lastLoadTime = Date.now()
       console.log("✅ Productos estáticos cargados:", this.productsCache.length)
@@ -65,9 +66,6 @@ class ProductService {
       // Aplicar filtros de cliente-side para el modo producción
       if (filters.category) {
         filteredProducts = filteredProducts.filter((p) => p.category === filters.category)
-      }
-      if (filters.brand) {
-        filteredProducts = filteredProducts.filter((p) => p.brand.toLowerCase().includes(filters.brand.toLowerCase()))
       }
       if (filters.search) {
         const searchTerm = filters.search.toLowerCase()
