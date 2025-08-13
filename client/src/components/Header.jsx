@@ -2,8 +2,10 @@
 
 import { Link } from "react-router-dom"
 import { useUser } from "../hooks/useUser"
-import { X } from "lucide-react"
+import { User, Home, Settings } from "lucide-react"
+import { isDevelopment } from "../utils/envUtils"
 import { scrollToTop } from "../hooks/useScrollToTop"
+import logo from "../../public/LauchaBmxStore-logosinfondo.png"
 
 export default function Header() {
   const { currentUser } = useUser()
@@ -13,52 +15,69 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-stone-100 border-b border-stone-200 fixed top-0 left-0 w-full z-50">
-      <div className="flex justify-between items-center max-w-7xl mx-auto px-4 py-4">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2" onClick={handleLinkClick}>
-          <div className="w-6 h-6 bg-teal-600 rounded-sm flex items-center justify-center">
-            <div className="w-3 h-3 bg-white rounded-sm"></div>
+    <header className="bg-gradient-to-r from-gray-900 via-gray-800 to-black shadow-lg border-b border-gray-700 fixed top-0 left-0 w-full z-50">
+      <div className="flex justify-between items-center max-w-7xl mx-auto p-4">
+        <Link to="/" className="group flex items-center gap-3" onClick={handleLinkClick}>
+          <img
+            src={logo || "/placeholder.svg"}
+            alt="Laucha BMX Store"
+            className="w-10 h-10 group-hover:scale-110 transition-transform duration-200"
+          />
+          <div>
+            <h1 className="font-bold text-xl bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent group-hover:from-yellow-300 group-hover:to-yellow-400 transition-all duration-300">
+              LAUCHA BMX
+            </h1>
+            <p className="text-xs text-gray-400 -mt-1">STORE</p>
           </div>
-          <span className="text-stone-800 font-medium text-lg">JB Ropa Usada BB</span>
         </Link>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <Link
-            to="/catalogo"
-            className="text-stone-700 hover:text-stone-900 font-medium transition-colors duration-200"
-            onClick={handleLinkClick}
-          >
-            Catálogo
-          </Link>
-          <Link
-            to="/valores"
-            className="text-stone-700 hover:text-stone-900 font-medium transition-colors duration-200"
-            onClick={handleLinkClick}
-          >
-            Valores
-          </Link>
-          <Link
-            to="/faq"
-            className="text-stone-700 hover:text-stone-900 font-medium transition-colors duration-200"
-            onClick={handleLinkClick}
-          >
-            FAQ
-          </Link>
-          <Link
-            to="/vender"
-            className="text-stone-700 hover:text-stone-900 font-medium transition-colors duration-200"
-            onClick={handleLinkClick}
-          >
-            Vender mi ropa
-          </Link>
-        </nav>
+        <nav>
+          <ul className="flex gap-6 items-center">
+            <Link
+              to="/"
+              className="group flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200"
+              onClick={handleLinkClick}
+            >
+              <Home size={18} className="group-hover:scale-110 transition-transform duration-200" />
+              <span className="hidden sm:block font-medium">Inicio</span>
+            </Link>
 
-        {/* Close button (as shown in the image) */}
-        <button className="w-10 h-10 bg-stone-400 hover:bg-stone-500 rounded-full flex items-center justify-center transition-colors duration-200">
-          <X className="text-white" size={20} />
-        </button>
+            {/* Admin Panel - Only in development */}
+            {isDevelopment && currentUser && (
+              <Link
+                to="/admin"
+                className="group flex items-center gap-2 text-gray-300 hover:text-red-400 transition-colors duration-200"
+                onClick={handleLinkClick}
+              >
+                <Settings size={18} className="group-hover:scale-110 transition-transform duration-200" />
+                <span className="hidden sm:block font-medium">Admin</span>
+              </Link>
+            )}
+
+            {/* Authentication - Only show in development OR if user is already logged in */}
+            {(isDevelopment || currentUser) && (
+              <Link to="/profile" className="group flex items-center gap-2" onClick={handleLinkClick}>
+                {currentUser ? (
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={currentUser.profilePicture || "/placeholder.svg"}
+                      alt="profile"
+                      className="h-8 w-8 rounded-full object-cover ring-2 ring-yellow-500 group-hover:ring-yellow-400 transition-all duration-200"
+                    />
+                    <span className="hidden sm:block text-gray-300 group-hover:text-white font-medium transition-colors duration-200">
+                      Perfil
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200">
+                    <User size={18} className="group-hover:scale-110 transition-transform duration-200" />
+                    <span className="font-medium">Iniciar Sesión</span>
+                  </div>
+                )}
+              </Link>
+            )}
+          </ul>
+        </nav>
       </div>
     </header>
   )

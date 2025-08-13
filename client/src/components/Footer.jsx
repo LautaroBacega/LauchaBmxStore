@@ -1,79 +1,69 @@
 "use client"
 
-import { ChevronDown, ChevronUp } from "lucide-react"
-import { useState } from "react"
+import { MapPin, Instagram, MessageCircle  } from 'lucide-react'
 
 export default function Footer() {
-  const [expandedFaq, setExpandedFaq] = useState(null)
-
-  const faqData = [
-    {
-      question: "¿Cómo sé el estado de las prendas?",
-      answer:
-        "Todas nuestras prendas son cuidadosamente inspeccionadas y clasificadas según su estado. Proporcionamos descripciones detalladas y fotos de cualquier imperfección.",
-    },
-    {
-      question: "¿Hacen envíos?",
-      answer: "Sí, realizamos envíos a todo el país. Los costos y tiempos de entrega varían según la ubicación.",
-    },
-    {
-      question: "¿Puedo vender mi ropa?",
-      answer: "¡Claro! Evaluamos tus prendas y si encajan con el estilo, las publicamos y te pagamos cuando se vendan.",
-    },
-  ]
-
-  const toggleFaq = (index) => {
-    setExpandedFaq(expandedFaq === index ? null : index)
+  const handleWhatsAppClick = () => {
+    const message = "Hola! Me gustaría obtener más información sobre las partes disponbles ."
+    const whatsappUrl = `https://wa.me/5492915092263?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, '_blank')
   }
 
   return (
-    <footer className="bg-stone-100">
-      {/* FAQ Section */}
-      <div className="py-16">
+    <footer className="bg-gray-900 text-white">
+      {/* Contact Section */}
+      <div className="py-16 bg-gray-800">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl font-serif text-stone-800 mb-12">Preguntas frecuentes</h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">Contactar</h2>
+            <p className="text-gray-300">
+              ¿Tenés alguna consulta sobre los productos? ¡Escribime!
+            </p>
+          </div>
 
-          <div className="space-y-4">
-            {faqData.map((faq, index) => (
-              <div key={index} className="border-b border-stone-300">
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="w-full py-6 flex items-center justify-between text-left hover:bg-stone-50 transition-colors duration-200"
-                >
-                  <span className="text-stone-800 font-medium text-lg">{faq.question}</span>
-                  {expandedFaq === index ? (
-                    <ChevronUp className="text-stone-600" size={20} />
-                  ) : (
-                    <ChevronDown className="text-stone-600" size={20} />
-                  )}
-                </button>
-                {expandedFaq === index && (
-                  <div className="pb-6 px-4">
-                    <p className="text-stone-600 leading-relaxed">{faq.answer}</p>
-                  </div>
-                )}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center p-6 bg-gray-700 rounded-xl hover:bg-gray-600 transition-colors duration-200">
+              <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle  className="text-green-600" size={24} />
               </div>
-            ))}
+              <h3 className="font-bold text-white mb-2">WhatsApp</h3>
+              <button
+                onClick={handleWhatsAppClick}
+                className="text-gray-300 hover:text-yellow-400 transition-colors duration-200"
+              >
+                +54 9 291 509-2263
+              </button>
+            </div>
+
+            <div className="text-center p-6 bg-gray-700 rounded-xl hover:bg-gray-600 ">
+              <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Instagram className="text-red-600" size={24} />
+              </div>
+              <h3 className="font-bold text-white mb-2">Instragram</h3>
+              <a className="text-gray-300 hover:text-yellow-400" href="https://www.instagram.com/lauchabmxstore/">@lauchabmxstore</a>
+            </div>
+
+            <div className="text-center p-6 bg-gray-700 rounded-xl hover:bg-gray-600 ">
+              <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="text-yellow-600" size={24} />
+              </div>
+              <h3 className="font-bold text-white mb-2">Ubicación</h3>
+              <p className="text-gray-300">Bahía Blanca, Buenos Aires, Argentina</p>
+            </div>
           </div>
         </div>
-      </div>
+      </div>      
 
       {/* Bottom Bar */}
-      <div className="py-8 border-t border-stone-300">
+      <div className="py-6 bg-black">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-stone-600 text-sm mb-4 md:mb-0">
-              © 2025 JB Ropa Usada BB. Todos los derechos reservados.
+            <div className="text-gray-400 text-sm mb-4 md:mb-0">
+              © 2025 Laucha BMX Store. Todos los derechos reservados.
             </div>
-            <div className="flex space-x-8 text-sm">
-              <a href="#" className="text-stone-600 hover:text-stone-800 transition-colors duration-200">
-                Catálogo
-              </a>
-              <a href="#" className="text-stone-600 hover:text-stone-800 transition-colors duration-200">
-                Valores
-              </a>
-              <a href="#" className="text-stone-600 hover:text-stone-800 transition-colors duration-200">
-                FAQ
+            <div className="flex space-x-6 text-sm">
+              <a href="https://bacegalautaro.netlify.app/" className="text-gray-400  transition-colors duration-200">
+                Desarrollado por  <span className='font-bold  hover:text-yellow-400'>Lautaro Bacega</span>
               </a>
             </div>
           </div>
