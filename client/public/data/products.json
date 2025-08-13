@@ -307,6 +307,47 @@
       "tags": [],
       "createdAt": "2025-08-13T18:02:02.055Z",
       "updatedAt": "2025-08-13T18:03:11.714Z"
+    },
+    {
+      "id": "1755116775878",
+      "name": "aasdw",
+      "description": "aasasas",
+      "price": 12,
+      "category": "rims",
+      "brand": "aassa",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755129025219_img_2_rxfec5s_IMG_5936.jpg?alt=media&token=ae3ad955-5020-466a-8b29-385025074f47"
+      ],
+      "specifications": {
+        "aa": "sss"
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-13T20:26:15.878Z",
+      "updatedAt": "2025-08-13T23:50:29.733Z"
+    },
+    {
+      "id": "1755129015122",
+      "name": "eses",
+      "description": "adaada",
+      "price": 12,
+      "category": "rims",
+      "brand": "tyty",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755128966770_img_0_ghg7w7o_IMG_2002.jpg?alt=media&token=185b8ab6-52d6-47be-9d67-42f2de95a339",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755128992131_img_1_ulag37p_IMG_2009.jpg?alt=media&token=8f6ce595-1b15-4233-b166-857a88998e6f"
+      ],
+      "specifications": {
+        "d": "f"
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-13T23:50:15.122Z",
+      "updatedAt": "2025-08-13T23:50:15.122Z"
     }
   ],
   "categories": []

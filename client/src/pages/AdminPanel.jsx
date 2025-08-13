@@ -12,16 +12,15 @@ import {
   RotateCcw,
   BarChart3,
   FileUp,
-  CheckCircle,
   AlertCircle,
-  ChevronLeft,
-  ChevronRight,
+  Camera,
 } from "lucide-react"
-import { getDownloadURL, getStorage, ref, uploadBytes, deleteObject } from "firebase/storage"
+import { getDownloadURL, getStorage, ref, deleteObject, uploadBytesResumable } from "firebase/storage"
 import { getAuth, signInAnonymously } from "firebase/auth"
 import { app } from "../firebase"
 import { productService } from "../services/productService"
 import { isDevelopment } from "../utils/envUtils"
+import ErrorModal from "../components/ErrorModal"
 
 // Global counter for unique image IDs
 let uniqueImageIdCounter = 0
@@ -84,11 +83,33 @@ const initializeFirebaseAuth = async () => {
   }
 }
 
-export default function AdminPanel() {
+const compressImage = (file, maxWidth = 800, quality = 0.8) => {
+  return new Promise((resolve) => {
+    const canvas = document.createElement("canvas")
+    const ctx = canvas.getContext("2d")
+    const img = new Image()
+
+    img.onload = () => {
+      // Calculate new dimensions maintaining aspect ratio
+      const ratio = Math.min(maxWidth / img.width, maxWidth / img.height)
+      canvas.width = img.width * ratio
+      canvas.height = img.height * ratio
+
+      // Draw and compress
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+      canvas.toBlob(resolve, "image/jpeg", quality)
+    }
+
+    img.src = URL.createObjectURL(file)
+  })
+}
+
+const AdminPanel = () => {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [showModal, setShowModal] = useState(false)
+  const [showModalState, setShowModalState] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("")
@@ -152,6 +173,31 @@ export default function AdminPanel() {
     { id: "stems", name: "Stems", value: "stems", label: "Stems" },
   ]
 
+  const [errorModal, setErrorModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "error",
+  })
+
+  const openErrorModal = (title, message, type = "error") => {
+    setErrorModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+    })
+  }
+
+  const closeModalErrorModal = () => {
+    setErrorModal({
+      isOpen: false,
+      title: "",
+      message: "",
+      type: "error",
+    })
+  }
+
   useEffect(() => {
     if (isDevelopment) {
       // Inicializar autenticación al cargar el componente
@@ -176,7 +222,7 @@ export default function AdminPanel() {
 
   // Bloquear scroll cuando el modal está abierto
   useEffect(() => {
-    if (showModal) {
+    if (showModalState) {
       // Guardar la posición actual del scroll
       const scrollY = window.scrollY
       document.body.style.position = "fixed"
@@ -202,29 +248,23 @@ export default function AdminPanel() {
       document.body.style.width = ""
       document.body.style.overflow = ""
     }
-  }, [showModal])
+  }, [showModalState])
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (filters = {}) => {
+    setLoading(true)
+    setError(null)
     try {
-      setLoading(true)
-      setError(null)
-
-      const filters = {
-        page: currentPage,
-        limit: 20,
-        search: searchTerm,
-        category: selectedCategory,
-        active: undefined,
-      }
-
       const data = await productService.getAllProductsAdmin(filters)
       setProducts(data.products)
       setPagination(data.pagination)
     } catch (error) {
       console.error("Error fetching products:", error)
-      // Mostrar un mensaje más específico según el tipo de error
       if (error.message.includes("ECONNREFUSED")) {
-        alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+        openErrorModal(
+          "Error de Conexión",
+          "El servidor backend no está corriendo.\nPor favor, inicia el servidor API.",
+          "error",
+        )
       } else {
         setError("Error al cargar productos: " + error.message)
       }
@@ -253,7 +293,6 @@ export default function AdminPanel() {
     }
   }
 
-  // Function to upload a single image to Firebase - OPTIMIZADA
   const uploadFileToFirebase = async (fileObject) => {
     const file = fileObject.file
     const tempId = fileObject.id
@@ -269,65 +308,103 @@ export default function AdminPanel() {
       return
     }
 
-    // Validar tamaño (máximo 10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 5 * 1024 * 1024) {
       setFormData((prev) => ({
         ...prev,
         images: prev.images.map((img) =>
-          img.id === tempId ? { ...img, error: "La imagen debe ser menor a 10MB" } : img,
+          img.id === tempId ? { ...img, error: "La imagen debe ser menor a 5MB" } : img,
         ),
       }))
       return
     }
 
     try {
-      // Asegurar autenticación antes de subir
-      await initializeFirebaseAuth()
-
-      // Mostrar progreso inmediatamente
       setFormData((prev) => ({
         ...prev,
-        images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: 10 } : img)),
+        images: prev.images.map((img) =>
+          img.id === tempId ? { ...img, progress: 5, status: "Comprimiendo..." } : img,
+        ),
+      }))
+
+      const compressedFile = await compressImage(file)
+
+      setFormData((prev) => ({
+        ...prev,
+        images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: 10, status: "Subiendo..." } : img)),
       }))
 
       const storage = getStorage(app)
       const fileName = `products/${Date.now()}_${tempId}_${file.name}`
       const storageRef = ref(storage, fileName)
 
-      // Usar uploadBytes en lugar de uploadBytesResumable para mayor velocidad
-      setFormData((prev) => ({
-        ...prev,
-        images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: 50 } : img)),
-      }))
+      const uploadTask = uploadBytesResumable(storageRef, compressedFile)
 
-      await uploadBytes(storageRef, file)
+      return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          uploadTask.cancel()
+          reject(new Error("Upload timeout"))
+        }, 30000) // 30 second timeout
 
-      setFormData((prev) => ({
-        ...prev,
-        images: prev.images.map((img) => (img.id === tempId ? { ...img, progress: 80 } : img)),
-      }))
-
-      const downloadURL = await getDownloadURL(storageRef)
-
-      setFormData((prev) => ({
-        ...prev,
-        images: prev.images.map((img) =>
-          img.id === tempId ? { ...img, url: downloadURL, file: null, progress: 100 } : img,
-        ),
-      }))
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+            setFormData((prev) => ({
+              ...prev,
+              images: prev.images.map((img) =>
+                img.id === tempId ? { ...img, progress, status: `Subiendo... ${progress}%` } : img,
+              ),
+            }))
+          },
+          (error) => {
+            clearTimeout(timeout)
+            console.error("Error uploading image:", error)
+            setFormData((prev) => ({
+              ...prev,
+              images: prev.images.map((img) =>
+                img.id === tempId ? { ...img, error: "Error al subir la imagen", status: "Error" } : img,
+              ),
+            }))
+            reject(error)
+          },
+          async () => {
+            clearTimeout(timeout)
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
+              setFormData((prev) => ({
+                ...prev,
+                images: prev.images.map((img) =>
+                  img.id === tempId
+                    ? { ...img, url: downloadURL, file: null, progress: 100, status: "Completado" }
+                    : img,
+                ),
+              }))
+              resolve(downloadURL)
+            } catch (error) {
+              reject(error)
+            }
+          },
+        )
+      })
     } catch (error) {
       console.error("Error uploading image:", error)
       setFormData((prev) => ({
         ...prev,
-        images: prev.images.map((img) => (img.id === tempId ? { ...img, error: "Error al subir la imagen" } : img)),
+        images: prev.images.map((img) =>
+          img.id === tempId ? { ...img, error: "Error al subir la imagen", status: "Error" } : img,
+        ),
       }))
     }
   }
 
-  // Handle multiple file selection - OPTIMIZADO
   const handleFileSelect = async (e) => {
     const files = Array.from(e.target.files)
     if (files.length === 0) return
+
+    if (files.length > 5) {
+      alert("Máximo 5 imágenes por vez para mejor rendimiento")
+      return
+    }
 
     const newImageObjects = files.map((file) => {
       return {
@@ -336,6 +413,7 @@ export default function AdminPanel() {
         file: file,
         progress: 0,
         error: null,
+        status: "Esperando...",
       }
     })
 
@@ -348,15 +426,24 @@ export default function AdminPanel() {
       }
     })
 
-    // Subir todas las imágenes en paralelo para mayor velocidad
-    const uploadPromises = newImageObjects.map((fileObject) => uploadFileToFirebase(fileObject))
+    const uploadInBatches = async (imageObjects, batchSize = 2) => {
+      for (let i = 0; i < imageObjects.length; i += batchSize) {
+        const batch = imageObjects.slice(i, i + batchSize)
+        const batchPromises = batch.map((fileObject) => uploadFileToFirebase(fileObject))
 
-    try {
-      await Promise.all(uploadPromises)
-    } catch (error) {
-      console.error("Error uploading some images:", error)
+        try {
+          await Promise.all(batchPromises)
+          // Small delay between batches to prevent overwhelming Firebase
+          if (i + batchSize < imageObjects.length) {
+            await new Promise((resolve) => setTimeout(resolve, 500))
+          }
+        } catch (error) {
+          console.error("Error uploading batch:", error)
+        }
+      }
     }
 
+    await uploadInBatches(newImageObjects)
     e.target.value = ""
   }
 
@@ -415,18 +502,20 @@ export default function AdminPanel() {
         await productService.addProduct(productData)
       }
 
-      setShowModal(false)
-      setEditingProduct(null)
       resetForm()
       fetchProducts()
       fetchStats()
-      alert("Producto guardado correctamente.")
+      openErrorModal("Éxito", "Producto guardado correctamente.", "success")
     } catch (error) {
       console.error("Error saving product:", error)
       if (error.message.includes("ECONNREFUSED")) {
-        alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+        openErrorModal(
+          "Error de Conexión",
+          "El servidor backend no está corriendo.\nPor favor, inicia el servidor API.",
+          "error",
+        )
       } else {
-        alert("Error al guardar el producto: " + error.message)
+        openErrorModal("Error", "Error al guardar el producto:\n" + error.message, "error")
       }
     }
   }
@@ -455,7 +544,7 @@ export default function AdminPanel() {
       })),
       specifications: {}, // Limpiar especificaciones fijas
     })
-    setShowModal(true)
+    setShowModalState(true)
     setCurrentImageIndex(0)
   }
 
@@ -481,39 +570,43 @@ export default function AdminPanel() {
         // Actualizar la UI inmediatamente
         fetchProducts()
         fetchStats()
-        alert("Producto eliminado correctamente.")
+        openErrorModal("Éxito", "Producto eliminado correctamente.", "success")
       } catch (error) {
         console.error("Error deleting product:", error)
         if (error.message.includes("ECONNREFUSED")) {
-          alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+          openErrorModal(
+            "Error de Conexión",
+            "El servidor backend no está corriendo.\nPor favor, inicia el servidor API.",
+            "error",
+          )
         } else {
-          alert("Error al eliminar el producto: " + error.message)
+          openErrorModal("Error", "Error al eliminar el producto:\n" + error.message, "error")
         }
       }
     }
   }
 
   const handleResetData = async () => {
-    if (
-      window.confirm(
-        "¿Estás seguro de que quieres resetear todos los datos a los originales del JSON? Esto eliminará todos los cambios realizados.",
-      )
-    ) {
+    if (window.confirm("¿Estás seguro de que quieres resetear todos los datos? Esta acción no se puede deshacer.")) {
       try {
-        const success = await productService.resetToOriginal()
-        if (success) {
+        const result = await productService.resetData()
+        if (result.success) {
           fetchProducts()
           fetchStats()
-          alert("Datos reseteados correctamente.")
+          openErrorModal("Éxito", "Datos reseteados correctamente.", "success")
         } else {
-          alert("Error al resetear los datos")
+          openErrorModal("Error", "Error al resetear los datos", "error")
         }
       } catch (error) {
         console.error("Error resetting data:", error)
         if (error.message.includes("ECONNREFUSED")) {
-          alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+          openErrorModal(
+            "Error de Conexión",
+            "El servidor backend no está corriendo.\nPor favor, inicia el servidor API.",
+            "error",
+          )
         } else {
-          alert("Error al resetear los datos: " + error.message)
+          openErrorModal("Error", "Error al resetear los datos:\n" + error.message, "error")
         }
       }
     }
@@ -522,13 +615,17 @@ export default function AdminPanel() {
   const handleExportData = async () => {
     try {
       await productService.exportData()
-      alert("Datos exportados correctamente.")
+      openErrorModal("Éxito", "Datos exportados correctamente.", "success")
     } catch (error) {
       console.error("Error exporting data:", error)
       if (error.message.includes("ECONNREFUSED")) {
-        alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
+        openErrorModal(
+          "Error de Conexión",
+          "El servidor backend no está corriendo.\nPor favor, inicia el servidor API.",
+          "error",
+        )
       } else {
-        alert("Error al exportar los datos: " + error.message)
+        openErrorModal("Error", "Error al exportar los datos:\n" + error.message, "error")
       }
     }
   }
@@ -537,23 +634,21 @@ export default function AdminPanel() {
     const file = e.target.files[0]
     if (!file) return
 
-    if (
-      window.confirm(
-        "¿Estás seguro de que quieres importar estos datos? Esto reemplazará todos los productos actuales.",
-      )
-    ) {
-      try {
-        await productService.importData(file)
-        fetchProducts()
-        fetchStats()
-        alert("Datos importados correctamente.")
-      } catch (error) {
-        console.error("Error importing data:", error)
-        if (error.message.includes("ECONNREFUSED")) {
-          alert("Error: El servidor backend no está corriendo. Por favor, inicia el servidor API.")
-        } else {
-          alert("Error al importar los datos: " + error.message)
-        }
+    try {
+      await productService.importData(file)
+      fetchProducts()
+      fetchStats()
+      openErrorModal("Éxito", "Datos importados correctamente.", "success")
+    } catch (error) {
+      console.error("Error importing data:", error)
+      if (error.message.includes("ECONNREFUSED")) {
+        openErrorModal(
+          "Error de Conexión",
+          "El servidor backend no está corriendo.\nPor favor, inicia el servidor API.",
+          "error",
+        )
+      } else {
+        openErrorModal("Error", "Error al importar los datos:\n" + error.message, "error")
       }
     }
 
@@ -666,11 +761,11 @@ export default function AdminPanel() {
     } else {
       resetForm()
     }
-    setShowModal(true)
+    setShowModalState(true)
   }
 
   const closeModal = () => {
-    setShowModal(false)
+    setShowModalState(false)
     resetForm()
   }
 
@@ -880,9 +975,9 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 py-24 ${showModal ? "overflow-hidden" : ""}`}>
+    <div className={`min-h-screen bg-gray-50 py-24 ${showModalState ? "overflow-hidden" : ""}`}>
       {/* Contenido principal con efecto blur cuando el modal está abierto */}
-      <div className={`transition-all duration-300 ${showModal ? "blur-sm" : ""}`}>
+      <div className={`transition-all duration-300 ${showModalState ? "blur-sm" : ""}`}>
         {/* Todo el contenido existente va aquí */}
         <div className="max-w-7xl mx-auto px-4">
           {/* Header */}
@@ -1011,7 +1106,7 @@ export default function AdminPanel() {
                 onClick={() => {
                   resetForm()
                   setEditingProduct(null)
-                  setShowModal(true)
+                  setShowModalState(true)
                 }}
                 className="bg-yellow-500 text-black px-6 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-200 flex items-center gap-2"
               >
@@ -1186,7 +1281,7 @@ export default function AdminPanel() {
       </div>
 
       {/* Modal permanece fuera del div con blur */}
-      {showModal && (
+      {showModalState && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
           <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
@@ -1282,114 +1377,59 @@ export default function AdminPanel() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Imágenes del Producto</label>
                       <div className="space-y-4">
-                        {formData.images.length > 0 ? (
-                          <div className="relative border border-gray-200 rounded-lg p-4 flex flex-col items-center justify-center">
-                            {/* Carousel Navigation */}
-                            {formData.images.length > 1 && (
-                              <>
-                                <button
-                                  type="button"
-                                  onClick={handlePrevImage}
-                                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 z-10"
-                                >
-                                  <ChevronLeft size={20} />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={handleNextImage}
-                                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 z-10"
-                                >
-                                  <ChevronRight size={20} />
-                                </button>
-                              </>
-                            )}
-
-                            {/* Current Image Display */}
-                            {formData.images[currentImageIndex] && (
-                              <div className="space-y-4 w-full">
-                                <div className="flex items-center justify-between mb-3">
-                                  <span className="text-sm font-medium text-gray-700">
-                                    Imagen {currentImageIndex + 1} de {formData.images.length}
-                                  </span>
-                                  <button
-                                    type="button"
-                                    onClick={() => removeImage(formData.images[currentImageIndex].id)}
-                                    className="text-red-600 hover:text-red-800"
-                                  >
-                                    <X size={16} />
-                                  </button>
-                                </div>
-
-                                {/* Preview de imagen */}
-                                <div className="mb-3 flex items-center justify-center w-full max-h-64 overflow-hidden">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                          {formData.images.map((image, index) => (
+                            <div key={image.id} className="relative group">
+                              <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-gray-300">
+                                {image.url ? (
                                   <img
-                                    src={
-                                      formData.images[currentImageIndex].url ||
-                                      (formData.images[currentImageIndex].file
-                                        ? URL.createObjectURL(formData.images[currentImageIndex].file)
-                                        : "/placeholder.svg")
-                                    }
-                                    alt={`Preview ${currentImageIndex + 1}`}
-                                    className="max-h-64 w-auto object-contain rounded-lg border"
+                                    src={image.url || "/placeholder.svg"}
+                                    alt={`Product ${index + 1}`}
+                                    className="w-full h-full object-cover cursor-pointer"
+                                    onClick={() => setCurrentImageIndex(index)}
                                   />
-                                </div>
-
-                                {/* Botón de subida o estado */}
-                                <div className="space-y-2">
-                                  {formData.images[currentImageIndex].progress !== null &&
-                                  formData.images[currentImageIndex].progress < 100 &&
-                                  !formData.images[currentImageIndex].error ? (
-                                    <div className="space-y-2">
-                                      <div className="flex items-center gap-2 text-blue-600">
-                                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                                        <span className="text-sm">
-                                          Subiendo: {formData.images[currentImageIndex].progress}%
-                                        </span>
-                                      </div>
-                                      <div className="w-full bg-gray-200 rounded-full h-2">
-                                        <div
-                                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                                          style={{ width: `${formData.images[currentImageIndex].progress}%` }}
-                                        ></div>
-                                      </div>
+                                ) : image.file ? (
+                                  <div className="w-full h-full flex flex-col items-center justify-center p-4">
+                                    <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-2"></div>
+                                    <div className="text-xs text-center text-gray-600 mb-1">
+                                      {image.status || "Procesando..."}
                                     </div>
-                                  ) : formData.images[currentImageIndex].error ? (
-                                    <div className="flex items-center gap-2 text-red-600">
-                                      <AlertCircle size={16} />
-                                      <span className="text-sm">{formData.images[currentImageIndex].error}</span>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                      <div
+                                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                        style={{ width: `${image.progress}%` }}
+                                      ></div>
                                     </div>
-                                  ) : (
-                                    <div className="flex items-center gap-2 text-green-600">
-                                      <CheckCircle size={16} />
-                                      <span className="text-sm">Subida completa</span>
-                                    </div>
-                                  )}
-                                </div>
+                                    <div className="text-xs text-gray-500 mt-1">{image.progress}%</div>
+                                  </div>
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <Camera className="w-8 h-8 text-gray-400" />
+                                  </div>
+                                )}
                               </div>
-                            )}
 
-                            {/* Carousel Indicators */}
-                            {formData.images.length > 1 && (
-                              <div className="flex justify-center gap-2 mt-4">
-                                {formData.images.map((_, idx) => (
-                                  <button
-                                    key={idx}
-                                    type="button"
-                                    onClick={() => setCurrentImageIndex(idx)}
-                                    className={`w-2 h-2 rounded-full ${
-                                      idx === currentImageIndex ? "bg-yellow-500" : "bg-gray-300"
-                                    }`}
-                                    aria-label={`Go to image ${idx + 1}`}
-                                  ></button>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="border border-gray-200 rounded-lg p-4 text-center text-gray-500">
-                            No hay imágenes seleccionadas.
-                          </div>
-                        )}
+                              {image.error && (
+                                <div className="absolute inset-0 bg-red-50 border-2 border-red-300 rounded-lg flex items-center justify-center">
+                                  <div className="text-center p-2">
+                                    <AlertCircle className="w-6 h-6 text-red-500 mx-auto mb-1" />
+                                    <p className="text-xs text-red-600">{image.error}</p>
+                                  </div>
+                                </div>
+                              )}
+
+                              {image.url && (
+                                <button
+                                  type="button"
+                                  onClick={() => removeImage(image.id)}
+                                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
 
                         {/* Hidden file input for multiple selection */}
                         <input
@@ -1469,7 +1509,7 @@ export default function AdminPanel() {
                   <button
                     type="button"
                     onClick={() => {
-                      setShowModal(false)
+                      setShowModalState(false)
                       setEditingProduct(null)
                       resetForm()
                     }}
@@ -1495,6 +1535,15 @@ export default function AdminPanel() {
           </div>
         </div>
       )}
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        onClose={closeModalErrorModal}
+        title={errorModal.title}
+        message={errorModal.message}
+        type={errorModal.type}
+      />
     </div>
   )
 }
+
+export default AdminPanel
