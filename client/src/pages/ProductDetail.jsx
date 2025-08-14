@@ -6,6 +6,7 @@ import { ArrowLeft, ShoppingCart, Truck, MessageCircle, X, Copy, CheckCircle } f
 import { productService } from "../services/productService"
 import { isProduction } from "../utils/envUtils"
 import { scrollToTop } from "../hooks/useScrollToTop"
+import ShippingCalculator from "../components/ShippingCalculator"
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -258,6 +259,7 @@ Por favor, cotizá el envío para proceder con la compra.`
                     product.images[selectedImage] ||
                     "/no-image-placeholder.png" ||
                     "/placeholder.svg" ||
+                    "/placeholder.svg" ||
                     "/placeholder.svg"
                   }
                   alt={product.name}
@@ -349,6 +351,9 @@ Por favor, cotizá el envío para proceder con la compra.`
                 </div>
               </div>
 
+              {/* Shipping Calculator */}
+              <ShippingCalculator product={product} />
+
               {/* Specifications */}
               {product.specifications && Object.keys(product.specifications).length > 0 && (
                 <div className="bg-white rounded-xl shadow-lg p-6">
@@ -406,6 +411,7 @@ Por favor, cotizá el envío para proceder con la compra.`
                         src={
                           relatedProduct.images[0] ||
                           "/no-image-placeholder.png" ||
+                          "/placeholder.svg" ||
                           "/placeholder.svg" ||
                           "/placeholder.svg"
                         }
