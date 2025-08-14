@@ -287,37 +287,15 @@
       "updatedAt": "2025-08-13T18:31:36.792Z"
     },
     {
-      "id": "1755108122055",
-      "name": "aa",
-      "description": "",
-      "price": 11,
-      "category": "frames",
-      "brand": "aa",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755108135319_img_2_gx5begr_IMG_2010.jpg?alt=media&token=cbaad9a9-2cc8-4683-8b39-a0ef1f4296f8",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755108172968_img_1_xbhmvlc_IMG_2011.jpg?alt=media&token=98d07ef1-7b03-4812-815a-b62c42d2668a"
-      ],
-      "specifications": {
-        "333": "de3e3",
-        "aaa": "aaa"
-      },
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-13T18:02:02.055Z",
-      "updatedAt": "2025-08-13T18:03:11.714Z"
-    },
-    {
       "id": "1755116775878",
-      "name": "aasdw",
+      "name": "aasd",
       "description": "aasasas",
       "price": 12,
       "category": "rims",
       "brand": "aassa",
       "stock": 1,
       "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755129025219_img_2_rxfec5s_IMG_5936.jpg?alt=media&token=ae3ad955-5020-466a-8b29-385025074f47"
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755129768373_img_6_ufiw193_IMG_2013.jpg?alt=media&token=80f0f0f2-3662-4787-96e8-13b693d457e8"
       ],
       "specifications": {
         "aa": "sss"
@@ -326,7 +304,7 @@
       "active": true,
       "tags": [],
       "createdAt": "2025-08-13T20:26:15.878Z",
-      "updatedAt": "2025-08-13T23:50:29.733Z"
+      "updatedAt": "2025-08-14T00:02:53.230Z"
     },
     {
       "id": "1755129015122",
@@ -334,12 +312,9 @@
       "description": "adaada",
       "price": 12,
       "category": "rims",
-      "brand": "tyty",
+      "brand": "tyt",
       "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755128966770_img_0_ghg7w7o_IMG_2002.jpg?alt=media&token=185b8ab6-52d6-47be-9d67-42f2de95a339",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755128992131_img_1_ulag37p_IMG_2009.jpg?alt=media&token=8f6ce595-1b15-4233-b166-857a88998e6f"
-      ],
+      "images": [],
       "specifications": {
         "d": "f"
       },
@@ -347,7 +322,25 @@
       "active": true,
       "tags": [],
       "createdAt": "2025-08-13T23:50:15.122Z",
-      "updatedAt": "2025-08-13T23:50:15.122Z"
+      "updatedAt": "2025-08-14T00:06:19.199Z"
+    },
+    {
+      "id": "1755130919970",
+      "name": "qwqw",
+      "description": "1212",
+      "price": 11,
+      "category": "seats",
+      "brand": "qwqw",
+      "stock": 1,
+      "images": [],
+      "specifications": {
+        "12": "12"
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-14T00:21:59.970Z",
+      "updatedAt": "2025-08-14T00:22:06.217Z"
     }
   ],
   "categories": []

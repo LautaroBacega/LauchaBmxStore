@@ -21,6 +21,7 @@ import { app } from "../firebase"
 import { productService } from "../services/productService"
 import { isDevelopment } from "../utils/envUtils"
 import ErrorModal from "../components/ErrorModal"
+// import NoImagePlaceholder from "../components/NoImagePlaceholder"
 
 // Global counter for unique image IDs
 let uniqueImageIdCounter = 0
@@ -180,6 +181,10 @@ const AdminPanel = () => {
     type: "error",
   })
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [productToDelete, setProductToDelete] = useState(null)
+  const [showEditModal, setShowEditModal] = useState(false)
+
   const openErrorModal = (title, message, type = "error") => {
     setErrorModal({
       isOpen: true,
@@ -196,6 +201,12 @@ const AdminPanel = () => {
       message: "",
       type: "error",
     })
+    if (errorModal.type === "success") {
+      setShowEditModal(false)
+      setShowModalState(false)
+      setEditingProduct(null)
+      resetForm()
+    }
   }
 
   useEffect(() => {
@@ -459,6 +470,51 @@ const AdminPanel = () => {
     setDynamicSpecs(dynamicSpecs.filter((spec) => spec.id !== id))
   }
 
+  const handleDelete = async (productId) => {
+    const product = products.find((p) => p.id === productId)
+    setProductToDelete(product)
+    setShowDeleteModal(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!productToDelete) return
+
+    try {
+      // Eliminar el producto del backend primero
+      await productService.deleteProduct(productToDelete.id)
+
+      // Intentar eliminar imágenes de Firebase (sin bloquear si falla)
+      if (productToDelete.images) {
+        // Ejecutar eliminación de imágenes en paralelo sin esperar
+        productToDelete.images.forEach((imageUrl) => {
+          deleteImageFromFirebase(imageUrl).catch((error) => {
+            // Error ya manejado en la función deleteImageFromFirebase
+          })
+        })
+      }
+
+      // Actualizar la UI inmediatamente
+      fetchProducts()
+      fetchStats()
+      setShowDeleteModal(false)
+      setProductToDelete(null)
+      openErrorModal("Éxito", "Producto eliminado correctamente.", "success")
+    } catch (error) {
+      console.error("Error deleting product:", error)
+      setShowDeleteModal(false)
+      setProductToDelete(null)
+      if (error.message.includes("ECONNREFUSED")) {
+        openErrorModal(
+          "Error de Conexión",
+          "El servidor backend no está corriendo.\nPor favor, inicia el servidor API.",
+          "error",
+        )
+      } else {
+        openErrorModal("Error", "Error al eliminar el producto:\n" + error.message, "error")
+      }
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -546,44 +602,6 @@ const AdminPanel = () => {
     })
     setShowModalState(true)
     setCurrentImageIndex(0)
-  }
-
-  const handleDelete = async (productId) => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
-      try {
-        // Encontrar el producto para obtener sus imágenes
-        const productToDelete = products.find((p) => p.id === productId)
-
-        // Eliminar el producto del backend primero
-        await productService.deleteProduct(productId)
-
-        // Intentar eliminar imágenes de Firebase (sin bloquear si falla)
-        if (productToDelete && productToDelete.images) {
-          // Ejecutar eliminación de imágenes en paralelo sin esperar
-          productToDelete.images.forEach((imageUrl) => {
-            deleteImageFromFirebase(imageUrl).catch((error) => {
-              // Error ya manejado en la función deleteImageFromFirebase
-            })
-          })
-        }
-
-        // Actualizar la UI inmediatamente
-        fetchProducts()
-        fetchStats()
-        openErrorModal("Éxito", "Producto eliminado correctamente.", "success")
-      } catch (error) {
-        console.error("Error deleting product:", error)
-        if (error.message.includes("ECONNREFUSED")) {
-          openErrorModal(
-            "Error de Conexión",
-            "El servidor backend no está corriendo.\nPor favor, inicia el servidor API.",
-            "error",
-          )
-        } else {
-          openErrorModal("Error", "Error al eliminar el producto:\n" + error.message, "error")
-        }
-      }
-    }
   }
 
   const handleResetData = async () => {
@@ -855,18 +873,6 @@ const AdminPanel = () => {
     } catch (error) {
       console.error("Error saving product:", error)
       setError("Error al guardar producto: " + error.message)
-    }
-  }
-
-  const handleDelete2 = async (id) => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
-      try {
-        await productService.deleteProduct(id)
-        await fetchProducts()
-      } catch (error) {
-        console.error("Error deleting product:", error)
-        setError("Error al eliminar producto: " + error.message)
-      }
     }
   }
 
@@ -1187,9 +1193,16 @@ const AdminPanel = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <img
-                              src={product.images[0] || "/placeholder.svg?height=48&width=48&query=bmx part"}
+                              src={
+                                product.images && product.images.length > 0
+                                  ? product.images[0]
+                                  : "/no-image-placeholder.png"
+                              }
                               alt={product.name}
                               className="w-12 h-12 rounded-lg object-cover"
+                              onError={(e) => {
+                                e.target.src = "/no-image-placeholder.png"
+                              }}
                             />
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">{product.name}</div>
@@ -1387,6 +1400,9 @@ const AdminPanel = () => {
                                     alt={`Product ${index + 1}`}
                                     className="w-full h-full object-cover cursor-pointer"
                                     onClick={() => setCurrentImageIndex(index)}
+                                    onError={(e) => {
+                                      e.target.src = "/no-image-placeholder.png"
+                                    }}
                                   />
                                 ) : image.file ? (
                                   <div className="w-full h-full flex flex-col items-center justify-center p-4">
@@ -1535,6 +1551,36 @@ const AdminPanel = () => {
           </div>
         </div>
       )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center mb-4">
+              <AlertCircle className="text-red-500 mr-3" size={24} />
+              <h3 className="text-lg font-semibold">Confirmar Eliminación</h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              ¿Estás seguro de que quieres eliminar el producto "{productToDelete?.name}"? Esta acción no se puede
+              deshacer.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false)
+                  setProductToDelete(null)
+                }}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+              <button onClick={confirmDelete} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <ErrorModal
         isOpen={errorModal.isOpen}
         onClose={closeModalErrorModal}

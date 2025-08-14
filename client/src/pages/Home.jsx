@@ -279,6 +279,9 @@ export default function Home() {
                             src={product.images[0] || "/placeholder.svg?height=40&width=40&query=bmx part"}
                             alt={product.name}
                             className="w-10 h-10 rounded-lg object-cover"
+                            onError={(e) => {
+                              e.target.src = "/no-image-placeholder.png"
+                            }}
                           />
                           <div className="flex-1 min-w-0">
                             <h4 className="font-medium text-gray-800 truncate">{product.name}</h4>
@@ -383,7 +386,7 @@ export default function Home() {
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors duration-200"
+                    className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 hover:text-black transition-all duration-200"
                   >
                     Ver Todo el Catálogo
                   </button>

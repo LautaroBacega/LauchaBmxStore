@@ -49,9 +49,12 @@ export default function ProductCard({ product, viewMode = "grid" }) {
           {/* Image */}
           <div className="w-48 h-32 flex-shrink-0 relative overflow-hidden bg-gray-50">
             <img
-              src={product.images[0] || "/placeholder.svg?height=128&width=192&query=bmx part"}
+              src={product.images && product.images.length > 0 ? product.images[0] : "/no-image-placeholder.png"}
               alt={product.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                e.target.src = "/no-image-placeholder.png"
+              }}
             />
             {product.featured && (
               <div className="absolute top-2 left-2 bg-yellow-500 text-black px-2 py-1 rounded-full text-xs font-bold">
@@ -126,9 +129,12 @@ export default function ProductCard({ product, viewMode = "grid" }) {
       {/* Image Container */}
       <div className="relative overflow-hidden bg-gray-50">
         <img
-          src={product.images[0] || "/placeholder.svg?height=250&width=300&query=bmx part"}
+          src={product.images && product.images.length > 0 ? product.images[0] : "/no-image-placeholder.png"}
           alt={product.name}
           className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            e.target.src = "/no-image-placeholder.png"
+          }}
         />
         {product.featured && (
           <div className="absolute top-3 left-3 bg-yellow-500 text-black px-2 py-1 rounded-full text-xs font-bold">
@@ -199,7 +205,7 @@ export default function ProductCard({ product, viewMode = "grid" }) {
               Ver Detalles
             </Link>
 
-            
+            {isProduction ? (
               <button
                 onClick={handleContactClick}
                 className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-200 text-sm font-medium flex items-center justify-center gap-1"
@@ -207,7 +213,15 @@ export default function ProductCard({ product, viewMode = "grid" }) {
                 <MessageCircle size={14} />
                 Consultar
               </button>
-            
+            ) : (
+              <button
+                className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all duration-200 text-sm font-medium flex items-center justify-center gap-1"
+                disabled={product.stock === 0}
+              >
+                <ShoppingCart size={14} />
+                {product.stock === 0 ? "Sin stock" : "Agregar"}
+              </button>
+            )}
           </div>
         </div>
       </div>

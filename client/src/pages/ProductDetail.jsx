@@ -256,12 +256,15 @@ Por favor, cotizá el envío para proceder con la compra.`
                 <img
                   src={
                     product.images[selectedImage] ||
-                    "/placeholder.svg?height=500&width=500&query=bmx part" ||
+                    "/no-image-placeholder.png" ||
                     "/placeholder.svg" ||
                     "/placeholder.svg"
                   }
                   alt={product.name}
                   className="w-full h-96 object-cover"
+                  onError={(e) => {
+                    e.target.src = "/no-image-placeholder.png"
+                  }}
                 />
               </div>
 
@@ -277,9 +280,12 @@ Por favor, cotizá el envío para proceder con la compra.`
                       }`}
                     >
                       <img
-                        src={image || "/placeholder.svg"}
+                        src={image || "/no-image-placeholder.png"}
                         alt={`${product.name} ${index + 1}`}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.src = "/no-image-placeholder.png"
+                        }}
                       />
                     </button>
                   ))}
@@ -399,12 +405,15 @@ Por favor, cotizá el envío para proceder con la compra.`
                       <img
                         src={
                           relatedProduct.images[0] ||
-                          "/placeholder.svg?height=200&width=250&query=bmx part" ||
+                          "/no-image-placeholder.png" ||
                           "/placeholder.svg" ||
                           "/placeholder.svg"
                         }
                         alt={relatedProduct.name}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          e.target.src = "/no-image-placeholder.png"
+                        }}
                       />
                       <div className="p-4">
                         <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-yellow-600 transition-colors duration-200">
@@ -579,4 +588,3 @@ Por favor, cotizá el envío para proceder con la compra.`
     </div>
   )
 }
-
