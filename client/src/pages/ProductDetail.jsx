@@ -269,18 +269,16 @@ Por favor, cotizá el envío para proceder con la compra.`
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Product Images */}
             <div className="space-y-4">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="flex justify-center">
                 <img
                   src={
                     product.images[selectedImage] ||
                     "/no-image-placeholder.png" ||
                     "/placeholder.svg" ||
-                    "/placeholder.svg" ||
-                    "/placeholder.svg" ||
                     "/placeholder.svg"
                   }
                   alt={product.name}
-                  className="w-full h-96 object-cover"
+                  className="max-w-full h-auto max-h-96 rounded-xl shadow-lg"
                   onError={(e) => {
                     e.target.src = "/no-image-placeholder.png"
                   }}
@@ -289,13 +287,13 @@ Por favor, cotizá el envío para proceder con la compra.`
 
               {/* Image Thumbnails */}
               {product.images.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto">
+                <div className="flex gap-2 overflow-x-auto justify-center">
                   {product.images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                        selectedImage === index ? "border-yellow-500" : "border-gray-200 hover:border-gray-300"
+                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden transition-all duration-200 ${
+                        selectedImage === index ? "ring-2 ring-yellow-500" : "hover:ring-2 hover:ring-gray-300"
                       }`}
                     >
                       <img
@@ -424,21 +422,21 @@ Por favor, cotizá el envío para proceder con la compra.`
                 {relatedProducts.map((relatedProduct) => (
                   <div key={relatedProduct.id} className="bg-white rounded-xl shadow-lg overflow-hidden group">
                     <Link to={`/product/${relatedProduct.id}`} onClick={handleRelatedProductClick}>
-                      <img
-                        src={
-                          relatedProduct.images[0] ||
-                          "/no-image-placeholder.png" ||
-                          "/placeholder.svg" ||
-                          "/placeholder.svg" ||
-                          "/placeholder.svg" ||
-                          "/placeholder.svg"
-                        }
-                        alt={relatedProduct.name}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                        onError={(e) => {
-                          e.target.src = "/no-image-placeholder.png"
-                        }}
-                      />
+                      <div className="overflow-hidden">
+                        <img
+                          src={
+                            relatedProduct.images[0] ||
+                            "/no-image-placeholder.png" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg"
+                          }
+                          alt={relatedProduct.name}
+                          className="w-full h-auto max-h-48 object-contain group-hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            e.target.src = "/no-image-placeholder.png"
+                          }}
+                        />
+                      </div>
                       <div className="p-4">
                         <h3 className="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-yellow-600 transition-colors duration-200">
                           {relatedProduct.name}

@@ -258,7 +258,7 @@ export default function Home() {
       <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center">
-            <img src="/LauchaBmxStore-logosinfondo.png" alt="Laucha BMX Store" className="h-60 mx-auto" />
+            <img src="/LauchaBmxStore-logosinfondo.png" alt="Laucha BMX Store" className="h-40 mx-auto" />
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
               <span className="text-yellow-500">LAUCHA</span> BMX STORE
             </h1>
