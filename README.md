@@ -1,321 +1,231 @@
-# 🔐 MERN Authentication System
+# 🚴‍♂️ Laucha BMX Store
 
-Un sistema completo de autenticación MERN (MongoDB, Express, React, Node.js) con características avanzadas de seguridad, incluyendo refresh tokens, reset de contraseñas, OAuth con Google, y temporizadores visuales de sesión.
+Una tienda online completa para productos de BMX desarrollada con tecnologías modernas. Incluye sistema de autenticación, panel de administración, calculadora de envíos y gestión completa de productos.
 
-## ✨ Características
+## 🚀 Características Principales
 
-### 🔑 Autenticación Completa
-- ✅ Registro e inicio de sesión con email/contraseña
-- ✅ Autenticación OAuth con Google (Firebase)
-- ✅ Sistema de refresh tokens para sesiones seguras
-- ✅ Logout con limpieza completa de tokens
-
-### 🔒 Seguridad Avanzada
-- ✅ **Access Tokens**: 15 minutos de duración
-- ✅ **Refresh Tokens**: 7 días de duración
-- ✅ Refresh automático transparente para el usuario
-- ✅ Cookies httpOnly para prevenir ataques XSS
-- ✅ Hashing de contraseñas con bcryptjs
-- ✅ Validación de tokens JWT
-
-### 📧 Reset de Contraseñas
-- ✅ Solicitud de reset por email
-- ✅ Tokens seguros con expiración (1 hora)
-- ✅ Verificación de tokens antes del reset
-- ✅ Emails transaccionales con Brevo/Nodemailer
-- ✅ Confirmación por email después del reset
-
-### 👤 Gestión de Perfil
-- ✅ Actualización de información personal
-- ✅ Cambio de contraseña
-- ✅ Upload de foto de perfil (Firebase Storage)
-- ✅ Eliminación de cuenta
-
-### ⏱️ Monitoreo de Sesión
-- ✅ **Temporizador de Access Token**: Cuenta regresiva de 15 minutos
-- ✅ **Temporizador de Refresh Token**: Cuenta regresiva de 7 días
-- ✅ Notificaciones antes de expiración
-- ✅ Refresh manual de tokens
-- ✅ Modal de sesión expirada con redirección automática
-
-### 🎨 Interfaz de Usuario
-- ✅ Diseño moderno con Tailwind CSS
-- ✅ Componentes responsivos
-- ✅ Iconos con Lucide React
-- ✅ Animaciones y transiciones suaves
-- ✅ Feedback visual para todas las acciones
+- **🛍️ Catálogo de Productos**: Navegación por categorías, búsqueda avanzada y filtros
+- **👤 Sistema de Autenticación**: Registro, login, OAuth con Google, recuperación de contraseña
+- **🔐 Panel de Administración**: CRUD completo de productos, gestión de imágenes, importación/exportación
+- **📦 Calculadora de Envíos**: Integración con API de Andreani para cálculo de costos por código postal
+- **📱 Diseño Responsivo**: Optimizado para móviles y escritorio
+- **🔄 Gestión de Sesiones**: Tokens JWT con refresh automático
+- **☁️ Almacenamiento en la Nube**: Firebase Storage para imágenes
+- **🎨 UI Moderna**: Tailwind CSS con componentes Radix UI
 
 ## 🛠️ Tecnologías Utilizadas
 
-### Backend
-- **Node.js** - Runtime de JavaScript
-- **Express.js** - Framework web
-- **MongoDB** - Base de datos NoSQL
-- **Mongoose** - ODM para MongoDB
-- **JWT** - JSON Web Tokens
-- **bcryptjs** - Hashing de contraseñas
-- **Nodemailer** - Envío de emails
-- **CORS** - Cross-Origin Resource Sharing
-- **Cookie Parser** - Manejo de cookies
-
 ### Frontend
-- **React 18** - Biblioteca de UI
-- **Vite** - Build tool y dev server
-- **React Router DOM** - Enrutamiento
-- **Tailwind CSS** - Framework de CSS
-- **Lucide React** - Iconos
-- **Firebase** - OAuth y Storage
+- **Next.js 14** - Framework React para producción
+- **React 19** - Biblioteca de interfaz de usuario
+- **TypeScript** - Tipado estático
+- **Tailwind CSS** - Framework CSS utility-first
+- **Radix UI** - Componentes de UI accesibles
+- **React Hook Form + Zod** - Manejo y validación de formularios
+- **Lucide React** - Iconografía
+- **Vite** - Build tool alternativo para desarrollo
+
+### Backend
+- **Express.js** - Framework web para Node.js
+- **MongoDB + Mongoose** - Base de datos NoSQL y ODM
+- **JWT** - Autenticación basada en tokens
+- **Firebase Admin** - Integración server-side con Firebase
+- **Multer** - Manejo de archivos
+- **Nodemailer** - Servicio de emails
+- **Bcrypt** - Encriptación de contraseñas
 
 ### Servicios Externos
-- **Brevo (Sendinblue)** - Servicio de email
-- **Firebase Auth** - OAuth con Google
 - **Firebase Storage** - Almacenamiento de imágenes
+- **Andreani API** - Cálculo de envíos
+- **Google OAuth** - Autenticación social
 
-## 📦 Instalación
+## 📁 Estructura del Proyecto
 
-### Prerrequisitos
-- Node.js (v16 o superior)
-- MongoDB (local o Atlas)
-- Cuenta de Firebase
-- Cuenta de Brevo para emails
-
-### 1. Clonar el repositorio
-\`\`\`bash
-git clone https://github.com/tu-usuario/mern-auth-complete.git
-cd mern-auth-complete
+\`\`\`
+├── app/                    # Next.js App Router
+├── client/                 # Cliente Vite (alternativo)
+│   ├── src/
+│   │   ├── components/     # Componentes reutilizables
+│   │   ├── pages/          # Páginas de la aplicación
+│   │   ├── context/        # Context providers
+│   │   ├── hooks/          # Custom hooks
+│   │   └── services/       # Servicios API
+│   └── public/             # Archivos estáticos
+├── api/                    # Backend Express
+│   ├── controllers/        # Lógica de negocio
+│   ├── models/            # Modelos de datos
+│   ├── routes/            # Rutas API
+│   └── utils/             # Utilidades
+└── components/            # Componentes Next.js
 \`\`\`
 
-### 2. Configurar el Backend
+## ⚙️ Configuración e Instalación
+
+### Prerrequisitos
+- Node.js 18+
+- MongoDB
+- Cuenta de Firebase
+- Cuenta de Google Cloud (para OAuth)
+
+### Variables de Entorno
+
+Crea un archivo `.env` en la raíz del proyecto:
+
+\`\`\`env
+# Base de datos
+MONGO=mongodb://localhost:27017/laucha-bmx-store
+
+# JWT
+JWT_SECRET=tu_jwt_secret_muy_seguro
+
+# Email (Nodemailer)
+SMTP_USER=tu_email@gmail.com
+SMTP_PASSWORD=tu_app_password
+SENDER_EMAIL=noreply@lauchaBmxstore.com
+
+# URLs
+FRONTEND_URL=http://localhost:5173
+PORT=3000
+
+# Administradores (emails separados por comas)
+ADMIN_EMAILS=admin@lauchaBmxstore.com,admin2@lauchaBmxstore.com
+\`\`\`
+
+### Firebase Configuration
+
+Crea `client/src/firebase.js`:
+
+\`\`\`javascript
+import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
+
+const firebaseConfig = {
+  apiKey: "tu_api_key",
+  authDomain: "tu_auth_domain",
+  projectId: "tu_project_id",
+  storageBucket: "tu_storage_bucket",
+  messagingSenderId: "tu_sender_id",
+  appId: "tu_app_id"
+};
+
+const app = initializeApp(firebaseConfig);
+export const storage = getStorage(app);
+\`\`\`
+
+### Instalación
+
+1. **Clonar el repositorio**
+\`\`\`bash
+git clone <repository-url>
+cd laucha-bmx-store
+\`\`\`
+
+2. **Instalar dependencias del backend**
 \`\`\`bash
 cd api
 npm install
 \`\`\`
 
-Crear archivo \`.env\` en la carpeta \`api\`:
-\`\`\`env
-# Base de datos
-MONGO=mongodb://localhost:27017/mern-auth
-# o para MongoDB Atlas:
-# MONGO=mongodb+srv://usuario:password@cluster.mongodb.net/mern-auth
-
-# JWT
-JWT_SECRET=tu_jwt_secret_muy_seguro_aqui
-
-# Email (Brevo)
-SMTP_USER=tu_email_brevo@smtp-brevo.com
-SMTP_PASSWORD=tu_password_brevo
-SENDER_EMAIL=tu_email_verificado@dominio.com
-
-# URLs
-FRONTEND_URL=http://localhost:5173
-NODE_ENV=development
-
-# Puerto
-PORT=3000
-\`\`\`
-
-### 3. Configurar el Frontend
+3. **Instalar dependencias del cliente**
 \`\`\`bash
 cd ../client
 npm install
 \`\`\`
 
-Crear archivo \`.env\` en la carpeta \`client\`:
-\`\`\`env
-# Firebase
-VITE_FIREBASE_API_KEY=tu_firebase_api_key
+4. **Instalar dependencias de Next.js (opcional)**
+\`\`\`bash
+cd ..
+npm install
 \`\`\`
 
-### 4. Configurar Firebase
+### Ejecución en Desarrollo
 
-1. Crear proyecto en [Firebase Console](https://console.firebase.google.com/)
-2. Habilitar Authentication → Google
-3. Habilitar Storage
-4. Obtener la configuración y actualizar \`client/src/firebase.js\`
-
-### 5. Configurar Brevo
-
-1. Crear cuenta en [Brevo](https://www.brevo.com/)
-2. Verificar dominio de email
-3. Obtener credenciales SMTP
-4. Actualizar variables de entorno
-
-## 🚀 Ejecución
-
-### Desarrollo
+1. **Iniciar MongoDB**
 \`\`\`bash
-# Terminal 1 - Backend
+mongod
+\`\`\`
+
+2. **Iniciar el backend**
+\`\`\`bash
 cd api
 npm run dev
+\`\`\`
 
-# Terminal 2 - Frontend  
+3. **Iniciar el cliente (en otra terminal)**
+\`\`\`bash
 cd client
 npm run dev
 \`\`\`
 
-### Producción
-\`\`\`bash
-# Backend
-cd api
-npm start
+4. **Acceder a la aplicación**
+- Cliente: http://localhost:5173
+- API: http://localhost:3000
 
-# Frontend (build)
-cd client
-npm run build
-npm run preview
-\`\`\`
+## 📋 Funcionalidades Detalladas
 
-## 📁 Estructura del Proyecto
+### 🛒 Catálogo de Productos
+- Visualización en grid y lista
+- Filtros por categoría, marca y precio
+- Búsqueda en tiempo real
+- Paginación automática
+- Imágenes con placeholder automático
 
-\`\`\`
-mern-auth-complete/
-├── api/                          # Backend
-│   ├── controllers/              # Controladores
-│   │   ├── auth.controller.js    # Autenticación
-│   │   └── user.controller.js    # Usuarios
-│   ├── models/                   # Modelos de datos
-│   │   └── user.model.js         # Modelo de usuario
-│   ├── routes/                   # Rutas de API
-│   │   ├── auth.route.js         # Rutas de auth
-│   │   └── user.route.js         # Rutas de usuario
-│   ├── services/                 # Servicios
-│   │   └── email.service.js      # Servicio de email
-│   ├── utils/                    # Utilidades
-│   │   ├── error.js              # Manejo de errores
-│   │   ├── tokenUtils.js         # Utilidades de tokens
-│   │   └── verifyUser.js         # Middleware de verificación
-│   ├── .env                      # Variables de entorno
-│   ├── index.js                  # Punto de entrada
-│   └── package.json              # Dependencias backend
-├── client/                       # Frontend
-│   ├── src/
-│   │   ├── components/           # Componentes React
-│   │   │   ├── Header.jsx        # Navegación
-│   │   │   ├── OAuth.jsx         # Google OAuth
-│   │   │   ├── PrivateRoute.jsx  # Rutas protegidas
-│   │   │   ├── TokenTimers.jsx   # Temporizadores
-│   │   │   └── ...
-│   │   ├── context/              # Context API
-│   │   │   └── UserContext.jsx   # Estado global de usuario
-│   │   ├── hooks/                # Hooks personalizados
-│   │   │   └── useUser.jsx       # Hook de usuario
-│   │   ├── pages/                # Páginas
-│   │   │   ├── SignIn.jsx        # Inicio de sesión
-│   │   │   ├── SignUp.jsx        # Registro
-│   │   │   ├── Profile.jsx       # Perfil
-│   │   │   ├── ForgotPassword.jsx # Olvidé contraseña
-│   │   │   └── ResetPassword.jsx # Reset contraseña
-│   │   ├── utils/                # Utilidades
-│   │   │   └── apiInterceptor.js # Interceptor de API
-│   │   ├── App.jsx               # Componente principal
-│   │   ├── main.jsx              # Punto de entrada
-│   │   ├── firebase.js           # Configuración Firebase
-│   │   └── index.css             # Estilos globales
-│   ├── .env                      # Variables de entorno
-│   ├── package.json              # Dependencias frontend
-│   └── vite.config.js            # Configuración Vite
-└── README.md                     # Este archivo
-\`\`\`
+### 👨‍💼 Panel de Administración
+- Gestión completa de productos (CRUD)
+- Subida optimizada de imágenes a Firebase
+- Importación/exportación de datos JSON
+- Control de stock y precios
+- Gestión de categorías y marcas
 
-## 🔌 API Endpoints
+### 🚚 Sistema de Envíos
+- Calculadora integrada con Andreani
+- Cálculo por código postal
+- Estimación de tiempos de entrega
+- Diferentes zonas de envío
+- Precios actualizados automáticamente
 
-### Autenticación
-\`\`\`
-POST   /api/auth/signup              # Registro
-POST   /api/auth/signin              # Inicio de sesión
-POST   /api/auth/google              # OAuth Google
-GET    /api/auth/signout             # Cerrar sesión
-POST   /api/auth/refresh-token       # Refrescar tokens
-POST   /api/auth/request-password-reset  # Solicitar reset
-GET    /api/auth/verify-reset-token/:token  # Verificar token
-POST   /api/auth/reset-password      # Restablecer contraseña
-\`\`\`
+### 🔐 Autenticación Avanzada
+- Registro con verificación por email
+- Login tradicional y OAuth Google
+- Recuperación de contraseña
+- Tokens JWT con refresh automático
+- Protección de rutas sensibles
 
-### Usuario
-\`\`\`
-GET    /api/user/                    # Test endpoint
-POST   /api/user/update/:id          # Actualizar perfil
-DELETE /api/user/delete/:id          # Eliminar cuenta
-\`\`\`
+## 🚀 Despliegue
 
-## 🔒 Configuración de Seguridad
+### Backend (Railway/Heroku)
+1. Configurar variables de entorno
+2. Conectar repositorio
+3. Desplegar automáticamente
 
-### Duración de Tokens
-- **Access Token**: 15 minutos ⏱️
-- **Refresh Token**: 7 días 📅
+### Frontend (Netlify/Vercel)
+1. Configurar build command: `npm run build`
+2. Configurar redirects para SPA
+3. Configurar variables de entorno
 
-### ¿Son estos valores estándar?
-
-**SÍ**, estos valores siguen las mejores prácticas de seguridad:
-
-#### Access Tokens (15 minutos)
-- ✅ **Estándar de la industria**: 5-30 minutos
-- ✅ **Balance perfecto**: Seguridad vs UX
-- ✅ **Recomendación OAuth 2.0**: Tokens de corta duración
-- ✅ **Usado por**: Google (1 hora), GitHub (8 horas), Auth0 (24 horas)
-
-#### Refresh Tokens (7 días)
-- ✅ **Estándar web**: 1-30 días para aplicaciones web
-- ✅ **Recomendación OWASP**: Máximo 30 días
-- ✅ **Usado por**: Spotify (1 hora), Instagram (60 días), Discord (7 días)
-
-#### Alternativas según el contexto:
-- **Aplicaciones bancarias**: Access 5 min, Refresh 1 día
-- **Aplicaciones sociales**: Access 1 hora, Refresh 30 días
-- **Aplicaciones empresariales**: Access 30 min, Refresh 7 días
-
-### Medidas de Seguridad Implementadas
-- 🔒 Cookies httpOnly (previene XSS)
-- 🔒 Tokens JWT firmados
-- 🔒 Hashing bcrypt (salt rounds: 10)
-- 🔒 Validación de entrada
-- 🔒 Rate limiting implícito
-- 🔒 CORS configurado
-- 🔒 Limpieza de tokens en logout
-
-## 🌐 Deployment
-
-### Backend (Render/Railway)
-1. Conectar repositorio
-2. Configurar variables de entorno
-3. Comando de build: \`npm install\`
-4. Comando de start: \`npm start\`
-
-### Frontend (Vercel/Netlify)
-1. Conectar repositorio
-2. Directorio de build: \`client\`
-3. Comando de build: \`npm run build\`
-4. Directorio de output: \`dist\`
-
-### Variables de Entorno en Producción
-Asegúrate de configurar todas las variables de entorno en tu plataforma de deployment.
+### Base de Datos (MongoDB Atlas)
+1. Crear cluster en MongoDB Atlas
+2. Configurar IP whitelist
+3. Actualizar MONGO_URI en variables de entorno
 
 ## 🤝 Contribución
 
 1. Fork el proyecto
-2. Crea una rama para tu feature (\`git checkout -b feature/AmazingFeature\`)
-3. Commit tus cambios (\`git commit -m 'Add some AmazingFeature'\`)
-4. Push a la rama (\`git push origin feature/AmazingFeature\`)
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
 ## 📝 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo \`LICENSE\` para más detalles.
+Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
-## 🙏 Agradecimientos
+## 📞 Contacto
 
-- [React](https://reactjs.org/)
-- [Express.js](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Firebase](https://firebase.google.com/)
-- [Brevo](https://www.brevo.com/)
-
-## 📞 Soporte
-
-Si tienes alguna pregunta o problema, por favor abre un issue en GitHub.
+- **Desarrollador**: [Tu Nombre]
+- **Email**: contacto@lauchaBmxstore.com
+- **Proyecto**: [Link al repositorio]
 
 ---
 
-⭐ Si este proyecto te fue útil, ¡dale una estrella en GitHub!
-\`\`\`
+⭐ Si te gusta este proyecto, ¡dale una estrella en GitHub!

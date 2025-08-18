@@ -7,6 +7,8 @@ import { productService } from "../services/productService"
 import { isProduction } from "../utils/envUtils"
 import { scrollToTop } from "../hooks/useScrollToTop"
 import ShippingCalculator from "../components/ShippingCalculator"
+import SEOHead from "../components/SEOHead"
+import ProductStructuredData from "../components/ProductStructuredData"
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -216,6 +218,20 @@ Por favor, cotizá el envío para proceder con la compra.`
 
   return (
     <div className={`min-h-screen bg-gray-50 ${showPurchaseModal ? "overflow-hidden" : ""}`}>
+      {product && (
+        <>
+          <SEOHead
+            title={`${product.name} - ${product.brand} | Laucha BMX Store`}
+            description={`${product.description} - ${formatPrice(product.price)} - Envíos a todo el país con Andreani.`}
+            keywords={`${product.name}, ${product.brand}, ${getCategoryName(product.category)}, BMX, repuestos BMX, Argentina`}
+            image={product.images && product.images.length > 0 ? product.images[0] : "/no-image-placeholder.png"}
+            url={`https://lauchaBMXstore.com/product/${product.id}`}
+            type="product"
+          />
+          <ProductStructuredData product={product} />
+        </>
+      )}
+
       {/* Contenido principal con efecto blur cuando el modal está abierto */}
       <div className={`transition-all duration-300 ${showPurchaseModal ? "blur-sm" : ""}`}>
         {/* Breadcrumb */}
@@ -258,6 +274,7 @@ Por favor, cotizá el envío para proceder con la compra.`
                   src={
                     product.images[selectedImage] ||
                     "/no-image-placeholder.png" ||
+                    "/placeholder.svg" ||
                     "/placeholder.svg" ||
                     "/placeholder.svg" ||
                     "/placeholder.svg"
@@ -411,6 +428,7 @@ Por favor, cotizá el envío para proceder con la compra.`
                         src={
                           relatedProduct.images[0] ||
                           "/no-image-placeholder.png" ||
+                          "/placeholder.svg" ||
                           "/placeholder.svg" ||
                           "/placeholder.svg" ||
                           "/placeholder.svg"

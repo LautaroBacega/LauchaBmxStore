@@ -9,6 +9,7 @@ import CategoryFilter from "../components/CategoryFilter"
 import { productService } from "../services/productService"
 import { useLocation } from "react-router-dom"
 import { scrollToTop } from "../hooks/useScrollToTop"
+import SEOHead from "../components/SEOHead"
 
 export default function Home() {
   const { currentUser } = useUser()
@@ -228,6 +229,31 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-10">
+      <SEOHead
+        title={
+          filters.search
+            ? `Búsqueda: ${filters.search} | Laucha BMX Store`
+            : filters.category
+              ? `${getCategoryName(filters.category)} | Laucha BMX Store`
+              : "Laucha BMX Store - Repuestos y Accesorios BMX Argentina"
+        }
+        description={
+          filters.search
+            ? `Resultados de búsqueda para "${filters.search}" en Laucha BMX Store`
+            : filters.category
+              ? `${getCategoryName(filters.category)} - Repuestos y accesorios BMX de calidad`
+              : "Tienda especializada en repuestos y accesorios BMX en Argentina. Rims, cuadros, asientos, manubrios y más. Envíos a todo el país con Andreani."
+        }
+        keywords={
+          filters.search
+            ? `${filters.search}, BMX, repuestos BMX, Argentina`
+            : filters.category
+              ? `${getCategoryName(filters.category)}, BMX, repuestos BMX, Argentina`
+              : "BMX, repuestos BMX, accesorios BMX, rims BMX, cuadros BMX, asientos BMX, manubrios BMX, Argentina, tienda BMX"
+        }
+        url="https://lauchaBMXstore.com/"
+      />
+
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-10">
         <div className="max-w-7xl mx-auto px-4">
