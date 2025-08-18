@@ -47,8 +47,6 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
         setLoading(true)
         const categoryData = await productService.getCategories()
 
-        console.log("📊 Datos de categorías recibidos:", categoryData)
-
         // Filtrar solo categorías que tienen productos (count > 0)
         const availableCategories = categoryData.filter((cat) => cat.count > 0)
 
@@ -64,7 +62,6 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
         const remainingCategories = availableCategories.filter((cat) => !categoryOrder.includes(cat.id))
 
         const finalCategories = [...orderedCategories, ...remainingCategories]
-        console.log("📋 Categorías finales:", finalCategories)
 
         setCategories(finalCategories)
       } catch (error) {

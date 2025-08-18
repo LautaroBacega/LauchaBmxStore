@@ -1,5 +1,5 @@
 import { errorHandler } from "../utils/error.js"
-import fs from "fs/promises" // Importar el módulo fs/promises para operaciones asíncronas de archivos
+import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
 
@@ -174,22 +174,11 @@ export const getProductsByCategory = async (req, res, next) => {
 // Get all categories with product counts - CORREGIDO CON DEBUGGING
 export const getCategories = async (req, res, next) => {
   try {
-    console.log("🔍 getCategories API called")
-    console.log("📁 Reading products file from:", productsFilePath)
-
     const data = await readProductsFile()
-    console.log("📦 Data loaded:", {
-      productsCount: data.products?.length || 0,
-      categoriesCount: data.categories?.length || 0,
-      hasCategories: !!data.categories,
-      sampleCategories: data.categories?.slice(0, 3),
-    })
-
     const { products, categories: predefinedCategories } = data
 
     // Verificar si tenemos categorías predefinidas
     if (!predefinedCategories || predefinedCategories.length === 0) {
-      console.warn("⚠️ No predefined categories found, using default categories")
       const defaultCategories = [
         { id: "frames", name: "Cuadros" },
         { id: "wheels", name: "Ruedas" },
@@ -205,7 +194,6 @@ export const getCategories = async (req, res, next) => {
         { id: "accessories", name: "Accesorios" },
       ]
 
-      // Contar productos activos por categoría
       const categoryCounts = {}
       products
         .filter((p) => p.active)
@@ -213,15 +201,12 @@ export const getCategories = async (req, res, next) => {
           categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
         })
 
-      console.log("📊 Category counts:", categoryCounts)
-
       const formattedCategories = defaultCategories.map((cat) => ({
         id: cat.id,
         name: cat.name,
         count: categoryCounts[cat.id] || 0,
       }))
 
-      console.log("📋 Formatted categories (using defaults):", formattedCategories)
       res.status(200).json(formattedCategories)
       return
     }
@@ -229,13 +214,10 @@ export const getCategories = async (req, res, next) => {
     // Contar productos activos por categoría
     const categoryCounts = {}
     const activeProducts = products.filter((p) => p.active)
-    console.log("📊 Active products:", activeProducts.length)
 
     activeProducts.forEach((p) => {
       categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1
     })
-
-    console.log("📊 Category counts:", categoryCounts)
 
     const formattedCategories = predefinedCategories.map((cat) => ({
       id: cat.id,
@@ -243,7 +225,6 @@ export const getCategories = async (req, res, next) => {
       count: categoryCounts[cat.id] || 0,
     }))
 
-    console.log("📋 Formatted categories:", formattedCategories)
     res.status(200).json(formattedCategories)
   } catch (error) {
     console.error("❌ Error in getCategories:", error)

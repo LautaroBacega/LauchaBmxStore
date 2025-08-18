@@ -18,8 +18,6 @@ export default function ForgotPassword() {
     setMessage("")
 
     try {
-      console.log("🔄 Enviando solicitud de reset para:", email)
-
       const response = await fetch("/api/auth/request-password-reset", {
         method: "POST",
         headers: {
@@ -29,11 +27,7 @@ export default function ForgotPassword() {
         body: JSON.stringify({ email }),
       })
 
-      console.log("📡 Response status:", response.status)
-      console.log("📡 Response headers:", response.headers)
-
       const data = await response.json()
-      console.log("📦 Response data:", data)
 
       if (response.ok) {
         setMessage(data.message)
@@ -42,7 +36,7 @@ export default function ForgotPassword() {
         setError(data.message || "Ocurrió un error. Por favor intentá de nuevo.")
       }
     } catch (error) {
-      console.error("❌ Error completo:", error)
+      console.error("Error in password reset request:", error)
       setError("Error de conexión. Por favor intentá de nuevo.")
     } finally {
       setLoading(false)

@@ -24,7 +24,7 @@ export default function TokenExpiryNotification({ secondsRemaining }) {
       setIsVisible(false)
       setIsRefreshing(false)
     } catch (error) {
-      console.error("Error al refrescar token:", error)
+      console.error("Error refreshing token:", error)
       setIsRefreshing(false)
     }
   }

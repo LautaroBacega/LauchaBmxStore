@@ -24,7 +24,7 @@ export default function OAuth() {
 
       navigate("/")
     } catch (error) {
-      console.log("could not login with google", error)
+      console.error("Google authentication failed:", error)
     }
   }
 

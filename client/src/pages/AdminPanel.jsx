@@ -21,7 +21,6 @@ import { app } from "../firebase"
 import { productService } from "../services/productService"
 import { isDevelopment } from "../utils/envUtils"
 import ErrorModal from "../components/ErrorModal"
-// import NoImagePlaceholder from "../components/NoImagePlaceholder"
 
 // Global counter for unique image IDs
 let uniqueImageIdCounter = 0
@@ -30,24 +29,19 @@ let uniqueImageIdCounter = 0
 const deleteImageFromFirebase = async (imageUrl) => {
   try {
     if (!imageUrl || !imageUrl.includes("firebase")) {
-      console.log("⚠️ URL no válida o no es de Firebase:", imageUrl)
       return
     }
 
     // Asegurar autenticación anónima
     const auth = getAuth(app)
     if (!auth.currentUser) {
-      console.log("🔐 Autenticando anónimamente para eliminar imagen...")
       await signInAnonymously(auth)
     }
-
-    console.log("✅ Usuario autenticado:", auth.currentUser.uid)
 
     const storage = getStorage(app)
     // Extraer el path de la URL de Firebase
     const urlParts = imageUrl.split("/o/")[1]
     if (!urlParts) {
-      console.log("⚠️ No se pudo extraer el path de la URL:", imageUrl)
       return
     }
 
@@ -55,15 +49,13 @@ const deleteImageFromFirebase = async (imageUrl) => {
     const imageRef = ref(storage, imagePath)
 
     await deleteObject(imageRef)
-    console.log("✅ Imagen eliminada de Firebase:", imagePath)
   } catch (error) {
     if (error.code === "storage/unauthorized") {
-      console.warn("⚠️ Sin permisos para eliminar imagen de Firebase:", imageUrl)
-      console.warn("💡 Verifica las reglas de Firebase Storage")
+      console.warn("Sin permisos para eliminar imagen de Firebase:", imageUrl)
     } else if (error.code === "storage/object-not-found") {
-      console.log("ℹ️ La imagen ya no existe en Firebase:", imageUrl)
+      // La imagen ya no existe, no es un error crítico
     } else {
-      console.error("❌ Error eliminando imagen de Firebase:", error)
+      console.error("Error eliminando imagen de Firebase:", error)
     }
   }
 }
@@ -73,14 +65,10 @@ const initializeFirebaseAuth = async () => {
   try {
     const auth = getAuth(app)
     if (!auth.currentUser) {
-      console.log("🔐 Iniciando autenticación anónima...")
       await signInAnonymously(auth)
-      console.log("✅ Autenticación anónima exitosa:", auth.currentUser.uid)
-    } else {
-      console.log("✅ Usuario ya autenticado:", auth.currentUser.uid)
     }
   } catch (error) {
-    console.error("❌ Error en autenticación anónima:", error)
+    console.error("Error en autenticación anónima:", error)
   }
 }
 
@@ -289,7 +277,6 @@ const AdminPanel = () => {
       const statsData = await productService.getStats()
       setStats(statsData)
     } catch (error) {
-      console.error("Error fetching stats:", error)
       // No mostrar alert para estadísticas, solo log
       setStats({
         totalProducts: 0,

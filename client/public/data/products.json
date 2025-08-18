@@ -284,63 +284,7 @@
       "active": true,
       "tags": [],
       "createdAt": "2025-08-11T14:18:41.673Z",
-      "updatedAt": "2025-08-13T18:31:36.792Z"
-    },
-    {
-      "id": "1755116775878",
-      "name": "aasd",
-      "description": "aasasas",
-      "price": 12,
-      "category": "rims",
-      "brand": "aassa",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1755129768373_img_6_ufiw193_IMG_2013.jpg?alt=media&token=80f0f0f2-3662-4787-96e8-13b693d457e8"
-      ],
-      "specifications": {
-        "aa": "sss"
-      },
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-13T20:26:15.878Z",
-      "updatedAt": "2025-08-14T00:02:53.230Z"
-    },
-    {
-      "id": "1755129015122",
-      "name": "eses",
-      "description": "adaada",
-      "price": 12,
-      "category": "rims",
-      "brand": "tyt",
-      "stock": 1,
-      "images": [],
-      "specifications": {
-        "d": "f"
-      },
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-13T23:50:15.122Z",
-      "updatedAt": "2025-08-14T00:06:19.199Z"
-    },
-    {
-      "id": "1755130919970",
-      "name": "qwqw",
-      "description": "1212",
-      "price": 11,
-      "category": "seats",
-      "brand": "qwqw",
-      "stock": 1,
-      "images": [],
-      "specifications": {
-        "12": "12"
-      },
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-14T00:21:59.970Z",
-      "updatedAt": "2025-08-14T00:22:06.217Z"
+      "updatedAt": "2025-08-18T15:05:12.180Z"
     }
   ],
   "categories": []

@@ -32,16 +32,11 @@ export default function ResetPassword() {
       }
 
       try {
-        console.log("🔍 Verificando token:", token)
-
         const response = await fetch(`/api/auth/verify-reset-token/${token}`, {
           credentials: "include",
         })
 
-        console.log("📡 Verification response status:", response.status)
-
         const data = await response.json()
-        console.log("📦 Verification data:", data)
 
         if (response.ok) {
           setTokenValid(true)
@@ -49,7 +44,7 @@ export default function ResetPassword() {
           setError(data.message || "Token inválido o expirado")
         }
       } catch (error) {
-        console.error("❌ Error verificando token:", error)
+        console.error("Error verifying reset token:", error)
         setError("Error verificando el token")
       } finally {
         setCheckingToken(false)
@@ -84,8 +79,6 @@ export default function ResetPassword() {
     setMessage("")
 
     try {
-      console.log("🔄 Restableciendo contraseña...")
-
       const response = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -97,10 +90,7 @@ export default function ResetPassword() {
         }),
       })
 
-      console.log("📡 Reset response status:", response.status)
-
       const data = await response.json()
-      console.log("📦 Reset data:", data)
 
       if (response.ok) {
         setMessage(data.message)
@@ -113,7 +103,7 @@ export default function ResetPassword() {
         setError(data.message || "Ocurrió un error. Por favor intentá de nuevo.")
       }
     } catch (error) {
-      console.error("❌ Error resetting password:", error)
+      console.error("Error resetting password:", error)
       setError("Error de conexión. Por favor intentá de nuevo.")
     } finally {
       setLoading(false)
