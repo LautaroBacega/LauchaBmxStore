@@ -156,6 +156,7 @@ const AdminPanel = () => {
     { id: "handlebars", name: "Manubrios", value: "handlebars", label: "Manubrios" },
     { id: "levers", name: "Palancas", value: "levers", label: "Palancas" },
     { id: "pedals", name: "Pedales", value: "pedals", label: "Pedales" },
+    { id: "sprockets", name: "Platos", value: "sprockets", label: "Platos" },
     { id: "posts", name: "Postes", value: "posts", label: "Postes" },
     { id: "grips", name: "Puños", value: "grips", label: "Puños" },
     { id: "spokes", name: "Rayos", value: "spokes", label: "Rayos" },
