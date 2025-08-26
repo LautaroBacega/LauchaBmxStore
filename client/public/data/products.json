@@ -259,7 +259,7 @@
       "name": "Bicicleta Completa Rodado 16'",
       "description": "- CUADRO ACERO 16\" SOLDADURA TIG \n- HORQUILLA ACERO A-HEAD \n- ASIENTO bmx \n- LLANTA  ALUMINIO de 36 agujeros\n- MAZAS DRIVER 9\n- MANUBRIO ACERO 8\" \n- STEM ALUMINIO \n- PEDAL PLASTICO \n- PLATO ACERO 25T \n- BIELA NEGRA \n- FRENO TRASERO U-BRAKE ALUMINIO \n- CUBIERTAS hartex 16' \n- PUÑOS IZHAVEL",
       "price": 250000,
-      "category": "complete-bikes",
+      "category": "Bicicletas Completas",
       "brand": "MoBikeco",
       "stock": 1,
       "images": [
@@ -372,7 +372,7 @@
       "name": "Horquilla Krow Big Classic",
       "description": "Horquilla Krow Big Classic con top bolt S&M ",
       "price": 110000,
-      "category": "forks",
+      "category": "Horquillas",
       "brand": "Krow",
       "stock": 1,
       "images": [
@@ -398,7 +398,7 @@
       "name": "Poste Pivotal",
       "description": "",
       "price": 12000,
-      "category": "posts",
+      "category": "Postes",
       "brand": "Generico",
       "stock": 1,
       "images": [
@@ -458,7 +458,7 @@
       "name": "Rueda Delantera Stranger, Supra",
       "description": "- Aro Supra Dome\n- Maza Stranger (un poco de juego)",
       "price": 100000,
-      "category": "front-hubs",
+      "category": "Mazas Delanteras",
       "brand": "Stranger",
       "stock": 1,
       "images": [
@@ -479,7 +479,7 @@
       "name": "Rueda Trasera Primo Freemix y Supra",
       "description": "SE ESCUCHAN OFERTAS! \n- Aro Supra Dome\n- Maza Primo Freemix (driver con 2 dientes rotos, falta una tuerca) ",
       "price": 0,
-      "category": "rear-hubs",
+      "category": "Mazas Traseras",
       "brand": "Primo",
       "stock": 1,
       "images": [
