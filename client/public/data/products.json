@@ -284,7 +284,114 @@
       "active": true,
       "tags": [],
       "createdAt": "2025-08-11T14:18:41.673Z",
-      "updatedAt": "2025-08-18T15:05:12.180Z"
+      "updatedAt": "2025-08-26T01:58:38.455Z"
+    },
+    {
+      "id": "1756173289504",
+      "name": "Cuadro Fiend Colin Varanyak 20.25",
+      "description": "",
+      "price": 375000,
+      "category": "frames",
+      "brand": "Fiend",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173217796_img_0_zbbut5d_IMG_6899.jpg?alt=media&token=7c228f20-009c-44bd-9ca6-eb2d0dbbdaf7",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173217820_img_1_kro349w_IMG_6900.jpg?alt=media&token=51c59e1b-e6d2-4bd1-803d-37247133e088",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173221149_img_2_verwfgp_IMG_6901.jpg?alt=media&token=25853143-d761-4db0-88c7-078f0fa57dbc",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173221161_img_3_m8ajdik_IMG_6902.jpg?alt=media&token=0498a875-8c24-4439-9b22-29695ac0dbe3",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173223943_img_4_4mqelfl_IMG_6903.jpg?alt=media&token=59281d49-e9be-4d47-8ea8-f87b6c394cef",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173229740_img_5_pon3wjp_IMG_6904.jpg?alt=media&token=d3c44df9-c6f5-4f9e-9bef-ab752190ae75",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173229770_img_6_8f2zola_IMG_6905.jpg?alt=media&token=322e45d4-7aa5-4de7-86a5-f4c3610ee593",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173231510_img_7_jnp49m6_IMG_6906.jpg?alt=media&token=6c795386-45ef-4920-8367-02bf6cf773bd",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173231525_img_8_0ijc8iw_IMG_6907.jpg?alt=media&token=f0c550b3-2762-4f12-b63b-30fb10c0923a",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173233320_img_9_5ueh9zi_IMG_6910.jpg?alt=media&token=91b5a664-606c-408b-8d16-5ff8843bf01e",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173236590_img_10_ogd7efb_IMG_6911.jpg?alt=media&token=9a51bf0d-75fb-4e75-859d-efdc514180c6",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173236605_img_11_hbrvmik_IMG_6912.jpg?alt=media&token=18afa7b5-c238-452e-a99f-4572787245a3",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173239169_img_12_h6uvjbu_IMG_6913.jpg?alt=media&token=5566c393-a1a2-4751-9c16-270e5a990274",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173239179_img_13_wzjgn93_IMG_6914.jpg?alt=media&token=7594d8ff-957b-4b91-a9c9-f072b9f775cc"
+      ],
+      "specifications": {
+        "Medida": "20.25",
+        "Vainas": "12.7"
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-26T01:54:49.504Z",
+      "updatedAt": "2025-08-26T01:54:49.504Z"
+    },
+    {
+      "id": "1756173374392",
+      "name": "Stem Fiend Reynolds",
+      "description": "",
+      "price": 75000,
+      "category": "stems",
+      "brand": "Fiend",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173364852_img_14_g24bgbl_IMG_6861.jpg?alt=media&token=b99e529e-2797-4d91-8b56-854cd205b6dd",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173364837_img_15_psdlolq_IMG_6862.jpg?alt=media&token=448ad459-6ac6-474c-bf69-67e7345bb8f6",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173367539_img_16_ada6jqh_IMG_6863.jpg?alt=media&token=3a1e753d-d48b-4052-9c7a-0ee229267df2",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173367568_img_17_oi07bde_IMG_6864.jpg?alt=media&token=bf041740-4370-464c-b9df-62f8858d09f3",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173370167_img_18_g92441z_IMG_6865.jpg?alt=media&token=11231485-2983-41c1-a07e-e38df65649e7",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173370233_img_19_8lb4aac_IMG_6866.jpg?alt=media&token=a45ad5c8-9648-4d92-89a0-a68f1f435260",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173370268_img_20_6uwtxr8_IMG_6867.jpg?alt=media&token=a97fd1fb-b411-49bb-a0eb-e28033efb683"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-26T01:56:14.392Z",
+      "updatedAt": "2025-08-26T01:56:14.392Z"
+    },
+    {
+      "id": "1756173479875",
+      "name": "Manubrio Fit Brandon Begin",
+      "description": "Manubrio Fit Brandon Begin 4 piezas con puños Eclat de regalo (pequeños detalles en el agarre)",
+      "price": 55000,
+      "category": "handlebars",
+      "brand": "Fit",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173463123_img_21_zvhv4d4_IMG_6854.jpg?alt=media&token=8ef4dee2-4411-441d-bb6e-df989044b3a4",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173463141_img_22_22imka8_IMG_6855.jpg?alt=media&token=315a02f1-fcc6-446f-9fb1-9c1330a67ece",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173466139_img_23_tdao3tr_IMG_6856.jpg?alt=media&token=bca1a52d-6ba5-4c86-b209-924e35d95e95",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173466157_img_24_byn8712_IMG_6857.jpg?alt=media&token=a4cb72a9-f763-481a-a6c2-694e0fc00a37",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173468682_img_25_7foe7kl_IMG_6858.jpg?alt=media&token=a496784c-8230-4a4f-b562-2ce923f064ae",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173466169_img_26_i5mmwnq_IMG_6859.jpg?alt=media&token=240d91fa-9250-46a1-86ee-90ef33ec2de7"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-26T01:57:59.875Z",
+      "updatedAt": "2025-08-26T01:57:59.875Z"
+    },
+    {
+      "id": "1756173605629",
+      "name": "Horquilla Krow Big Classic",
+      "description": "Horquilla Krow Big Classic con top bolt S&M ",
+      "price": 110000,
+      "category": "forks",
+      "brand": "Krow",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173582890_img_35_ng9rk0k_IMG_6879.jpg?alt=media&token=1c7537b5-2ca4-4103-affe-8aed23d32631",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173582872_img_36_1dpifik_IMG_6880.jpg?alt=media&token=b1f54eb3-7d7f-4159-a723-8c255587d156",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173585944_img_37_viihm1s_IMG_6881.jpg?alt=media&token=10dbaa74-e7a9-4d84-9791-412f0920912e",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173585956_img_38_beym23t_IMG_6882.jpg?alt=media&token=748f6064-2f9d-4516-aa20-b1df3ec41b31",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173588723_img_39_7tp02dh_IMG_6883.jpg?alt=media&token=3b28258a-85ae-4ee4-a907-bfb0fd0d8c1b",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173586812_img_40_rnq0v8x_IMG_6884.jpg?alt=media&token=eed92517-042c-4100-a2fe-b3323d10abf6",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173586827_img_41_x577jkk_IMG_6885.jpg?alt=media&token=fc5a49f5-b168-4662-89aa-6bd1ec146c09",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173600432_img_42_b0jtnp1_IMG_6886.jpg?alt=media&token=3cbf03db-dd6a-4450-a111-8649847a72d2",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173600443_img_43_gdjkoww_IMG_6887.jpg?alt=media&token=a30ecfad-e385-4ad1-a15b-82956f3acc5e"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-26T02:00:05.629Z",
+      "updatedAt": "2025-08-26T02:00:05.629Z"
     }
   ],
   "categories": []
