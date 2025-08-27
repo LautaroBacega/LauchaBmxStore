@@ -205,7 +205,7 @@ const AdminPanel = () => {
       fetchProducts()
       fetchStats()
     }
-  }, [currentPage, searchTerm, selectedCategory])
+  }, [currentPage, searchTerm, selectedCategory, sortBy, sortOrder])
 
   // Effect to clean up object URLs when images are removed or component unmounts
   useEffect(() => {
@@ -254,7 +254,17 @@ const AdminPanel = () => {
     setLoading(true)
     setError(null)
     try {
-      const data = await productService.getAllProductsAdmin(filters)
+      const completeFilters = {
+        page: currentPage,
+        limit: 12,
+        search: searchTerm,
+        category: selectedCategory,
+        sortBy,
+        sortOrder,
+        ...filters,
+      }
+
+      const data = await productService.getAllProductsAdmin(completeFilters)
       setProducts(data.products)
       setPagination(data.pagination)
     } catch (error) {
@@ -1256,7 +1266,7 @@ const AdminPanel = () => {
             {pagination.totalPages > 1 && (
               <div className="bg-gray-50 px-6 py-3 flex justify-between items-center">
                 <div className="text-sm text-gray-700">
-                  Mostrando {(currentPage - 1) * 20 + 1} a {Math.min(currentPage * 20, pagination.totalProducts)} de{" "}
+                  Mostrando {(currentPage - 1) * 12 + 1} a {Math.min(currentPage * 12, pagination.totalProducts)} de{" "}
                   {pagination.totalProducts} productos
                 </div>
                 <div className="flex gap-2">
