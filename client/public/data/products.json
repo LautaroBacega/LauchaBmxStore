@@ -574,13 +574,19 @@
       "category": "Mazas Delanteras",
       "brand": "Federal, Glint",
       "stock": 1,
-      "images": [],
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410991816_img_72_ri6xjbf_IMG_7231.jpg?alt=media&token=f8195ae0-c746-445b-a6fc-d3145c1d3b40",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410991867_img_73_v7k4tu3_IMG_7232.jpg?alt=media&token=e6afe755-cf95-4f91-aa2e-f22de8362749",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410994400_img_74_32dbxuy_IMG_7233.jpg?alt=media&token=3ef069fe-567a-4867-8ac0-4c7658773121",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410994410_img_75_95n1cn4_IMG_7234.jpg?alt=media&token=216e4d8d-a4f0-44d4-beb1-5d389038507f",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410996705_img_76_sw15riz_IMG_7235.jpg?alt=media&token=d27f8efb-bfcc-4269-acb1-d6b651f6c153"
+      ],
       "specifications": {},
       "featured": false,
       "active": true,
       "tags": [],
       "createdAt": "2025-08-28T15:05:13.452Z",
-      "updatedAt": "2025-08-28T15:05:57.950Z"
+      "updatedAt": "2025-08-28T19:56:39.567Z"
     },
     {
       "id": "1756393669814",
@@ -590,13 +596,18 @@
       "category": "Mazas Traseras",
       "brand": "Salt, Federal",
       "stock": 1,
-      "images": [],
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410970733_img_68_fcs79hl_IMG_7237.jpg?alt=media&token=0dbf0b86-722b-4891-80c2-80469ce4d14f",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410970701_img_69_lwk249g_IMG_7238.jpg?alt=media&token=aa10eb20-c45b-4c14-ae96-b355955915df",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410973934_img_70_15dm2z8_IMG_7239.jpg?alt=media&token=d6859913-f636-4197-b3dc-2dfab6578470",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410973969_img_71_0fcqr8h_IMG_7240.jpg?alt=media&token=0bc2519a-952f-4930-b19f-53bf647ec4fa"
+      ],
       "specifications": {},
       "featured": false,
       "active": true,
       "tags": [],
       "createdAt": "2025-08-28T15:07:49.814Z",
-      "updatedAt": "2025-08-28T15:09:28.275Z"
+      "updatedAt": "2025-08-28T19:56:19.952Z"
     },
     {
       "id": "1756393742074",
