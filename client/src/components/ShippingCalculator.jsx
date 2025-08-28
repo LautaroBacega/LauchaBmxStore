@@ -179,7 +179,7 @@ export default function ShippingCalculator({ product }) {
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
           <p className="text-blue-700 text-sm">
-            <strong>💡 Tip:</strong> Los envíos se realizan a través de Andreani. El cálculo es estimativo y puede
+            Los envíos se realizan a través de Andreani. El cálculo es estimativo y puede
             variar según el peso y dimensiones exactas del producto.
           </p>
         </div>

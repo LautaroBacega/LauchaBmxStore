@@ -16,18 +16,25 @@ export default function ProductCard({ product, viewMode = "grid" }) {
 
   const getCategoryName = (category) => {
     const categoryMap = {
-      frames: "Cuadros",
-      wheels: "Ruedas",
-      handlebars: "Manubrios",
-      pedals: "Pedales",
-      chains: "Cadenas",
-      brakes: "Frenos",
-      seats: "Asientos",
-      grips: "Puños",
-      pegs: "Pegs",
-      sprockets: "Platos",
-      tires: "Cubiertas",
-      accessories: "Accesorios",
+      "Bicicletas Completas": "Bicicletas Completas",
+      Aros: "Aros",
+      Asientos: "Asientos",
+      Cajas: "Cajas",
+      Cuadros: "Cuadros",
+      Cubiertas: "Cubiertas",
+      Frenos: "Frenos",
+      Horquillas: "Horquillas",
+      "Juegos de Dirección": "Juegos de Dirección",
+      "Mazas Delanteras": "Mazas Delanteras",
+      "Mazas Traseras": "Mazas Traseras",
+      Manubrios: "Manubrios",
+      Palancas: "Palancas",
+      Pedales: "Pedales",
+      Platos: "Platos",
+      Postes: "Postes",
+      Puños: "Puños",
+      Rayos: "Rayos",
+      Stems: "Stems",
     }
     return categoryMap[category] || category
   }

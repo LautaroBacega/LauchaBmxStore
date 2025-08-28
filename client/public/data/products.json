@@ -20,15 +20,10 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754869970149_img_49_tvz5a1o_IMG_2015.jpg?alt=media&token=c9442758-9119-49c5-b0d7-a8bbf50f0349"
       ],
       "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "20.6",
-        "color": "Negro",
-        "compatibility": ""
+        "Medida": "20.6"
       },
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-10T23:49:56.668Z",
       "updatedAt": "2025-08-11T14:00:00.425Z"
     },
@@ -37,7 +32,7 @@
       "name": "Stem Sunday Freeze",
       "description": "- Material: Aluminio 6061 T6\n- Altura: 34 mm.\n- Largo: 48 mm.\n- Tipo: Top Load.\n- Peso Aproximado: 294 Gramos.",
       "price": 40000,
-      "category": "handlebars",
+      "category": "Stems",
       "brand": "Sunday",
       "stock": 1,
       "images": [
@@ -46,25 +41,18 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939237_img_0_5e2uvfg_IMG_1990.jpg?alt=media&token=ca63386d-e20b-4fdc-b358-5eb72263349e",
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939237_img_1_7tv5xlg_IMG_1991.jpg?alt=media&token=4e9ad9b3-a771-4c85-b73e-74d1c7c6a67c"
       ],
-      "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "",
-        "color": "Pulido",
-        "compatibility": ""
-      },
+      "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:02:30.601Z",
-      "updatedAt": "2025-08-11T14:02:30.601Z"
+      "updatedAt": "2025-08-27T20:03:59.254Z"
     },
     {
       "id": "1754921125755",
       "name": "Horquilla Krow Big 341",
       "description": "- Material: Full cromo 4130, con tratamiento térmico.\n- Peso Aproximado: 1028 gramos.",
       "price": 155000,
-      "category": "frames",
+      "category": "Horquillas",
       "brand": "Krow",
       "stock": 1,
       "images": [
@@ -75,25 +63,18 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_7_gl43c9x_IMG_2004.jpg?alt=media&token=bd41ef43-501f-4a94-b8f0-76f8f18b55de",
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_4_re0s1r5_IMG_2005.jpg?alt=media&token=3f371226-0c9c-41cb-9200-8b3667eb3bea"
       ],
-      "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "25mm",
-        "color": "Negro",
-        "compatibility": ""
-      },
+      "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:05:25.755Z",
-      "updatedAt": "2025-08-11T14:05:25.755Z"
+      "updatedAt": "2025-08-27T20:10:59.577Z"
     },
     {
       "id": "1754921229002",
       "name": "Palancas genericas + pedales de regalo",
       "description": "Palancas genericas derecha, 1 fisura reparada, con Pedales genericos ",
       "price": 20000,
-      "category": "frames",
+      "category": "Palancas",
       "brand": "Generico",
       "stock": 1,
       "images": [
@@ -103,24 +84,19 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_11_0qaxzr4_IMG_1986.jpg?alt=media&token=6930363f-358e-48b9-beaf-fc96aa372633"
       ],
       "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "175mm",
-        "color": "Negro",
-        "compatibility": ""
+        "Medida": "175mm"
       },
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:07:09.002Z",
-      "updatedAt": "2025-08-11T14:07:09.002Z"
+      "updatedAt": "2025-08-27T20:04:27.713Z"
     },
     {
       "id": "1754921300462",
       "name": "Caja Mid",
       "description": "Caja Mid generica 19mm",
       "price": 15000,
-      "category": "chains",
+      "category": "Cajas",
       "brand": "Generica",
       "stock": 1,
       "images": [
@@ -129,24 +105,19 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921288676_img_14_8hlpu4v_IMG_1976.jpg?alt=media&token=1af71534-fd59-4e6d-9296-4f2072e7e063"
       ],
       "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "19mm",
-        "color": "",
-        "compatibility": ""
+        "Medida": "19mm"
       },
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:08:20.462Z",
-      "updatedAt": "2025-08-11T14:08:20.462Z"
+      "updatedAt": "2025-08-27T20:03:46.609Z"
     },
     {
       "id": "1754921417583",
       "name": "Rueda delantera",
       "description": "Rueda delantera:\n- Maza Rival KK a bulones\n- Aro Supra Dome doble pared\n- Cubierta Maxxis Rizer 2.30",
       "price": 105000,
-      "category": "wheels",
+      "category": "Mazas Delanteras",
       "brand": "Rival, Supra Dome, Maxxis",
       "stock": 1,
       "images": [
@@ -157,25 +128,18 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_17_es64yza_IMG_2029.jpg?alt=media&token=56e43ab5-f452-414b-91a5-13cac1265953",
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_19_skosmhe_IMG_2030.jpg?alt=media&token=c2903c65-36da-41b4-8e43-5db0c14792ef"
       ],
-      "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "Rodado 20",
-        "color": "",
-        "compatibility": ""
-      },
+      "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:10:17.583Z",
-      "updatedAt": "2025-08-11T14:10:17.583Z"
+      "updatedAt": "2025-08-27T20:02:40.231Z"
     },
     {
       "id": "1754921662655",
       "name": "Horquilla Krow Big 341",
       "description": "1 firsura reparada",
       "price": 90000,
-      "category": "handlebars",
+      "category": "Horquillas",
       "brand": "Krow",
       "stock": 1,
       "images": [
@@ -185,41 +149,27 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_23_3joyw8o_IMG_3409.jpg?alt=media&token=097d24bc-5871-4e79-90b4-6814e300e011",
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_25_jxamqn4_IMG_3410.jpg?alt=media&token=a058d749-2309-449b-8f72-c3505becf80d"
       ],
-      "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "25mm",
-        "color": "Negro",
-        "compatibility": ""
-      },
+      "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:14:22.655Z",
-      "updatedAt": "2025-08-11T14:14:22.655Z"
+      "updatedAt": "2025-08-27T20:12:51.836Z"
     },
     {
       "id": "1754921756491",
       "name": "Asiento Glint poste integrado",
       "description": ".",
       "price": 9000,
-      "category": "seats",
+      "category": "Asientos",
       "brand": "Glint",
       "stock": 1,
       "images": [
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921705003_img_31_1u3v24o_IMG_4385.jpg?alt=media&token=b7cfbb2a-0563-4055-9652-227b2f627df9",
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921705003_img_30_aetao3i_IMG_4386.jpg?alt=media&token=aa0c7ec0-19b4-45a2-8125-e70397ee65ff"
       ],
-      "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "",
-        "color": "",
-        "compatibility": ""
-      },
+      "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:15:56.491Z",
       "updatedAt": "2025-08-11T14:15:56.492Z"
     },
@@ -228,7 +178,7 @@
       "name": "Cuadro Total SandStorm",
       "description": "1 fisura reparada",
       "price": 300000,
-      "category": "frames",
+      "category": "Cuadros",
       "brand": "Total",
       "stock": 1,
       "images": [
@@ -242,15 +192,10 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921798267_img_33_ai2g8h4_IMG_5950.jpg?alt=media&token=1c44244e-0072-4269-a011-40dc9368fccd"
       ],
       "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "20.5",
-        "color": "",
-        "compatibility": ""
+        "Medida": "20.5"
       },
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:16:46.002Z",
       "updatedAt": "2025-08-11T14:16:46.003Z"
     },
@@ -273,16 +218,10 @@
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901682_img_45_4yuudy4_IMG_5941.jpg?alt=media&token=00b30cd0-f31d-4afb-a396-f205acbd46fd"
       ],
       "specifications": {
-        "material": "",
-        "weight": "",
-        "size": "Rodado 16'",
-        "color": "Amarillo",
-        "compatibility": "",
-        "Rodado": "Rodado 16"
+        "Rodado": "16"
       },
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-11T14:18:41.673Z",
       "updatedAt": "2025-08-26T01:58:38.455Z"
     },
@@ -291,7 +230,7 @@
       "name": "Cuadro Fiend Colin Varanyak 20.25",
       "description": "",
       "price": 375000,
-      "category": "frames",
+      "category": "Cuadros",
       "brand": "Fiend",
       "stock": 1,
       "images": [
@@ -316,7 +255,6 @@
       },
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-26T01:54:49.504Z",
       "updatedAt": "2025-08-26T01:54:49.504Z"
     },
@@ -325,7 +263,7 @@
       "name": "Stem Fiend Reynolds",
       "description": "",
       "price": 75000,
-      "category": "stems",
+      "category": "Stems",
       "brand": "Fiend",
       "stock": 1,
       "images": [
@@ -340,7 +278,6 @@
       "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-26T01:56:14.392Z",
       "updatedAt": "2025-08-26T01:56:14.392Z"
     },
@@ -349,7 +286,7 @@
       "name": "Manubrio Fit Brandon Begin",
       "description": "Manubrio Fit Brandon Begin 4 piezas con puños Eclat de regalo (pequeños detalles en el agarre)",
       "price": 55000,
-      "category": "handlebars",
+      "category": "Manubrios",
       "brand": "Fit",
       "stock": 1,
       "images": [
@@ -363,7 +300,6 @@
       "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-26T01:57:59.875Z",
       "updatedAt": "2025-08-26T01:57:59.875Z"
     },
@@ -389,7 +325,6 @@
       "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-26T02:00:05.629Z",
       "updatedAt": "2025-08-26T02:00:05.629Z"
     },
@@ -408,7 +343,6 @@
       "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-26T02:01:54.724Z",
       "updatedAt": "2025-08-26T02:01:54.724Z"
     },
@@ -417,7 +351,7 @@
       "name": "Pedales S&M",
       "description": "",
       "price": 40000,
-      "category": "pedals",
+      "category": "Pedales",
       "brand": "S&M",
       "stock": 1,
       "images": [
@@ -429,7 +363,6 @@
       "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-26T02:02:36.430Z",
       "updatedAt": "2025-08-26T02:02:36.431Z"
     },
@@ -438,7 +371,7 @@
       "name": "Plato Federal",
       "description": "",
       "price": 55000,
-      "category": "sprockets",
+      "category": "Platos",
       "brand": "Federal",
       "stock": 1,
       "images": [
@@ -449,7 +382,6 @@
       "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-26T02:05:01.916Z",
       "updatedAt": "2025-08-26T02:07:04.473Z"
     },
@@ -470,7 +402,6 @@
       "specifications": {},
       "featured": false,
       "active": true,
-      "tags": [],
       "createdAt": "2025-08-26T02:07:53.449Z",
       "updatedAt": "2025-08-26T02:09:28.238Z"
     },
@@ -496,6 +427,197 @@
       "tags": [],
       "createdAt": "2025-08-26T02:09:09.107Z",
       "updatedAt": "2025-08-26T02:09:39.558Z"
+    },
+    {
+      "id": "1756392127316",
+      "name": "Cuadro Fly Savanna 21' Courage Adams",
+      "description": "",
+      "price": 315000,
+      "category": "Cuadros",
+      "brand": "Fly",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392098508_img_0_6087a0w_IMG_7124.jpg?alt=media&token=4dd96aa6-28a3-4baa-8f11-709f06f5a74c",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392098527_img_1_koovb5x_IMG_7135.jpg?alt=media&token=8f8da7c0-89ad-4aa8-ac15-c7a77c97c57f",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392101864_img_2_3khry5g_IMG_7132.jpg?alt=media&token=bcfc51e4-71b5-4f9e-a417-aa18730fbecc",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392101874_img_3_f6w6zob_IMG_7133.jpg?alt=media&token=50f16a82-70d0-45f2-9860-571553e88e12",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392104564_img_4_gtkaz0a_IMG_7128.jpg?alt=media&token=a75c30aa-28de-419b-8fd8-351bf57c6a34",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392108366_img_5_pyfy4yp_IMG_7130.jpg?alt=media&token=c5d72a18-4b0a-473b-a33d-e7c3e9b8ae7b",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392108280_img_6_k7fzv9n_IMG_7127.jpg?alt=media&token=c4d27c46-1bd4-4f50-a255-8da9838fd278",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392111024_img_7_2m1mwc9_IMG_7131.jpg?alt=media&token=76c0866d-1b0b-4bab-9536-303813cc5a60",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392111037_img_8_yo881ze_IMG_7125.jpg?alt=media&token=0f114a40-7575-4c7a-abd6-3715bca33140",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392113763_img_9_rbxzae5_IMG_7134.jpg?alt=media&token=3593c2c1-ecfd-4d9f-971a-6398d68aaa66",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392112776_img_10_pa9hx3c_IMG_7126.jpg?alt=media&token=fc6dfd2c-0c7a-4f0b-962e-95c36cd02eed",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392112765_img_11_lzr42xq_IMG_7129.jpg?alt=media&token=a2ce4b0a-7af6-48f8-b1c6-78e1e5b4ff6f"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T14:42:07.316Z",
+      "updatedAt": "2025-08-28T14:42:07.316Z"
+    },
+    {
+      "id": "1756392303768",
+      "name": "Stem Salt Plus Front Load",
+      "description": "",
+      "price": 42000,
+      "category": "Stems",
+      "brand": "Salt Plus",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392276713_img_12_43o9g1y_IMG_7138.jpg?alt=media&token=9978eebd-255a-405e-b78e-5de7dccabea5",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392276782_img_13_xjepxl4_IMG_7142.jpg?alt=media&token=e9106160-a34c-484f-b2f2-db136736be4d",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392280165_img_14_1lxkh4t_IMG_7137.jpg?alt=media&token=bc32c666-e2fb-49eb-ab4b-4b8c86f47967",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392280216_img_15_18v4kci_IMG_7141.jpg?alt=media&token=f52058cc-1ce0-4f2d-88ee-7dd941e578c1",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392282522_img_16_r7rji2o_IMG_7140.jpg?alt=media&token=2beb1c41-7096-43e6-ada8-faf6222ae2fe"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T14:45:03.768Z",
+      "updatedAt": "2025-08-28T14:45:03.769Z"
+    },
+    {
+      "id": "1756392554521",
+      "name": "Horquilla Krow Big 341",
+      "description": "",
+      "price": 110000,
+      "category": "Horquillas",
+      "brand": "Krow",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392511054_img_41_w29q1vj_IMG_7157.jpg?alt=media&token=63cfbfde-b35c-423f-ad6f-82a6dd520573",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392511121_img_42_e3bs6sf_IMG_7158.jpg?alt=media&token=c99fdab5-f8af-4cf7-b7b6-f74c5ec108f1",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392513745_img_43_xelrytu_IMG_7160.jpg?alt=media&token=ae9a5da1-ed00-47ca-82ed-396628af5a0c",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392513735_img_44_905hkw9_IMG_7163.jpg?alt=media&token=d8a43bf8-b770-4230-aa99-0ec18ffae369",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392516045_img_45_6tci5kd_IMG_7161.jpg?alt=media&token=30a07a21-1280-449b-8c3d-c7b74d84d542",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392519498_img_46_2b455o6_IMG_7162.jpg?alt=media&token=1617cf66-595e-489a-9acb-d28e7eb49728",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392519560_img_47_tzm4lhv_IMG_7159.jpg?alt=media&token=110404f9-8138-4fc6-8ef6-8fa48613d9ab",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392521828_img_48_x3gu8l6_IMG_7164.jpg?alt=media&token=15e21e24-49f2-4e75-b320-112a9656f9e2"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T14:49:14.521Z",
+      "updatedAt": "2025-08-28T14:49:14.522Z"
+    },
+    {
+      "id": "1756392668927",
+      "name": "Palancas Fitbikeco Indent (caja incluida)",
+      "description": "",
+      "price": 235000,
+      "category": "Palancas",
+      "brand": "Fit",
+      "stock": 1,
+      "images": [],
+      "specifications": {
+        "Estrias": "48",
+        "Piezas": "3",
+        "Eje": "24mm"
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T14:51:08.927Z",
+      "updatedAt": "2025-08-28T14:51:08.928Z"
+    },
+    {
+      "id": "1756393399661",
+      "name": "Plato Pirate 25 dientes",
+      "description": "",
+      "price": 38000,
+      "category": "Platos",
+      "brand": "Pirate",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393391079_img_52_4b7996s_IMG_7144.jpg?alt=media&token=7e79a0a2-5b0d-45ea-973d-13957ae7dc00",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393391046_img_53_6qfh1uj_IMG_7145.jpg?alt=media&token=a347a75d-e210-44a3-bcba-a3f4511219de",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393394162_img_54_sdlo3jx_IMG_7146.jpg?alt=media&token=22f8c54c-f9b7-44ea-9138-4927dc3ef301"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T15:03:19.661Z",
+      "updatedAt": "2025-08-28T15:03:19.661Z"
+    },
+    {
+      "id": "1756393458484",
+      "name": "Cubiertas Stranger Ballast 2.40",
+      "description": "💲 65.000 el par o 💲 35.000 c/u ",
+      "price": 35000,
+      "category": "Cubiertas",
+      "brand": "Stranger",
+      "stock": 2,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393447066_img_55_u5c2s0t_IMG_7151.jpg?alt=media&token=2e0f92f6-0e9a-45dc-a5cd-900486506c2d",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393447034_img_56_ge9xw9g_IMG_7152.jpg?alt=media&token=2027c6c3-8d5b-407d-bda9-7f0a3e6233d1",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393449932_img_57_w7zzuzq_IMG_7153.jpg?alt=media&token=1286740c-1fda-4da6-904d-5a1a92a884ed",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393449943_img_58_podfta2_IMG_7154.jpg?alt=media&token=de1d7a96-6fd2-4313-81e1-61993fe94878",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393452362_img_59_j38qxfg_IMG_7155.jpg?alt=media&token=6076ab44-b312-4e3d-bf54-026b48a08028"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T15:04:18.484Z",
+      "updatedAt": "2025-08-28T15:04:18.484Z"
+    },
+    {
+      "id": "1756393513452",
+      "name": "Rueda Delantera: Aro Federal, Maza Glint",
+      "description": "- Maza Glint a bulones\n- Aro Federal Stance XL",
+      "price": 115000,
+      "category": "Mazas Delanteras",
+      "brand": "Federal, Glint",
+      "stock": 1,
+      "images": [],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T15:05:13.452Z",
+      "updatedAt": "2025-08-28T15:05:57.950Z"
+    },
+    {
+      "id": "1756393669814",
+      "name": "Rueda Trasera: Maza Salt Ex, Aro Federal",
+      "description": "- Maza Salt Ex derecha (cassette) $130.000\n- Aro Federal Stance XL $75.000 ",
+      "price": 205000,
+      "category": "Mazas Traseras",
+      "brand": "Salt, Federal",
+      "stock": 1,
+      "images": [],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T15:07:49.814Z",
+      "updatedAt": "2025-08-28T15:09:28.275Z"
+    },
+    {
+      "id": "1756393742074",
+      "name": "Asiento Federal con poste largo",
+      "description": "",
+      "price": 65000,
+      "category": "Asientos",
+      "brand": "Federal",
+      "stock": 0,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393732258_img_60_o2d2pc2_IMG_7170.jpg?alt=media&token=9ed51b96-059f-4646-a0f2-d8c4ec0ad76e",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393732270_img_61_bnq4njp_IMG_7168.jpg?alt=media&token=bfde658c-2e13-43a3-a1a9-46d08f7a92ec",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393735028_img_62_hwxrfg7_IMG_7171.jpg?alt=media&token=52dcebbb-ce08-4114-976c-b9f9cb1d0bf0",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393735036_img_63_pxe8ori_IMG_7169.jpg?alt=media&token=6cd8c17f-b916-4d5e-ba2c-b2180f03ca61"
+      ],
+      "specifications": {},
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-08-28T15:09:02.074Z",
+      "updatedAt": "2025-08-28T15:09:56.518Z"
     }
   ],
   "categories": []

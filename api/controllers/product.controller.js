@@ -180,18 +180,25 @@ export const getCategories = async (req, res, next) => {
     // Verificar si tenemos categorías predefinidas
     if (!predefinedCategories || predefinedCategories.length === 0) {
       const defaultCategories = [
-        { id: "frames", name: "Cuadros" },
-        { id: "wheels", name: "Ruedas" },
-        { id: "handlebars", name: "Manubrios" },
-        { id: "pedals", name: "Pedales" },
-        { id: "chains", name: "Cadenas" },
-        { id: "brakes", name: "Frenos" },
-        { id: "seats", name: "Asientos" },
-        { id: "grips", name: "Puños" },
-        { id: "pegs", name: "Pegs" },
-        { id: "sprockets", name: "Platos" },
-        { id: "tires", name: "Cubiertas" },
-        { id: "accessories", name: "Accesorios" },
+        { id: "Bicicletas Completas", name: "Bicicletas Completas"},
+        { id: "Aros", name: "Aros" },
+        { id: "Asientos", name: "Asientos" },
+        { id: "Cajas", name: "Cajas" },
+        { id: "Cuadros", name: "Cuadros" },
+        { id: "Cubiertas", name: "Cubiertas" },
+        { id: "Frenos", name: "Frenos" },
+        { id: "Horquillas", name: "Horquillas" },
+        { id: "Juegos de Dirección", name: "Juegos de Dirección" },
+        { id: "Mazas Delanteras", name: "Mazas Delanteras" },
+        { id: "Mazas Traseras", name: "Mazas Traseras" },
+        { id: "Manubrios", name: "Manubrios" },
+        { id: "Palancas", name: "Palancas" },
+        { id: "Pedales", name: "Pedales" },
+        { id: "Platos", name: "Platos" },
+        { id: "Postes", name: "Postes" },
+        { id: "Puños", name: "Puños" },
+        { id: "Rayos", name: "Rayos" },
+        { id: "Stems", name: "Stems" }
       ]
 
       const categoryCounts = {}

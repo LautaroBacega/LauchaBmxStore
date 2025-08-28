@@ -93,37 +93,37 @@ export default function ProductDetail() {
 
   const getCategoryName = (category) => {
     const categoryMap = {
-      "complete-bikes": "Bicicletas Completas",
-      rims: "Aros",
-      seats: "Asientos",
-      "bottom-brackets": "Cajas",
-      tires: "Cubiertas",
-      frames: "Cuadros",
-      brakes: "Frenos",
-      forks: "Horquillas",
-      headsets: "Juegos de Dirección",
-      "front-hubs": "Mazas Delanteras",
-      "rear-hubs": "Mazas Traseras",
-      handlebars: "Manubrios",
-      levers: "Palancas",
-      pedals: "Pedales",
-      posts: "Postes",
-      grips: "Puños",
-      spokes: "Rayos",
-      stems: "Stems",
+      "Bicicletas Completas": "Bicicletas Completas",
+      Aros: "Aros",
+      Asientos: "Asientos",
+      Cajas: "Cajas",
+      Cubiertas: "Cubiertas",
+      Cuadros: "Cuadros",
+      Frenos: "Frenos",
+      Horquillas: "Horquillas",
+      "Juegos de Dirección": "Juegos de Dirección",
+      "Mazas Delanteras": "Mazas Delanteras",
+      "Mazas Traseras": "Mazas Traseras",
+      Manubrios: "Manubrios",
+      Palancas: "Palancas",
+      Pedales: "Pedales",
+      Postes: "Postes",
+      Puños: "Puños",
+      Rayos: "Rayos",
+      Stems: "Stems",
     }
     return categoryMap[category] || category
   }
 
   const handleWhatsAppContact = () => {
-    const message = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}. ¿Podrías darme más información?`
+    const message = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}.`
     const whatsappUrl = `https://wa.me/5492915092263?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
 
   const handleEmailContact = () => {
     const subject = `Consulta sobre: ${product.name}`
-    const body = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}. ¿Podrían darme más información sobre disponibilidad y formas de pago?`
+    const body = `Hola! Me interesa el producto: ${product.name} - ${formatPrice(product.price)}.`
     const emailUrl = `mailto:info@lauchaBMX.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     window.open(emailUrl, "_blank")
   }
@@ -240,11 +240,7 @@ Por favor, cotizá el envío para proceder con la compra.`
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Link to="/" className="hover:text-yellow-600" onClick={handleBreadcrumbClick}>
                 Inicio
-              </Link>
-              <span>/</span>
-              <Link to="/" className="hover:text-yellow-600" onClick={handleBreadcrumbClick}>
-                {isProduction ? "Catálogo" : "Tienda"}
-              </Link>
+              </Link>            
               <span>/</span>
               <button onClick={handleCategoryBreadcrumbClick} className="hover:text-yellow-600 text-left">
                 {getCategoryName(product.category)}
