@@ -247,14 +247,14 @@ export default function Home() {
             ? `Resultados de búsqueda para "${filters.search}" en Laucha BMX Store`
             : filters.category
               ? `${getCategoryName(filters.category)} - Repuestos y accesorios BMX de calidad`
-              : "Tienda especializada en repuestos y accesorios BMX en Argentina. Rims, cuadros, asientos, manubrios y más. Envíos a todo el país con Andreani."
+              : "Tienda especializada en repuestos y accesorios BMX en Argentina. Bicicletas, cuadros, asientos, manubrios y más. Envíos a todo el país con Andreani."
         }
         keywords={
           filters.search
             ? `${filters.search}, BMX, repuestos BMX, Argentina`
             : filters.category
               ? `${getCategoryName(filters.category)}, BMX, repuestos BMX, Argentina`
-              : "BMX, repuestos BMX, accesorios BMX, rims BMX, cuadros BMX, asientos BMX, manubrios BMX, Argentina, tienda BMX"
+              : "BMX, repuestos BMX, accesorios BMX, cuadros BMX, asientos BMX, manubrios BMX, Argentina, tienda BMX"
         }
         url="https://lauchaBMXstore.com/"
       />
@@ -508,7 +508,7 @@ export default function Home() {
       {/* Features Section */}
       <div className="py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
             <div className="text-center p-6">
               <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Truck className="text-red-600" size={32} />
@@ -518,13 +518,7 @@ export default function Home() {
                 Envíos a todo el país al mejor precio a través de Andreani. Consultá costos y tiempos.
               </p>
             </div>
-            <div className="text-center p-6">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                {/* Placeholder for another feature icon */}
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Otra Característica</h3>
-              <p className="text-gray-600">Descripción de otra característica importante de Laucha BMX Store.</p>
-            </div>
+            
           </div>
         </div>
       </div>
