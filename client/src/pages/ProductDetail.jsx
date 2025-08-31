@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, ShoppingCart, Truck, MessageCircle, X, Copy, CheckCircle } from "lucide-react"
+import { ArrowLeft, ShoppingCart, Truck, MessageCircle, X, Copy, CheckCircle, ZoomIn } from "lucide-react"
 import { productService } from "../services/productService"
 import { isProduction } from "../utils/envUtils"
 import { scrollToTop } from "../hooks/useScrollToTop"
@@ -19,6 +19,8 @@ export default function ProductDetail() {
   const [relatedProducts, setRelatedProducts] = useState([])
   const [showPurchaseModal, setShowPurchaseModal] = useState(false)
   const [copiedField, setCopiedField] = useState(null)
+  const [showZoomModal, setShowZoomModal] = useState(false)
+  const [zoomImageIndex, setZoomImageIndex] = useState(0)
 
   useEffect(() => {
     fetchProduct()
@@ -30,17 +32,14 @@ export default function ProductDetail() {
     }
   }, [product])
 
-  // Bloquear scroll cuando el modal está abierto
   useEffect(() => {
-    if (showPurchaseModal) {
-      // Guardar la posición actual del scroll
+    if (showPurchaseModal || showZoomModal) {
       const scrollY = window.scrollY
       document.body.style.position = "fixed"
       document.body.style.top = `-${scrollY}px`
       document.body.style.width = "100%"
       document.body.style.overflow = "hidden"
     } else {
-      // Restaurar el scroll
       const scrollY = document.body.style.top
       document.body.style.position = ""
       document.body.style.top = ""
@@ -51,19 +50,17 @@ export default function ProductDetail() {
       }
     }
 
-    // Cleanup al desmontar el componente
     return () => {
       document.body.style.position = ""
       document.body.style.top = ""
       document.body.style.width = ""
       document.body.style.overflow = ""
     }
-  }, [showPurchaseModal])
+  }, [showPurchaseModal, showZoomModal])
 
   const fetchProduct = async () => {
     try {
       setLoading(true)
-      // productService ahora maneja si es producción o desarrollo
       const data = await productService.getProduct(id)
       setProduct(data)
     } catch (error) {
@@ -75,9 +72,7 @@ export default function ProductDetail() {
 
   const fetchRelatedProducts = async () => {
     try {
-      // productService ahora maneja si es producción o desarrollo
       const data = await productService.getProductsByCategory(product.category, 4)
-      // Filter out current product
       setRelatedProducts(data.filter((p) => p.id !== product.id))
     } catch (error) {
       console.error("Error fetching related products:", error)
@@ -137,7 +132,6 @@ export default function ProductDetail() {
   }
 
   const handleCategoryBreadcrumbClick = () => {
-    // Navegar a la página principal con la categoría filtrada
     window.location.href = `/?category=${product.category}#main-content`
   }
 
@@ -152,7 +146,6 @@ export default function ProductDetail() {
       setTimeout(() => setCopiedField(null), 2000)
     } catch (error) {
       console.error("Error copying to clipboard:", error)
-      // Fallback para navegadores que no soportan clipboard API
       const textArea = document.createElement("textarea")
       textArea.value = text
       document.body.appendChild(textArea)
@@ -186,6 +179,23 @@ Por favor, cotizá el envío para proceder con la compra.`
     setShowPurchaseModal(false)
   }
 
+  const handleImageZoom = (imageIndex) => {
+    setZoomImageIndex(imageIndex)
+    setShowZoomModal(true)
+  }
+
+  const handleZoomClose = () => {
+    setShowZoomModal(false)
+  }
+
+  const handleZoomPrevious = () => {
+    setZoomImageIndex((prev) => (prev > 0 ? prev - 1 : product.images.length - 1))
+  }
+
+  const handleZoomNext = () => {
+    setZoomImageIndex((prev) => (prev < product.images.length - 1 ? prev + 1 : 0))
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -217,7 +227,7 @@ Por favor, cotizá el envío para proceder con la compra.`
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 ${showPurchaseModal ? "overflow-hidden" : ""}`}>
+    <div className={`min-h-screen bg-gray-50 ${showPurchaseModal || showZoomModal ? "overflow-hidden" : ""}`}>
       {product && (
         <>
           <SEOHead
@@ -232,15 +242,13 @@ Por favor, cotizá el envío para proceder con la compra.`
         </>
       )}
 
-      {/* Contenido principal con efecto blur cuando el modal está abierto */}
-      <div className={`transition-all duration-300 ${showPurchaseModal ? "blur-sm" : ""}`}>
-        {/* Breadcrumb */}
+      <div className={`transition-all duration-300 ${showPurchaseModal || showZoomModal ? "blur-sm" : ""}`}>
         <div className="bg-white border-b pt-20">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Link to="/" className="hover:text-yellow-600" onClick={handleBreadcrumbClick}>
                 Inicio
-              </Link>            
+              </Link>
               <span>/</span>
               <button onClick={handleCategoryBreadcrumbClick} className="hover:text-yellow-600 text-left">
                 {getCategoryName(product.category)}
@@ -252,7 +260,6 @@ Por favor, cotizá el envío para proceder con la compra.`
         </div>
 
         <div className="max-w-7xl mx-auto px-4 py-4">
-          {/* Back Button */}
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors duration-200"
@@ -263,25 +270,36 @@ Por favor, cotizá el envío para proceder con la compra.`
           </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Product Images */}
             <div className="space-y-4">
               <div className="flex justify-center">
-                <img
-                  src={
-                    product.images[selectedImage] ||
-                    "/no-image-placeholder.png" ||
-                    "/placeholder.svg" ||
-                    "/placeholder.svg"
-                  }
-                  alt={product.name}
-                  className="max-w-full h-auto max-h-96 rounded-xl shadow-lg"
-                  onError={(e) => {
-                    e.target.src = "/no-image-placeholder.png"
-                  }}
-                />
+                <div className="relative cursor-pointer" onClick={() => handleImageZoom(selectedImage)}>
+                  <img
+                    src={
+                      product.images[selectedImage] ||
+                      "/no-image-placeholder.png" ||
+                      "/placeholder.svg" ||
+                      "/placeholder.svg" ||
+                      "/placeholder.svg" ||
+                      "/placeholder.svg" ||
+                      "/placeholder.svg" ||
+                      "/placeholder.svg" ||
+                      "/placeholder.svg"
+                    }
+                    alt={product.name}
+                    className="max-w-full h-auto max-h-96 rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"
+                    onError={(e) => {
+                      e.target.src = "/no-image-placeholder.png"
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 rounded-xl flex items-center justify-center opacity-0 hover:opacity-100 pointer-events-none">
+                    <ZoomIn className="text-white" size={32} />
+                  </div>
+                  <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white px-2 py-1 rounded text-xs pointer-events-none">
+                    Toca para ampliar
+                  </div>
+                </div>
               </div>
 
-              {/* Image Thumbnails */}
               {product.images.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto justify-center">
                   {product.images.map((image, index) => (
@@ -306,7 +324,6 @@ Por favor, cotizá el envío para proceder con la compra.`
               )}
             </div>
 
-            {/* Product Info */}
             <div className="space-y-6">
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -320,7 +337,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                 <p className="text-gray-600 text-lg leading-relaxed">{product.description}</p>
               </div>
 
-              {/* Price and Actions */}
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
@@ -340,7 +356,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                   )}
                 </div>
 
-                {/* Production Mode - Contact Buttons */}
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 gap-3">
                     <button
@@ -362,10 +377,8 @@ Por favor, cotizá el envío para proceder con la compra.`
                 </div>
               </div>
 
-              {/* Shipping Calculator */}
               <ShippingCalculator product={product} />
 
-              {/* Specifications */}
               {product.specifications && Object.keys(product.specifications).length > 0 && (
                 <div className="bg-white rounded-xl shadow-lg p-6">
                   <h3 className="text-lg font-bold text-gray-800 mb-4">Especificaciones</h3>
@@ -395,7 +408,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                 </div>
               )}
 
-              {/* Shipping/Contact Info */}
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-lg font-bold text-gray-800 mb-4">
                   {isProduction ? "Información de contacto" : "Información de envío"}
@@ -410,7 +422,6 @@ Por favor, cotizá el envío para proceder con la compra.`
             </div>
           </div>
 
-          {/* Related Products */}
           {relatedProducts.length > 0 && (
             <div className="mt-16">
               <h2 className="text-2xl font-bold text-gray-800 mb-8">Productos relacionados</h2>
@@ -423,6 +434,11 @@ Por favor, cotizá el envío para proceder con la compra.`
                           src={
                             relatedProduct.images[0] ||
                             "/no-image-placeholder.png" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
+                            "/placeholder.svg" ||
                             "/placeholder.svg" ||
                             "/placeholder.svg"
                           }
@@ -448,7 +464,52 @@ Por favor, cotizá el envío para proceder con la compra.`
         </div>
       </div>
 
-      {/* Purchase Modal */}
+      {showZoomModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
+          <div className="relative max-w-full max-h-full flex items-center justify-center">
+            <button
+              onClick={handleZoomClose}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-2"
+            >
+              <X size={24} />
+            </button>
+
+            {product.images.length > 1 && (
+              <>
+                <button
+                  onClick={handleZoomPrevious}
+                  className="absolute left-4 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-2"
+                >
+                  <ArrowLeft size={24} />
+                </button>
+                <button
+                  onClick={handleZoomNext}
+                  className="absolute right-4 text-white hover:text-gray-300 transition-colors z-10 bg-black bg-opacity-50 rounded-full p-2"
+                >
+                  <ArrowLeft size={24} className="rotate-180" />
+                </button>
+              </>
+            )}
+
+            <img
+              src={product.images[zoomImageIndex] || "/no-image-placeholder.png"}
+              alt={`${product.name} ampliado`}
+              className="max-w-full max-h-full object-contain cursor-zoom-out"
+              onClick={handleZoomClose}
+              onError={(e) => {
+                e.target.src = "/no-image-placeholder.png"
+              }}
+            />
+
+            {product.images.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
+                {zoomImageIndex + 1} / {product.images.length}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {showPurchaseModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100 animate-modal-enter shadow-2xl">
@@ -467,7 +528,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-gray-800 mb-3">Transferencia Bancaria</h3>
 
-                  {/* Nombre */}
                   <div className="flex items-center justify-between py-2 border-b border-gray-200">
                     <span className="text-gray-600">Nombre:</span>
                     <div className="flex items-center gap-2">
@@ -485,7 +545,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                     </div>
                   </div>
 
-                  {/* CVU */}
                   <div className="flex items-center justify-between py-2 border-b border-gray-200">
                     <span className="text-gray-600">CVU:</span>
                     <div className="flex items-center gap-2">
@@ -503,7 +562,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                     </div>
                   </div>
 
-                  {/* Alias */}
                   <div className="flex items-center justify-between py-2 border-b border-gray-200">
                     <span className="text-gray-600">Alias:</span>
                     <div className="flex items-center gap-2">
@@ -521,7 +579,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                     </div>
                   </div>
 
-                  {/* CUIT/CUIL */}
                   <div className="flex items-center justify-between py-2 border-b border-gray-200">
                     <span className="text-gray-600">CUIT/CUIL:</span>
                     <div className="flex items-center gap-2">
@@ -539,7 +596,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                     </div>
                   </div>
 
-                  {/* Mercado Pago */}
                   <div className="flex items-center justify-between py-2">
                     <span className="text-gray-600">Plataforma:</span>
                     <div className="flex items-center gap-2">
@@ -558,7 +614,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                   </div>
                 </div>
 
-                {/* Instrucciones */}
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                   <h4 className="font-semibold text-yellow-800 mb-2">Instrucciones:</h4>
                   <p className="text-yellow-700 text-sm leading-relaxed">
@@ -582,7 +637,6 @@ Por favor, cotizá el envío para proceder con la compra.`
                 </div>
               </div>
 
-              {/* Botones de acción */}
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handlePurchaseWhatsApp}
