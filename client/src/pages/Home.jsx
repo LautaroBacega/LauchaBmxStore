@@ -44,8 +44,8 @@ export default function Home() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-      if (window.innerWidth < 768) {
+      setIsMobile(window.innerWidth < 1024)
+      if (window.innerWidth < 1024) {
         setViewMode("grid")
       }
     }
@@ -216,7 +216,7 @@ export default function Home() {
   }
 
   const scrollToMainContent = () => {
-    const mainContentElement = document.querySelector(".max-w-2xl.mx-auto.mb-8.relative")
+    const mainContentElement = document.querySelector(".max-w-7xl.mx-auto.px-4.py-8")
     if (mainContentElement) {
       mainContentElement.scrollIntoView({ behavior: "smooth", block: "start" })
     }
@@ -260,29 +260,31 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-10">
+      <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white pt-12 pb-1">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center">
-            <img src="/LauchaBmxStore-logosinfondo.png" alt="Laucha BMX Store" className="h-40 mx-auto" />
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            <img src="/LauchaBmxStore-logosinfondo.png" alt="Laucha BMX Store" className="h-16 md:h-40 mx-auto" />
+            <h1 className="text-2xl md:text-5xl lg:text-7xl font-bold mb-2 md:mb-6">
               <span className="text-yellow-500">LAUCHA</span> BMX STORE
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">Partes y accesorios para tu BMX.</p>
+            <p className="text-base md:text-xl lg:text-2xl text-gray-300 mb-4 md:mb-8 max-w-3xl mx-auto">
+              Partes y accesorios para tu BMX.
+            </p>
 
             {/* Search Bar integrada en el hero */}
-            <div className="max-w-2xl mx-auto mb-8 relative">
+            <div className="max-w-md md:max-w-2xl mx-auto mb-6 md:mb-8 relative">
               <div className="relative">
                 <input
                   type="text"
                   placeholder="Buscar productos..."
-                  className="w-full p-4 pl-12 rounded-lg text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full p-3 md:p-4 pl-10 md:pl-12 rounded-lg text-gray-800 text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   value={filters.search}
                   onChange={(e) => handleFilterChange({ search: e.target.value })}
                   onFocus={() => filters.search && setShowSuggestions(true)}
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 />
                 <div className="text-gray-400 absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <Search />
+                  <Search size={isMobile ? 18 : 24} />
                 </div>
               </div>
 
@@ -339,15 +341,42 @@ export default function Home() {
       {/* Main Content with Sidebar */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8" data-main-content>
-          {/* Sidebar with Filters */}
-          <div className="lg:w-1/4">
-            <CategoryFilter selectedCategory={filters.category} onCategoryChange={handleCategoryChange} />
+          {/* Sidebar */}
+          <div className="w-1/4 hidden lg:block">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Categorías</h3>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleCategoryChange("")}
+                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors duration-200 flex justify-between items-center ${
+                    !filters.category ? "bg-yellow-100 text-yellow-800 font-medium" : "text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  <span>Todas las categorías</span>
+                  <span className="text-sm text-gray-500">{pagination.totalProducts}</span>
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category.name}
+                    onClick={() => handleCategoryChange(category.name)}
+                    className={`w-full text-left px-3 py-2 rounded-lg transition-colors duration-200 flex justify-between items-center ${
+                      filters.category === category.name
+                        ? "bg-yellow-100 text-yellow-800 font-medium"
+                        : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <span>{category.name}</span>
+                    <span className="text-sm text-gray-500">{category.count}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Main Products Area */}
-          <div className="lg:w-3/4">
+          {/* Main Content */}
+          <div className="w-full lg:w-3/4">
             {/* Products Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">
                   {hasActiveFilters ? "Productos Filtrados" : "Catálogo"}
@@ -360,38 +389,46 @@ export default function Home() {
               </div>
 
               {/* Controls */}
-              <div className="flex items-center gap-4">
-                {/* Sort Dropdown */}
-                <select
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
-                  value={`${filters.sortBy}-${filters.sortOrder}`}
-                  onChange={(e) => {
-                    const [sortBy, sortOrder] = e.target.value.split("-")
-                    handleFilterChange({ sortBy, sortOrder })
-                  }}
-                >
-                  <option value="createdAt-desc">Más recientes</option>
-                  <option value="createdAt-asc">Más antiguos</option>
-                  <option value="price-asc">Precio: menor a mayor</option>
-                  <option value="price-desc">Precio: mayor a menor</option>
-                  <option value="name-asc">Nombre: A-Z</option>
-                  <option value="name-desc">Nombre: Z-A</option>
-                </select>
+              <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 w-full lg:w-auto">
+                <div className="w-full lg:w-auto lg:hidden order-1">
+                  <CategoryFilter selectedCategory={filters.category} onCategoryChange={handleCategoryChange} />
+                </div>
 
-                {/* View Mode Toggle - Solo en desktop */}
-                <div className="hidden md:flex border border-gray-300 rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => setViewMode("grid")}
-                    className={`p-2 ${viewMode === "grid" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                  >
-                    <Grid size={20} />
-                  </button>
-                  <button
-                    onClick={() => setViewMode("list")}
-                    className={`p-2 ${viewMode === "list" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-                  >
-                    <List size={20} />
-                  </button>
+                <div className="flex items-center gap-4 w-full sm:w-auto order-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-700 font-medium text-sm sm:text-base">Ordenar por:</span>
+                    <select
+                      className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white text-sm sm:text-base"
+                      value={`${filters.sortBy}-${filters.sortOrder}`}
+                      onChange={(e) => {
+                        const [sortBy, sortOrder] = e.target.value.split("-")
+                        handleFilterChange({ sortBy, sortOrder })
+                      }}
+                    >
+                      <option value="createdAt-desc">Más recientes</option>
+                      <option value="createdAt-asc">Más antiguos</option>
+                      <option value="price-asc">Precio: menor a mayor</option>
+                      <option value="price-desc">Precio: mayor a menor</option>
+                      <option value="name-asc">Nombre: A-Z</option>
+                      <option value="name-desc">Nombre: Z-A</option>
+                    </select>
+                  </div>
+
+                  {/* View Mode Toggle */}
+                  <div className="hidden md:flex border border-gray-300 rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setViewMode("grid")}
+                      className={`p-2 ${viewMode === "grid" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                    >
+                      <Grid size={20} />
+                    </button>
+                    <button
+                      onClick={() => setViewMode("list")}
+                      className={`p-2 ${viewMode === "list" ? "bg-yellow-500 text-black" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                    >
+                      <List size={20} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -429,7 +466,7 @@ export default function Home() {
                 <div
                   className={
                     effectiveViewMode === "grid"
-                      ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8"
+                      ? /* Cambiando xl:grid-cols-3 a lg:grid-cols-3 para consistencia */ "grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8"
                       : "space-y-4 mb-8"
                   }
                 >
@@ -471,15 +508,22 @@ export default function Home() {
       {/* Features Section */}
       <div className="py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1  gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="text-center p-6">
               <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Truck className="text-red-600" size={32} />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">Consultá Envíos</h3>
               <p className="text-gray-600">
-                Envíos a todo el país al mejor precio a traves de Andreani. Consultá costos y tiempos.
+                Envíos a todo el país al mejor precio a través de Andreani. Consultá costos y tiempos.
               </p>
+            </div>
+            <div className="text-center p-6">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                {/* Placeholder for another feature icon */}
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Otra Característica</h3>
+              <p className="text-gray-600">Descripción de otra característica importante de Laucha BMX Store.</p>
             </div>
           </div>
         </div>

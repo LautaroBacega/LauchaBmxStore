@@ -119,13 +119,13 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
       <div className="p-6">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center justify-between w-full text-left"
+          className="flex items-center justify-between w-full text-left lg:cursor-default"
         >
           <h3 className="text-lg font-bold text-gray-800">Categorías</h3>
           <div className="lg:hidden">{isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</div>
         </button>
 
-        <div className={`mt-4 space-y-2 ${isExpanded ? "block" : "hidden lg:block"}`}>
+        <div className={`mt-4 space-y-2 lg:block ${isExpanded ? "block" : "hidden"}`}>
           {/* Opción "Todas las categorías" */}
           <button
             onClick={() => handleCategoryClick("")}

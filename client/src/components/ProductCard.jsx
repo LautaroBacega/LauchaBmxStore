@@ -138,18 +138,18 @@ export default function ProductCard({ product, viewMode = "grid" }) {
         <img
           src={product.images && product.images.length > 0 ? product.images[0] : "/no-image-placeholder.png"}
           alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-48 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
           onError={(e) => {
             e.target.src = "/no-image-placeholder.png"
           }}
         />
         {product.featured && (
-          <div className="absolute top-3 left-3 bg-yellow-500 text-black px-2 py-1 rounded-full text-xs font-bold">
+          <div className="absolute top-2 left-2 bg-yellow-500 text-black px-1.5 py-0.5 md:px-2 md:py-1 rounded-full text-xs font-bold">
             DESTACADO
           </div>
         )}
         {product.stock === 0 && (
-          <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+          <div className="absolute top-2 right-2 bg-red-500 text-white px-1.5 py-0.5 md:px-2 md:py-1 rounded-full text-xs font-bold">
             SIN STOCK
           </div>
         )}
@@ -186,47 +186,49 @@ export default function ProductCard({ product, viewMode = "grid" }) {
       </div>
 
       {/* Product Info */}
-      <div className="p-4">
+      <div className="p-3 md:p-4">
         <div className="mb-2">
           <span className="text-xs text-gray-500 uppercase tracking-wide">{getCategoryName(product.category)}</span>
-          <span className="text-xs text-gray-400 ml-2">• {product.brand}</span>
+          <span className="text-xs text-gray-400 ml-1 md:ml-2">• {product.brand}</span>
         </div>
 
-        <h3 className="font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-yellow-600 transition-colors duration-200">
+        <h3 className="font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-yellow-600 transition-colors duration-200 text-sm md:text-base">
           {product.name}
         </h3>
 
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+        <p className="text-gray-600 text-sm mb-3 line-clamp-2 hidden md:block">{product.description}</p>
 
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="text-2xl font-bold text-gray-800">{formatPrice(product.price)}</span>
+            <span className="text-lg md:text-2xl font-bold text-gray-800">{formatPrice(product.price)}</span>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1 md:gap-2">
             <Link
               to={`/product/${product.id}`}
-              className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 hover:text-black transition-all duration-200 text-sm font-medium text-center"
+              className="bg-gray-800 text-white px-2 py-1.5 md:px-4 md:py-2 rounded-lg hover:bg-yellow-500 hover:text-black transition-all duration-200 text-xs md:text-sm font-medium text-center"
               onClick={handleProductClick}
             >
-              Ver Detalles
+              Ver
             </Link>
 
             {isProduction ? (
               <button
                 onClick={handleContactClick}
-                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-200 text-sm font-medium flex items-center justify-center gap-1"
+                className="bg-green-500 text-white px-2 py-1.5 md:px-4 md:py-2 rounded-lg hover:bg-green-600 transition-all duration-200 text-xs md:text-sm font-medium flex items-center justify-center gap-1"
               >
-                <MessageCircle size={14} />
-                Consultar
+                <MessageCircle size={12} className="md:hidden" />
+                <MessageCircle size={14} className="hidden md:inline" />
+                <span className="hidden md:inline">Consultar</span>
               </button>
             ) : (
               <button
-                className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all duration-200 text-sm font-medium flex items-center justify-center gap-1"
+                className="bg-yellow-500 text-black px-2 py-1.5 md:px-4 md:py-2 rounded-lg hover:bg-yellow-600 transition-all duration-200 text-xs md:text-sm font-medium flex items-center justify-center gap-1"
                 disabled={product.stock === 0}
               >
-                <ShoppingCart size={14} />
-                {product.stock === 0 ? "Sin stock" : "Agregar"}
+                <ShoppingCart size={12} className="md:hidden" />
+                <ShoppingCart size={14} className="hidden md:inline" />
+                <span className="hidden md:inline">{product.stock === 0 ? "Sin stock" : "Agregar"}</span>
               </button>
             )}
           </div>
