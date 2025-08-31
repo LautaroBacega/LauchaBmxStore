@@ -142,7 +142,12 @@ const AdminPanel = () => {
   const [dynamicSpecs, setDynamicSpecs] = useState([])
 
   const categories = [
-    { id: "Bicicletas Completas", name: "Bicicletas Completas", value: "Bicicletas Completa", label: "Bicicletas Completas" },
+    {
+      id: "Bicicletas Completas",
+      name: "Bicicletas Completas",
+      value: "Bicicletas Completa",
+      label: "Bicicletas Completas",
+    },
     { id: "Aros", name: "Aros", value: "Aros", label: "Aros" },
     { id: "Asientos", name: "Asientos", value: "Asientos", label: "Asientos" },
     { id: "Cajas", name: "Cajas", value: "Cajas", label: "Cajas" },
@@ -150,7 +155,12 @@ const AdminPanel = () => {
     { id: "Cuadros", name: "Cuadros", value: "Cuadros", label: "Cuadros" },
     { id: "Frenos", name: "Frenos", value: "brakes", label: "Frenos" },
     { id: "Horquillas", name: "Horquillas", value: "Horquillas", label: "Horquillas" },
-    { id: "Juegos de Dirección", name: "Juegos de Dirección", value: "Juegos de Dirección", label: "Juegos de Dirección" },
+    {
+      id: "Juegos de Dirección",
+      name: "Juegos de Dirección",
+      value: "Juegos de Dirección",
+      label: "Juegos de Dirección",
+    },
     { id: "Mazas Delanteras", name: "Mazas Delanteras", value: "Mazas Delanteras", label: "Mazas Delanteras" },
     { id: "Mazas Traseras", name: "Mazas Traseras", value: "Mazas Traseras", label: "Mazas Traseras" },
     { id: "Manubrios", name: "Manubrios", value: "Manubrios", label: "Manubrios" },
@@ -1271,14 +1281,34 @@ const AdminPanel = () => {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setCurrentPage(currentPage - 1)}
+                    onClick={() => {
+                      setCurrentPage(currentPage - 1)
+                      setTimeout(() => {
+                        const productsTableElement = document.querySelector(
+                          ".bg-white.rounded-xl.shadow-lg.p-6.mb-6",
+                        )
+                        if (productsTableElement) {
+                          productsTableElement.scrollIntoView({ behavior: "smooth", block: "start" })
+                        }
+                      }, 100)
+                    }}
                     disabled={!pagination.hasPrev}
                     className="px-3 py-1 bg-white border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     Anterior
                   </button>
                   <button
-                    onClick={() => setCurrentPage(currentPage + 1)}
+                    onClick={() => {
+                      setCurrentPage(currentPage + 1)
+                      setTimeout(() => {
+                        const productsTableElement = document.querySelector(
+                          ".bg-white.rounded-xl.shadow-lg.p-6.mb-6",
+                        )
+                        if (productsTableElement) {
+                          productsTableElement.scrollIntoView({ behavior: "smooth", block: "start" })
+                        }
+                      }, 100)
+                    }}
                     disabled={!pagination.hasNext}
                     className="px-3 py-1 bg-white border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >

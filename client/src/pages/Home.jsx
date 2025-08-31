@@ -32,6 +32,8 @@ export default function Home() {
     currentPage: 1,
     totalPages: 1,
     totalProducts: 0,
+    hasPrev: false,
+    hasNext: false,
   })
   const [categories, setCategories] = useState([])
   const [featuredProducts, setFeaturedProducts] = useState([])
@@ -127,6 +129,9 @@ export default function Home() {
       ...prevFilters,
       page: newPage,
     }))
+    setTimeout(() => {
+      scrollToMainContent()
+    }, 100)
   }
 
   const clearFilters = () => {
@@ -211,7 +216,7 @@ export default function Home() {
   }
 
   const scrollToMainContent = () => {
-    const mainContentElement = document.querySelector("[data-main-content]")
+    const mainContentElement = document.querySelector(".max-w-2xl.mx-auto.mb-8.relative")
     if (mainContentElement) {
       mainContentElement.scrollIntoView({ behavior: "smooth", block: "start" })
     }

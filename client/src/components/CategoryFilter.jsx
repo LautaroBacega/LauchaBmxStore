@@ -7,7 +7,7 @@ import { productService } from "../services/productService"
 export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   // Mapeo de categorías para mostrar nombres legibles - CORREGIDO para coincidir con el JSON
   const categoryNames = {
@@ -91,6 +91,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
 
   const handleCategoryClick = (category) => {
     onCategoryChange(category === selectedCategory ? "" : category)
+    setIsExpanded(false)
   }
 
   if (loading) {
