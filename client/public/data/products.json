@@ -551,7 +551,7 @@
       "price": 35000,
       "category": "Cubiertas",
       "brand": "Stranger",
-      "stock": 2,
+      "stock": 0,
       "images": [
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393447066_img_55_u5c2s0t_IMG_7151.jpg?alt=media&token=2e0f92f6-0e9a-45dc-a5cd-900486506c2d",
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393447034_img_56_ge9xw9g_IMG_7152.jpg?alt=media&token=2027c6c3-8d5b-407d-bda9-7f0a3e6233d1",
@@ -564,7 +564,7 @@
       "active": true,
       "tags": [],
       "createdAt": "2025-08-28T15:04:18.484Z",
-      "updatedAt": "2025-08-28T15:04:18.484Z"
+      "updatedAt": "2025-09-01T14:51:36.203Z"
     },
     {
       "id": "1756393513452",
@@ -591,7 +591,7 @@
     {
       "id": "1756393669814",
       "name": "Rueda Trasera: Maza Salt Ex, Aro Federal",
-      "description": "- Maza Salt Ex derecha (cassette) $130.000\n- Aro Federal Stance XL $75.000 ",
+      "description": "- Maza Salt Ex derecha (cassette)\n- Aro Federal Stance XL",
       "price": 205000,
       "category": "Mazas Traseras",
       "brand": "Salt, Federal",
@@ -607,7 +607,7 @@
       "active": true,
       "tags": [],
       "createdAt": "2025-08-28T15:07:49.814Z",
-      "updatedAt": "2025-08-28T19:56:19.952Z"
+      "updatedAt": "2025-09-01T14:50:00.065Z"
     },
     {
       "id": "1756393742074",
