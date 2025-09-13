@@ -92,27 +92,6 @@
       "updatedAt": "2025-08-27T20:04:27.713Z"
     },
     {
-      "id": "1754921300462",
-      "name": "Caja Mid",
-      "description": "Caja Mid generica 19mm",
-      "price": 15000,
-      "category": "Cajas",
-      "brand": "Generica",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921288675_img_16_somly5c_IMG_1974.jpg?alt=media&token=4b504144-a218-41c4-900f-5d9d3f6b5837",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921288676_img_15_c3d539z_IMG_1975.jpg?alt=media&token=0555657d-4780-422c-b47e-62669ef64b89",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921288676_img_14_8hlpu4v_IMG_1976.jpg?alt=media&token=1af71534-fd59-4e6d-9296-4f2072e7e063"
-      ],
-      "specifications": {
-        "Medida": "19mm"
-      },
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-11T14:08:20.462Z",
-      "updatedAt": "2025-08-27T20:03:46.609Z"
-    },
-    {
       "id": "1754921417583",
       "name": "Rueda delantera",
       "description": "Rueda delantera:\n- Maza Rival KK a bulones\n- Aro Supra Dome doble pared\n- Cubierta Maxxis Rizer 2.30",
@@ -133,45 +112,6 @@
       "active": true,
       "createdAt": "2025-08-11T14:10:17.583Z",
       "updatedAt": "2025-08-27T20:02:40.231Z"
-    },
-    {
-      "id": "1754921662655",
-      "name": "Horquilla Krow Big 341",
-      "description": "1 firsura reparada",
-      "price": 90000,
-      "category": "Horquillas",
-      "brand": "Krow",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_24_nypkur9_IMG_3405.jpg?alt=media&token=76287a9a-4dbc-4bf3-a98b-45013e2364e7",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_26_8ukfvnk_IMG_3406.jpg?alt=media&token=c4ca7ac4-ff57-4627-87ae-a3fd3e1dd8ef",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_27_hh9xzqj_IMG_3407.jpg?alt=media&token=d4ab88e6-0d01-4549-9263-2702d2bda7f7",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_23_3joyw8o_IMG_3409.jpg?alt=media&token=097d24bc-5871-4e79-90b4-6814e300e011",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921657839_img_25_jxamqn4_IMG_3410.jpg?alt=media&token=a058d749-2309-449b-8f72-c3505becf80d"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-11T14:14:22.655Z",
-      "updatedAt": "2025-08-27T20:12:51.836Z"
-    },
-    {
-      "id": "1754921756491",
-      "name": "Asiento Glint poste integrado",
-      "description": ".",
-      "price": 9000,
-      "category": "Asientos",
-      "brand": "Glint",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921705003_img_31_1u3v24o_IMG_4385.jpg?alt=media&token=b7cfbb2a-0563-4055-9652-227b2f627df9",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921705003_img_30_aetao3i_IMG_4386.jpg?alt=media&token=aa0c7ec0-19b4-45a2-8125-e70397ee65ff"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-11T14:15:56.491Z",
-      "updatedAt": "2025-08-11T14:15:56.492Z"
     },
     {
       "id": "1754921806002",
@@ -198,32 +138,6 @@
       "active": true,
       "createdAt": "2025-08-11T14:16:46.002Z",
       "updatedAt": "2025-08-11T14:16:46.003Z"
-    },
-    {
-      "id": "1754921921673",
-      "name": "Bicicleta Completa Rodado 16'",
-      "description": "- CUADRO ACERO 16\" SOLDADURA TIG \n- HORQUILLA ACERO A-HEAD \n- ASIENTO bmx \n- LLANTA  ALUMINIO de 36 agujeros\n- MAZAS DRIVER 9\n- MANUBRIO ACERO 8\" \n- STEM ALUMINIO \n- PEDAL PLASTICO \n- PLATO ACERO 25T \n- BIELA NEGRA \n- FRENO TRASERO U-BRAKE ALUMINIO \n- CUBIERTAS hartex 16' \n- PUÑOS IZHAVEL",
-      "price": 250000,
-      "category": "Bicicletas Completas",
-      "brand": "MoBikeco",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_47_jzosr6l_IMG_5934.jpg?alt=media&token=7c81da4d-89b7-483a-b33d-9ca75296fb2e",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_44_pkcdw1e_IMG_5935.jpg?alt=media&token=d67af30a-9ee3-4670-8e6d-aba4d919cd52",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_43_5xk2dpm_IMG_5936.jpg?alt=media&token=df54dfd8-55b0-4947-ad15-2f711ed9964e",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_46_hthi25n_IMG_5937.jpg?alt=media&token=b9a2363e-5a5a-48b6-b160-8192f5270588",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_41_dca9k34_IMG_5938.jpg?alt=media&token=3b73dfa5-5b0e-4ccd-9eb6-6faee5676f6f",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_42_e1xomne_IMG_5939.jpg?alt=media&token=f3aa6ed1-3fc4-4bf1-8371-a579ab76b2d1",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901681_img_40_aqmvter_IMG_5940.jpg?alt=media&token=bc7b0652-e444-4b8f-9158-76c65d56f4c1",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921901682_img_45_4yuudy4_IMG_5941.jpg?alt=media&token=00b30cd0-f31d-4afb-a396-f205acbd46fd"
-      ],
-      "specifications": {
-        "Rodado": "16"
-      },
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-11T14:18:41.673Z",
-      "updatedAt": "2025-08-26T01:58:38.455Z"
     },
     {
       "id": "1756173289504",
@@ -282,28 +196,6 @@
       "updatedAt": "2025-08-26T01:56:14.392Z"
     },
     {
-      "id": "1756173479875",
-      "name": "Manubrio Fit Brandon Begin",
-      "description": "Manubrio Fit Brandon Begin 4 piezas con puños Eclat de regalo (pequeños detalles en el agarre)",
-      "price": 55000,
-      "category": "Manubrios",
-      "brand": "Fit",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173463123_img_21_zvhv4d4_IMG_6854.jpg?alt=media&token=8ef4dee2-4411-441d-bb6e-df989044b3a4",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173463141_img_22_22imka8_IMG_6855.jpg?alt=media&token=315a02f1-fcc6-446f-9fb1-9c1330a67ece",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173466139_img_23_tdao3tr_IMG_6856.jpg?alt=media&token=bca1a52d-6ba5-4c86-b209-924e35d95e95",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173466157_img_24_byn8712_IMG_6857.jpg?alt=media&token=a4cb72a9-f763-481a-a6c2-694e0fc00a37",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173468682_img_25_7foe7kl_IMG_6858.jpg?alt=media&token=a496784c-8230-4a4f-b562-2ce923f064ae",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173466169_img_26_i5mmwnq_IMG_6859.jpg?alt=media&token=240d91fa-9250-46a1-86ee-90ef33ec2de7"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-26T01:57:59.875Z",
-      "updatedAt": "2025-08-26T01:57:59.875Z"
-    },
-    {
       "id": "1756173605629",
       "name": "Horquilla Krow Big Classic",
       "description": "Horquilla Krow Big Classic con top bolt S&M ",
@@ -329,24 +221,6 @@
       "updatedAt": "2025-08-26T02:00:05.629Z"
     },
     {
-      "id": "1756173714723",
-      "name": "Poste Pivotal",
-      "description": "",
-      "price": 12000,
-      "category": "Postes",
-      "brand": "Generico",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173708352_img_44_kki488b_IMG_6889.jpg?alt=media&token=a8287fe1-347f-4fbd-a782-5fa4ac894fbd",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173708282_img_45_pw76rf6_IMG_6890.jpg?alt=media&token=4723b4fb-be26-40a0-ab83-1cf1dca98980"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-26T02:01:54.724Z",
-      "updatedAt": "2025-08-26T02:01:54.724Z"
-    },
-    {
       "id": "1756173756430",
       "name": "Pedales S&M",
       "description": "",
@@ -365,25 +239,6 @@
       "active": true,
       "createdAt": "2025-08-26T02:02:36.430Z",
       "updatedAt": "2025-08-26T02:02:36.431Z"
-    },
-    {
-      "id": "1756173901916",
-      "name": "Plato Federal",
-      "description": "",
-      "price": 55000,
-      "category": "Platos",
-      "brand": "Federal",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173897649_img_0_213r767_IMG_6869.jpg?alt=media&token=d2b8ab66-af3c-443a-822f-a5bcba51131c",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173897628_img_1_6gs00ey_IMG_6870.jpg?alt=media&token=02573a6b-cd20-4eb3-b62d-fcaf70821e98",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173900211_img_2_281nfu3_IMG_6871.jpg?alt=media&token=cebc5078-c1df-4254-bd73-665c7b0f974b"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-26T02:05:01.916Z",
-      "updatedAt": "2025-08-26T02:07:04.473Z"
     },
     {
       "id": "1756174073449",
@@ -505,26 +360,6 @@
       "updatedAt": "2025-08-28T14:49:14.522Z"
     },
     {
-      "id": "1756392668927",
-      "name": "Palancas Fitbikeco Indent (caja incluida)",
-      "description": "",
-      "price": 235000,
-      "category": "Palancas",
-      "brand": "Fit",
-      "stock": 1,
-      "images": [],
-      "specifications": {
-        "Estrias": "48",
-        "Piezas": "3",
-        "Eje": "24mm"
-      },
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-28T14:51:08.927Z",
-      "updatedAt": "2025-08-28T14:51:08.928Z"
-    },
-    {
       "id": "1756393399661",
       "name": "Plato Pirate 25 dientes",
       "description": "",
@@ -543,28 +378,6 @@
       "tags": [],
       "createdAt": "2025-08-28T15:03:19.661Z",
       "updatedAt": "2025-08-28T15:03:19.661Z"
-    },
-    {
-      "id": "1756393458484",
-      "name": "Cubiertas Stranger Ballast 2.40",
-      "description": "💲 65.000 el par o 💲 35.000 c/u ",
-      "price": 35000,
-      "category": "Cubiertas",
-      "brand": "Stranger",
-      "stock": 0,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393447066_img_55_u5c2s0t_IMG_7151.jpg?alt=media&token=2e0f92f6-0e9a-45dc-a5cd-900486506c2d",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393447034_img_56_ge9xw9g_IMG_7152.jpg?alt=media&token=2027c6c3-8d5b-407d-bda9-7f0a3e6233d1",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393449932_img_57_w7zzuzq_IMG_7153.jpg?alt=media&token=1286740c-1fda-4da6-904d-5a1a92a884ed",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393449943_img_58_podfta2_IMG_7154.jpg?alt=media&token=de1d7a96-6fd2-4313-81e1-61993fe94878",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393452362_img_59_j38qxfg_IMG_7155.jpg?alt=media&token=6076ab44-b312-4e3d-bf54-026b48a08028"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-28T15:04:18.484Z",
-      "updatedAt": "2025-09-01T14:51:36.203Z"
     },
     {
       "id": "1756393513452",
@@ -608,27 +421,6 @@
       "tags": [],
       "createdAt": "2025-08-28T15:07:49.814Z",
       "updatedAt": "2025-09-01T14:50:00.065Z"
-    },
-    {
-      "id": "1756393742074",
-      "name": "Asiento Federal con poste largo",
-      "description": "",
-      "price": 65000,
-      "category": "Asientos",
-      "brand": "Federal",
-      "stock": 0,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393732258_img_60_o2d2pc2_IMG_7170.jpg?alt=media&token=9ed51b96-059f-4646-a0f2-d8c4ec0ad76e",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393732270_img_61_bnq4njp_IMG_7168.jpg?alt=media&token=bfde658c-2e13-43a3-a1a9-46d08f7a92ec",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393735028_img_62_hwxrfg7_IMG_7171.jpg?alt=media&token=52dcebbb-ce08-4114-976c-b9f9cb1d0bf0",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756393735036_img_63_pxe8ori_IMG_7169.jpg?alt=media&token=6cd8c17f-b916-4d5e-ba2c-b2180f03ca61"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-28T15:09:02.074Z",
-      "updatedAt": "2025-08-28T15:09:56.518Z"
     }
   ],
   "categories": []
