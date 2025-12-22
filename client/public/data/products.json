@@ -28,92 +28,6 @@
       "updatedAt": "2025-08-11T14:00:00.425Z"
     },
     {
-      "id": "1754920950601",
-      "name": "Stem Sunday Freeze",
-      "description": "- Material: Aluminio 6061 T6\n- Altura: 34 mm.\n- Largo: 48 mm.\n- Tipo: Top Load.\n- Peso Aproximado: 294 Gramos.",
-      "price": 40000,
-      "category": "Stems",
-      "brand": "Sunday",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939236_img_3_vln1np5_IMG_1988.jpg?alt=media&token=23ef0ed4-08ba-4795-b7c6-8b3d4a96d036",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939237_img_2_gzg797w_IMG_1989.jpg?alt=media&token=f9293e8e-6345-47c9-8971-fbda916cc94a",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939237_img_0_5e2uvfg_IMG_1990.jpg?alt=media&token=ca63386d-e20b-4fdc-b358-5eb72263349e",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754920939237_img_1_7tv5xlg_IMG_1991.jpg?alt=media&token=4e9ad9b3-a771-4c85-b73e-74d1c7c6a67c"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-11T14:02:30.601Z",
-      "updatedAt": "2025-08-27T20:03:59.254Z"
-    },
-    {
-      "id": "1754921125755",
-      "name": "Horquilla Krow Big 341",
-      "description": "- Material: Full cromo 4130, con tratamiento térmico.\n- Peso Aproximado: 1028 gramos.",
-      "price": 155000,
-      "category": "Horquillas",
-      "brand": "Krow",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110853_img_9_ze6yorf_IMG_1999.jpg?alt=media&token=54fffdc2-60e9-4f8f-84ef-06b67906b2d1",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_8_dai3n6b_IMG_2001.jpg?alt=media&token=41cf47c3-d6ab-4924-9ef6-cd68a7d530c5",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_5_c5393eb_IMG_2002.jpg?alt=media&token=8ee84285-6a0d-4632-b224-26c67366bdbe",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_6_j8uks2h_IMG_2003.jpg?alt=media&token=b1220d83-6193-45b3-a414-80b2663a69e7",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_7_gl43c9x_IMG_2004.jpg?alt=media&token=bd41ef43-501f-4a94-b8f0-76f8f18b55de",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921110854_img_4_re0s1r5_IMG_2005.jpg?alt=media&token=3f371226-0c9c-41cb-9200-8b3667eb3bea"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-11T14:05:25.755Z",
-      "updatedAt": "2025-08-27T20:10:59.577Z"
-    },
-    {
-      "id": "1754921229002",
-      "name": "Palancas genericas + pedales de regalo",
-      "description": "Palancas genericas derecha, 1 fisura reparada, con Pedales genericos ",
-      "price": 20000,
-      "category": "Palancas",
-      "brand": "Generico",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_13_9cru74f_IMG_1983.jpg?alt=media&token=642ca6a4-8305-474e-8218-61831937b999",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_10_89zo2do_IMG_1984.jpg?alt=media&token=abf213b1-49f8-4c57-826f-523bfb3bb69d",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_12_wc77wyc_IMG_1985.jpg?alt=media&token=980ba52e-e287-49ed-88e2-87afeac8c0bd",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921213156_img_11_0qaxzr4_IMG_1986.jpg?alt=media&token=6930363f-358e-48b9-beaf-fc96aa372633"
-      ],
-      "specifications": {
-        "Medida": "175mm"
-      },
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-11T14:07:09.002Z",
-      "updatedAt": "2025-08-27T20:04:27.713Z"
-    },
-    {
-      "id": "1754921417583",
-      "name": "Rueda delantera",
-      "description": "Rueda delantera:\n- Maza Rival KK a bulones\n- Aro Supra Dome doble pared\n- Cubierta Maxxis Rizer 2.30",
-      "price": 105000,
-      "category": "Mazas Delanteras",
-      "brand": "Rival, Supra Dome, Maxxis",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372262_img_22_13w3xiq_IMG_2025.jpg?alt=media&token=5a85f922-0bdd-463c-ad71-a192f85ef16f",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_20_5787s2p_IMG_2026.jpg?alt=media&token=a2617cf3-04bd-4270-a043-1fcb56ca64e5",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_21_88k3gcq_IMG_2027.jpg?alt=media&token=6f04bfb0-8bc9-46ca-9798-d881e7cca273",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_18_f7f0ad8_IMG_2028.jpg?alt=media&token=14354fcd-2bf3-4be8-9069-6c674f3320fa",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_17_es64yza_IMG_2029.jpg?alt=media&token=56e43ab5-f452-414b-91a5-13cac1265953",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1754921372263_img_19_skosmhe_IMG_2030.jpg?alt=media&token=c2903c65-36da-41b4-8e43-5db0c14792ef"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-11T14:10:17.583Z",
-      "updatedAt": "2025-08-27T20:02:40.231Z"
-    },
-    {
       "id": "1754921806002",
       "name": "Cuadro Total SandStorm",
       "description": "1 fisura reparada",
@@ -171,54 +85,6 @@
       "active": true,
       "createdAt": "2025-08-26T01:54:49.504Z",
       "updatedAt": "2025-08-26T01:54:49.504Z"
-    },
-    {
-      "id": "1756173374392",
-      "name": "Stem Fiend Reynolds",
-      "description": "",
-      "price": 75000,
-      "category": "Stems",
-      "brand": "Fiend",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173364852_img_14_g24bgbl_IMG_6861.jpg?alt=media&token=b99e529e-2797-4d91-8b56-854cd205b6dd",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173364837_img_15_psdlolq_IMG_6862.jpg?alt=media&token=448ad459-6ac6-474c-bf69-67e7345bb8f6",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173367539_img_16_ada6jqh_IMG_6863.jpg?alt=media&token=3a1e753d-d48b-4052-9c7a-0ee229267df2",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173367568_img_17_oi07bde_IMG_6864.jpg?alt=media&token=bf041740-4370-464c-b9df-62f8858d09f3",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173370167_img_18_g92441z_IMG_6865.jpg?alt=media&token=11231485-2983-41c1-a07e-e38df65649e7",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173370233_img_19_8lb4aac_IMG_6866.jpg?alt=media&token=a45ad5c8-9648-4d92-89a0-a68f1f435260",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173370268_img_20_6uwtxr8_IMG_6867.jpg?alt=media&token=a97fd1fb-b411-49bb-a0eb-e28033efb683"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-26T01:56:14.392Z",
-      "updatedAt": "2025-08-26T01:56:14.392Z"
-    },
-    {
-      "id": "1756173605629",
-      "name": "Horquilla Krow Big Classic",
-      "description": "Horquilla Krow Big Classic con top bolt S&M ",
-      "price": 110000,
-      "category": "Horquillas",
-      "brand": "Krow",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173582890_img_35_ng9rk0k_IMG_6879.jpg?alt=media&token=1c7537b5-2ca4-4103-affe-8aed23d32631",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173582872_img_36_1dpifik_IMG_6880.jpg?alt=media&token=b1f54eb3-7d7f-4159-a723-8c255587d156",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173585944_img_37_viihm1s_IMG_6881.jpg?alt=media&token=10dbaa74-e7a9-4d84-9791-412f0920912e",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173585956_img_38_beym23t_IMG_6882.jpg?alt=media&token=748f6064-2f9d-4516-aa20-b1df3ec41b31",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173588723_img_39_7tp02dh_IMG_6883.jpg?alt=media&token=3b28258a-85ae-4ee4-a907-bfb0fd0d8c1b",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173586812_img_40_rnq0v8x_IMG_6884.jpg?alt=media&token=eed92517-042c-4100-a2fe-b3323d10abf6",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173586827_img_41_x577jkk_IMG_6885.jpg?alt=media&token=fc5a49f5-b168-4662-89aa-6bd1ec146c09",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173600432_img_42_b0jtnp1_IMG_6886.jpg?alt=media&token=3cbf03db-dd6a-4450-a111-8649847a72d2",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756173600443_img_43_gdjkoww_IMG_6887.jpg?alt=media&token=a30ecfad-e385-4ad1-a15b-82956f3acc5e"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "createdAt": "2025-08-26T02:00:05.629Z",
-      "updatedAt": "2025-08-26T02:00:05.629Z"
     },
     {
       "id": "1756173756430",
@@ -282,35 +148,6 @@
       "tags": [],
       "createdAt": "2025-08-26T02:09:09.107Z",
       "updatedAt": "2025-08-26T02:09:39.558Z"
-    },
-    {
-      "id": "1756392127316",
-      "name": "Cuadro Fly Savanna 21' Courage Adams",
-      "description": "",
-      "price": 315000,
-      "category": "Cuadros",
-      "brand": "Fly",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392098508_img_0_6087a0w_IMG_7124.jpg?alt=media&token=4dd96aa6-28a3-4baa-8f11-709f06f5a74c",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392098527_img_1_koovb5x_IMG_7135.jpg?alt=media&token=8f8da7c0-89ad-4aa8-ac15-c7a77c97c57f",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392101864_img_2_3khry5g_IMG_7132.jpg?alt=media&token=bcfc51e4-71b5-4f9e-a417-aa18730fbecc",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392101874_img_3_f6w6zob_IMG_7133.jpg?alt=media&token=50f16a82-70d0-45f2-9860-571553e88e12",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392104564_img_4_gtkaz0a_IMG_7128.jpg?alt=media&token=a75c30aa-28de-419b-8fd8-351bf57c6a34",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392108366_img_5_pyfy4yp_IMG_7130.jpg?alt=media&token=c5d72a18-4b0a-473b-a33d-e7c3e9b8ae7b",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392108280_img_6_k7fzv9n_IMG_7127.jpg?alt=media&token=c4d27c46-1bd4-4f50-a255-8da9838fd278",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392111024_img_7_2m1mwc9_IMG_7131.jpg?alt=media&token=76c0866d-1b0b-4bab-9536-303813cc5a60",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392111037_img_8_yo881ze_IMG_7125.jpg?alt=media&token=0f114a40-7575-4c7a-abd6-3715bca33140",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392113763_img_9_rbxzae5_IMG_7134.jpg?alt=media&token=3593c2c1-ecfd-4d9f-971a-6398d68aaa66",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392112776_img_10_pa9hx3c_IMG_7126.jpg?alt=media&token=fc6dfd2c-0c7a-4f0b-962e-95c36cd02eed",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756392112765_img_11_lzr42xq_IMG_7129.jpg?alt=media&token=a2ce4b0a-7af6-48f8-b1c6-78e1e5b4ff6f"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-28T14:42:07.316Z",
-      "updatedAt": "2025-08-28T14:42:07.316Z"
     },
     {
       "id": "1756392303768",
@@ -380,47 +217,23 @@
       "updatedAt": "2025-08-28T15:03:19.661Z"
     },
     {
-      "id": "1756393513452",
-      "name": "Rueda Delantera: Aro Federal, Maza Glint",
-      "description": "- Maza Glint a bulones\n- Aro Federal Stance XL",
-      "price": 115000,
-      "category": "Mazas Delanteras",
-      "brand": "Federal, Glint",
-      "stock": 1,
-      "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410991816_img_72_ri6xjbf_IMG_7231.jpg?alt=media&token=f8195ae0-c746-445b-a6fc-d3145c1d3b40",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410991867_img_73_v7k4tu3_IMG_7232.jpg?alt=media&token=e6afe755-cf95-4f91-aa2e-f22de8362749",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410994400_img_74_32dbxuy_IMG_7233.jpg?alt=media&token=3ef069fe-567a-4867-8ac0-4c7658773121",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410994410_img_75_95n1cn4_IMG_7234.jpg?alt=media&token=216e4d8d-a4f0-44d4-beb1-5d389038507f",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410996705_img_76_sw15riz_IMG_7235.jpg?alt=media&token=d27f8efb-bfcc-4269-acb1-d6b651f6c153"
-      ],
-      "specifications": {},
-      "featured": false,
-      "active": true,
-      "tags": [],
-      "createdAt": "2025-08-28T15:05:13.452Z",
-      "updatedAt": "2025-08-28T19:56:39.567Z"
-    },
-    {
       "id": "1756393669814",
-      "name": "Rueda Trasera: Maza Salt Ex, Aro Federal",
-      "description": "- Maza Salt Ex derecha (cassette)\n- Aro Federal Stance XL",
-      "price": 205000,
+      "name": "Maza Salt Ex",
+      "description": "- Maza Salt Ex derecha (cassette)\n",
+      "price": 82,
       "category": "Mazas Traseras",
-      "brand": "Salt, Federal",
+      "brand": "Salt",
       "stock": 1,
       "images": [
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410970733_img_68_fcs79hl_IMG_7237.jpg?alt=media&token=0dbf0b86-722b-4891-80c2-80469ce4d14f",
         "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410970701_img_69_lwk249g_IMG_7238.jpg?alt=media&token=aa10eb20-c45b-4c14-ae96-b355955915df",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410973934_img_70_15dm2z8_IMG_7239.jpg?alt=media&token=d6859913-f636-4197-b3dc-2dfab6578470",
-        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410973969_img_71_0fcqr8h_IMG_7240.jpg?alt=media&token=0bc2519a-952f-4930-b19f-53bf647ec4fa"
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1756410973934_img_70_15dm2z8_IMG_7239.jpg?alt=media&token=d6859913-f636-4197-b3dc-2dfab6578470"
       ],
       "specifications": {},
       "featured": false,
       "active": true,
       "tags": [],
       "createdAt": "2025-08-28T15:07:49.814Z",
-      "updatedAt": "2025-09-01T14:50:00.065Z"
+      "updatedAt": "2025-12-22T14:55:38.220Z"
     }
   ],
   "categories": []
