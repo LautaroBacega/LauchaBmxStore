@@ -4,7 +4,7 @@
       "id": "1754869796668",
       "name": "Cuadro Total Hangover H3",
       "description": "1 mes de uso, igual a nuevo.\n\nMaterial: 4130 Chromoly\nSignature: Alex Coleborn\nVainas: 12,8”\nDirección: Integrado\nGyro tabs: Sí\nHerradura de freno: Soportes de freno extraíbles\nCaja: MID\nAbrazadera de asiento: Integrado\nDropouts: Tratamiento térmico de 6 mm de espesor con ajustadores de cadena integrados\nPeso: 2,15 kg",
-      "price": 420000,
+      "price": 380000,
       "category": "Cuadros",
       "brand": "Total",
       "stock": 1,
@@ -220,7 +220,7 @@
       "id": "1756393669814",
       "name": "Maza Salt Ex",
       "description": "- Maza Salt Ex derecha (cassette)\n",
-      "price": 82,
+      "price": 125000,
       "category": "Mazas Traseras",
       "brand": "Salt",
       "stock": 1,
@@ -233,7 +233,35 @@
       "active": true,
       "tags": [],
       "createdAt": "2025-08-28T15:07:49.814Z",
-      "updatedAt": "2025-12-22T14:55:38.220Z"
+      "updatedAt": "2025-12-22T20:06:19.843Z"
+    },
+    {
+      "id": "1766434447576",
+      "name": "Cuadro Stranger Crux 20.5",
+      "description": "",
+      "price": 300000,
+      "category": "Cuadros",
+      "brand": "Stranger",
+      "stock": 1,
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1766434430932_img_4_jzycyj0_IMG_8470.jpeg?alt=media&token=12217d41-187c-4c27-a4de-58fd10d85dc0",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1766434430992_img_5_5jzv95u_IMG_8471.jpeg?alt=media&token=dcb959d4-afb9-4f10-a9db-af77cca4b407",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1766434434526_img_6_0qpbyvc_IMG_8472.jpeg?alt=media&token=51855e25-01db-4584-ba35-28a743c27d54",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1766434434560_img_7_5ylnan2_IMG_8473.jpeg?alt=media&token=d671f51d-42bc-4a98-b23a-3366ef5887d7",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1766434437494_img_8_dxyxeix_IMG_8474.jpeg?alt=media&token=c8bc435e-9f4f-4890-a123-12cf1ec45619",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1766434435370_img_9_0o28xdi_IMG_8475.jpeg?alt=media&token=877c714d-947b-492b-b399-146913a21f64",
+        "https://firebasestorage.googleapis.com/v0/b/lauchabmxstore.firebasestorage.app/o/products%2F1766434435383_img_10_nj0g5nw_IMG_8476.jpeg?alt=media&token=7c41475d-8f97-4542-ba16-03f4b9e97cd4"
+      ],
+      "specifications": {
+        "Color": "Negro",
+        "Toptube": "20.5",
+        "Vainas": "12.8"
+      },
+      "featured": false,
+      "active": true,
+      "tags": [],
+      "createdAt": "2025-12-22T20:14:07.576Z",
+      "updatedAt": "2025-12-22T20:14:07.577Z"
     }
   ],
   "categories": []
