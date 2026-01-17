@@ -1,19 +1,19 @@
-# 🚴‍♂️ Laucha BMX Store
+# Laucha BMX Store
 
 Una tienda online completa para productos de BMX desarrollada con tecnologías modernas. Incluye sistema de autenticación, panel de administración, calculadora de envíos y gestión completa de productos.
 
-## 🚀 Características Principales
+## Características Principales
 
-- **🛍️ Catálogo de Productos**: Navegación por categorías, búsqueda avanzada y filtros
-- **👤 Sistema de Autenticación**: Registro, login, OAuth con Google, recuperación de contraseña
-- **🔐 Panel de Administración**: CRUD completo de productos, gestión de imágenes, importación/exportación
-- **📦 Calculadora de Envíos**: Integración con API de Andreani para cálculo de costos por código postal
-- **📱 Diseño Responsivo**: Optimizado para móviles y escritorio
-- **🔄 Gestión de Sesiones**: Tokens JWT con refresh automático
-- **☁️ Almacenamiento en la Nube**: Firebase Storage para imágenes
-- **🎨 UI Moderna**: Tailwind CSS con componentes Radix UI
+- **Catálogo de Productos**: Navegación por categorías, búsqueda avanzada y filtros
+- **Sistema de Autenticación**: Registro, login, OAuth con Google, recuperación de contraseña
+- **Panel de Administración**: CRUD completo de productos, gestión de imágenes, importación/exportación
+- **Calculadora de Envíos**: Integración con API de Andreani para cálculo de costos por código postal
+- **Diseño Responsivo**: Optimizado para móviles y escritorio
+- **Gestión de Sesiones**: Tokens JWT con refresh automático
+- **Almacenamiento en la Nube**: Firebase Storage para imágenes
+- **UI Moderna**: Tailwind CSS con componentes Radix UI
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 ### Frontend
 - **Next.js 14** - Framework React para producción
@@ -39,7 +39,7 @@ Una tienda online completa para productos de BMX desarrollada con tecnologías m
 - **Andreani API** - Cálculo de envíos
 - **Google OAuth** - Autenticación social
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 \`\`\`
 ├── app/                    # Next.js App Router
@@ -59,7 +59,7 @@ Una tienda online completa para productos de BMX desarrollada con tecnologías m
 └── components/            # Componentes Next.js
 \`\`\`
 
-## ⚙️ Configuración e Instalación
+## Configuración e Instalación
 
 ### Prerrequisitos
 - Node.js 18+
@@ -116,7 +116,7 @@ export const storage = getStorage(app);
 
 1. **Clonar el repositorio**
 \`\`\`bash
-git clone <repository-url>
+git clone
 cd laucha-bmx-store
 \`\`\`
 
@@ -132,11 +132,6 @@ cd ../client
 npm install
 \`\`\`
 
-4. **Instalar dependencias de Next.js (opcional)**
-\`\`\`bash
-cd ..
-npm install
-\`\`\`
 
 ### Ejecución en Desarrollo
 
@@ -161,37 +156,37 @@ npm run dev
 - Cliente: http://localhost:5173
 - API: http://localhost:3000
 
-## 📋 Funcionalidades Detalladas
+## Funcionalidades Detalladas
 
-### 🛒 Catálogo de Productos
+### Catálogo de Productos
 - Visualización en grid y lista
 - Filtros por categoría, marca y precio
 - Búsqueda en tiempo real
 - Paginación automática
 - Imágenes con placeholder automático
 
-### 👨‍💼 Panel de Administración
+### Panel de Administración
 - Gestión completa de productos (CRUD)
 - Subida optimizada de imágenes a Firebase
 - Importación/exportación de datos JSON
 - Control de stock y precios
 - Gestión de categorías y marcas
 
-### 🚚 Sistema de Envíos
+### Sistema de Envíos
 - Calculadora integrada con Andreani
 - Cálculo por código postal
 - Estimación de tiempos de entrega
 - Diferentes zonas de envío
 - Precios actualizados automáticamente
 
-### 🔐 Autenticación Avanzada
+### Autenticación Avanzada
 - Registro con verificación por email
 - Login tradicional y OAuth Google
 - Recuperación de contraseña
 - Tokens JWT con refresh automático
 - Protección de rutas sensibles
 
-## 🚀 Despliegue
+## Despliegue
 
 ### Backend (Railway/Heroku)
 1. Configurar variables de entorno
@@ -208,24 +203,9 @@ npm run dev
 2. Configurar IP whitelist
 3. Actualizar MONGO_URI en variables de entorno
 
-## 🤝 Contribución
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+## Contacto
 
-## 📝 Licencia
+- **Desarrollador**: Lautaro Bacega
+- **Email**: lautibacega@gmail.com
 
-Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
-
-## 📞 Contacto
-
-- **Desarrollador**: [Tu Nombre]
-- **Email**: contacto@lauchaBmxstore.com
-- **Proyecto**: [Link al repositorio]
-
----
-
-⭐ Si te gusta este proyecto, ¡dale una estrella en GitHub!
